@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import Experience from './3D/Experience';
+import Loading from './components/Loading';
+import useStore from './store';
+import About from './components/About';
+import Works from './components/Works';
+import Gui from './components/Gui';
 
 function App() {
+  const view = useStore((state) => state.view);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      {view === 'start' && <Loading />}
+      <Experience />
+      <Gui />
+      <About />
+      <Works />
     </div>
   );
 }
