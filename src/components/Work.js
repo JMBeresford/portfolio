@@ -28,9 +28,17 @@ const Work = () => {
       <div className='content'>
         <div className='desc'>{currentWork.description}</div>
         <div className='links'>
-          {currentWork.live && <a href={currentWork.live}>Live Project</a>}
+          {currentWork.live && (
+            <a href={currentWork.live} target='_blank'>
+              Live Project
+            </a>
+          )}
 
-          {currentWork.source && <a href={currentWork.source}>Source Code</a>}
+          {currentWork.source && (
+            <a href={currentWork.source} target='_blank'>
+              Source Code
+            </a>
+          )}
         </div>
       </div>
     </div>

@@ -11,21 +11,19 @@ const AboutCanvas = React.memo(() => {
 
   return (
     <div className='img'>
-      {(view === 'aboutEntered' || destination === 'aboutEntered') && (
-        <Canvas
-          dpr={[1, 2]}
-          ref={ref}
-          gl={{ toneMapping: ACESFilmicToneMapping }}
-          camera={{ fov: 65 }}
-          onCreated={({ camera }) => {
-            camera.position.set(0, 0, 2);
-          }}
-        >
-          <Suspense fallback={null}>
-            <AboutImage />
-          </Suspense>
-        </Canvas>
-      )}
+      <Canvas
+        dpr={[1, 2]}
+        ref={ref}
+        gl={{ toneMapping: ACESFilmicToneMapping }}
+        camera={{ fov: 65 }}
+        onCreated={({ camera }) => {
+          camera.position.set(0, 0, 2);
+        }}
+      >
+        <Suspense fallback={null}>
+          <AboutImage />
+        </Suspense>
+      </Canvas>
     </div>
   );
 });

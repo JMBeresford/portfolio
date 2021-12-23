@@ -4,6 +4,7 @@ import AboutCanvas from '../3D/AboutCanvas';
 
 const About = () => {
   const ref = useRef();
+  const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
 
   useEffect(() => {
@@ -38,7 +39,9 @@ const About = () => {
             specific topic or element.
           </p>
         </div>
-        <AboutCanvas />
+        {(view === 'aboutEntered' || destination === 'aboutEntered') && (
+          <AboutCanvas />
+        )}
       </div>
     </div>
   );
