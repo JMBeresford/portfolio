@@ -29,13 +29,13 @@ const Work = () => {
         <div className='desc'>{currentWork.description}</div>
         <div className='links'>
           {currentWork.live && (
-            <a href={currentWork.live} target='_blank'>
+            <a href={currentWork.live} rel='noreferrer' target='_blank'>
               Live Project
             </a>
           )}
 
           {currentWork.source && (
-            <a href={currentWork.source} target='_blank'>
+            <a href={currentWork.source} rel='noreferrer' target='_blank'>
               Source Code
             </a>
           )}
