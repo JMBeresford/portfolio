@@ -8,7 +8,6 @@ const WorkList = () => {
   const view = useStore((state) => state.view);
   const viewingWork = useStore((state) => state.viewingWork);
   const viewWork = useStore((state) => state.actions.viewWork);
-  const currentWork = useStore((state) => state.currentWork);
 
   const destination = useStore((state) => state.destination);
 

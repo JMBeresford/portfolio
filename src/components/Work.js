@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import useStore from '../store';
 
 const Work = () => {
@@ -17,7 +17,7 @@ const Work = () => {
     } else {
       ref.current.classList.remove('in');
     }
-  }, [viewingWork]);
+  }, [viewingWork, view]);
 
   return (
     <div ref={ref} id='workPage'>
@@ -28,17 +28,9 @@ const Work = () => {
       <div className='content'>
         <div className='desc'>{currentWork.description}</div>
         <div className='links'>
-          {currentWork.live ? (
-            <a href={currentWork.live}>Live Project</a>
-          ) : (
-            <a disabled href='#' />
-          )}
+          {currentWork.live && <a href={currentWork.live}>Live Project</a>}
 
-          {currentWork.source ? (
-            <a href={currentWork.source}>Source Code</a>
-          ) : (
-            <a disabled href='#' />
-          )}
+          {currentWork.source && <a href={currentWork.source}>Source Code</a>}
         </div>
       </div>
     </div>
