@@ -3,7 +3,7 @@ import { shaderMaterial, useTexture } from '@react-three/drei';
 import { extend, useFrame, useThree } from '@react-three/fiber';
 import vertexShader from '../shaders/particles/vert.glsl';
 import fragmentShader from '../shaders/particles/frag.glsl';
-import { AlwaysDepth, Color, NeverDepth, NoBlending, Vector3 } from 'three';
+import { Color, NoBlending, Vector3 } from 'three';
 import { gsap, Power1 } from 'gsap';
 
 const ParticleMaterial = shaderMaterial(

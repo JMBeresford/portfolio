@@ -2,7 +2,6 @@ import React, { useRef, useEffect, Suspense } from 'react';
 import useStore from '../store';
 import { Canvas } from '@react-three/fiber';
 import WorkBackground from '../3D/WorkBackground';
-import { ACESFilmicToneMapping } from 'three';
 
 const Work = () => {
   const ref = useRef();
