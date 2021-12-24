@@ -70,7 +70,7 @@ const AboutImage = React.memo(() => {
       onPointerMove={(e) => handleMove(e)}
     >
       <planeGeometry args={[2, 2, 50, 50]} />
-      <imageMaterial transparent={true} uTexture={map} />
+      <imageMaterial uTexture={map} />
     </mesh>
   );
 });

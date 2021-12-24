@@ -1,9 +1,14 @@
+import artofjayimg0 from '../img/artofjayjoson/0.png';
+import artofjayimg1 from '../img/artofjayjoson/1.png';
+
 const worksSlice = (set, get) => ({
   currentWork: {
     name: '',
     description: ``,
     live: '',
     source: '',
+    images: [artofjayimg0, artofjayimg1],
+    color: '#8657b1',
   },
   viewingWork: false,
   works: [
@@ -13,6 +18,8 @@ const worksSlice = (set, get) => ({
         This project is a web showcase of some of his curated works.`,
       live: 'http://artofjayjoson.com',
       source: 'https://github.com/JMBeresford/art-of-jay-joson',
+      images: [artofjayimg0, artofjayimg1],
+      color: '#8657b1',
     },
     {
       name: 'John Beresford',
@@ -20,6 +27,7 @@ const worksSlice = (set, get) => ({
       He develops creative web experiences using a synthesis of 3D design and standard web technologies.`,
       live: 'http://john-beresford.com',
       source: 'https://github.com/JMBeresford/portfolio',
+      images: [artofjayimg1],
     },
     {
       name: 'UCSC Chess Club',
@@ -27,6 +35,7 @@ const worksSlice = (set, get) => ({
       local environment. Uses a standard ELO rating system to rate players relative to others.`,
       live: null,
       source: 'https://github.com/JMBeresford/UCSC-chessclub',
+      images: [artofjayimg1],
     },
   ],
 });

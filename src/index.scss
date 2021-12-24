@@ -299,7 +299,6 @@ body {
 
 #about,
 #workList,
-#workPage,
 #lab {
   position: fixed;
   inset: 0;
@@ -335,7 +334,7 @@ body {
       content: '';
       z-index: -1;
       position: absolute;
-      left: -2.5%;
+      left: 5%;
       bottom: 25%;
       top: 60%;
       right: -10%;
@@ -372,8 +371,7 @@ body {
   }
 }
 
-#about,
-#workPage {
+#about {
   .content {
     cursor: auto;
     margin-top: 2rem;
@@ -507,47 +505,135 @@ body {
 }
 
 #workPage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 100%;
+  align-items: flex-end;
+  justify-content: center;
+
+  opacity: 0;
+
+  transition: all 1.25s ease-in-out;
+
+  pointer-events: none;
+  touch-action: none;
+  cursor: none;
+
+  font-family: $sans-serif;
+
+  h1 {
+    font-family: $serif;
+    max-width: max-content;
+    position: relative;
+
+    .underline {
+      content: '';
+      z-index: -1;
+      position: absolute;
+      left: 5%;
+      bottom: 25%;
+      top: 60%;
+      right: -10%;
+      transform-origin: left center;
+
+      transform: scaleX(0);
+      transition-delay: 1s;
+    }
+
+    &,
+    .underline {
+      transition: all 1.25s ease-in-out;
+    }
+  }
+
   .content {
-    grid-template-areas:
-      'desc img'
-      'links img';
+    z-index: 51;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    padding: 2rem 0;
+    color: white;
+    opacity: 0;
+    transform: translateY(10%);
+
+    transition: all 1.25s ease-in-out;
+
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.65) 60%,
+      rgba(0, 0, 0, 0.45) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+
+    > * {
+      width: clamp(300px, 100%, 1500px);
+    }
+
+    .text {
+      width: clamp(25ch, 100%, 45ch);
+    }
 
     .links {
-      margin-top: 3rem;
-      grid-area: links;
-
       display: flex;
-      align-items: flex-start;
+      align-items: center;
+      width: max-content;
       gap: 1.5rem;
-
-      transform: translateX(-10%);
-      opacity: 0;
-      overflow: auto;
-
-      transition: all 1.25s ease-in-out;
-      transition-delay: 0.75s;
 
       a[disabled] {
         display: none;
       }
 
       a {
+        pointer-events: all;
         text-decoration: none;
+        display: block;
         font-family: $serif;
         letter-spacing: 2px;
-        font-weight: 500;
+        font-weight: 600;
 
         background-color: rgba(0, 0, 0, 0);
 
-        color: black;
-        border: 1px solid black;
+        color: white;
+        border: 1px solid white;
         padding: 1rem 1.5rem;
 
         transition: all 0.2s ease-in-out;
 
         &:hover {
-          background-color: rgba(56, 56, 56, 0.2);
+          background-color: rgba(255, 255, 255, 0.2);
         }
+      }
+    }
+  }
+
+  .workCanvasWrapper {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    width: auto;
+  }
+
+  &.in {
+    opacity: 1;
+
+    pointer-events: all;
+    touch-action: all;
+    cursor: auto;
+
+    .content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    h1 {
+      opacity: 1;
+      transform: translateX(0);
+
+      .underline {
+        transform: scaleX(1);
       }
     }
   }
@@ -555,13 +641,27 @@ body {
 
 @media (max-width: 1000px) {
   #about,
-  #worksPage {
+  #workPage {
     .content {
       grid-template-columns: 100%;
 
       .img {
         display: none;
       }
+    }
+
+    .content {
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    .workCanvasWrapper {
+      bottom: 20%;
+      top: 10%;
     }
   }
 }
