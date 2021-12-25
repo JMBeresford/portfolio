@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import useStore from '../store';
 import Model from './Beresford_design';
 import Camera from '../components/Camera';
@@ -9,10 +9,13 @@ import { useMediaQuery } from 'react-responsive';
 import Cursor from '../components/Cursor';
 import { ACESFilmicToneMapping } from 'three';
 
+const DisableRender = () => useFrame(() => null, 1000);
+
 const Experience = () => {
   const ref = useRef();
   const init = useStore((state) => state.actions.init);
   const debugging = useStore((state) => state.debug.active);
+  const viewingWork = useStore((state) => state.viewingWork);
   const isPortrait = useMediaQuery({
     query: '(orientation: portrait)',
   });
@@ -43,6 +46,7 @@ const Experience = () => {
           ref={ref}
           gl={{ toneMapping: ACESFilmicToneMapping }}
         >
+          {viewingWork && <DisableRender />}
           <Camera near={0.001} />
           <Controls />
           <Suspense fallback={null}>

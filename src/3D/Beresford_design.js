@@ -8,10 +8,10 @@ import useStore from '../store';
 import modelPath from '../models/beresford_design.glb';
 import bake1 from '../img/bakes/bake1.jpg';
 import bake2 from '../img/bakes/bake2.jpg';
-import lightmap1_1 from '../img/bakes/lightmap1_1noise.jpg';
-import lightmap2_1 from '../img/bakes/lightmap2_1noise.jpg';
-import lightmap1_2 from '../img/bakes/lightmap1_2noise.jpg';
-import lightmap2_2 from '../img/bakes/lightmap2_2noise.jpg';
+import lightmap1_1 from '../img/bakes/lightmap1_1.jpg';
+import lightmap2_1 from '../img/bakes/lightmap2_1.jpg';
+import lightmap1_2 from '../img/bakes/lightmap1_2.jpg';
+import lightmap2_2 from '../img/bakes/lightmap2_2.jpg';
 import { extend, useFrame, useThree } from '@react-three/fiber';
 import {
   ACESFilmicToneMapping,
@@ -182,7 +182,6 @@ export default function Model(props) {
   useEffect(() => {
     if (useStore.getState().debug.active) {
       let pane = useStore.getState().debug.pane;
-      console.log(pane);
 
       pane
         .addButton({
@@ -1112,7 +1111,7 @@ export default function Model(props) {
         userData={{ name: 'socials' }}
       >
         <boxGeometry args={[1.15, 0.35, 0.45]} />
-        <meshBasicMaterial color='red' transparent={true} opacity={0.0} />
+        <meshBasicMaterial color='red' visible={false} />
       </mesh>
       <mesh
         position={[-1.0708, 1.40999, -0.82434]}
@@ -1120,7 +1119,7 @@ export default function Model(props) {
         userData={{ name: 'about' }}
       >
         <boxGeometry args={[0.8, 0.25, 0.45]} />
-        <meshBasicMaterial color='red' transparent={true} opacity={0.0} />
+        <meshBasicMaterial color='red' visible={false} />
       </mesh>
       <mesh
         position={[-1.1208, 1.00999, -0.82434]}
@@ -1128,7 +1127,7 @@ export default function Model(props) {
         userData={{ name: 'works' }}
       >
         <boxGeometry args={[0.8, 0.25, 0.45]} />
-        <meshBasicMaterial color='red' transparent={true} opacity={0.0} />
+        <meshBasicMaterial color='red' visible={false} />
       </mesh>
       <mesh
         position={[-1.0708, 0.62999, -0.82434]}
@@ -1136,7 +1135,7 @@ export default function Model(props) {
         userData={{ name: 'lab' }}
       >
         <boxGeometry args={[0.8, 0.25, 0.45]} />
-        <meshBasicMaterial color='red' transparent={true} opacity={0.0} />
+        <meshBasicMaterial color='red' visible={false} />
       </mesh>
       <mesh
         position={[0.38019, 1.0588, -0.91913]}
@@ -1144,7 +1143,7 @@ export default function Model(props) {
         userData={{ name: 'desk' }}
       >
         <boxGeometry args={[1.45, 0.625, 0.85]} />
-        <meshBasicMaterial color='red' transparent={true} opacity={0.0} />
+        <meshBasicMaterial color='red' visible={false} />
       </mesh>
     </group>
   );

@@ -1,7 +1,9 @@
 import React, { useRef, useEffect, Suspense } from 'react';
 import useStore from '../store';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import WorkBackground from '../3D/WorkBackground';
+
+const DisableRender = () => useFrame(() => null, 1000);
 
 const Work = () => {
   const ref = useRef();
@@ -67,6 +69,7 @@ const Work = () => {
             }}
             className='workCanvas'
           >
+            {!viewingWork && <DisableRender />}
             <Suspense fallback={null}>
               <WorkBackground
                 images={currentWork.images}

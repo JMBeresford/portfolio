@@ -4,7 +4,7 @@ import { extend, useFrame, useThree } from '@react-three/fiber';
 import vertexShader from '../shaders/particles/vert.glsl';
 import fragmentShader from '../shaders/particles/frag.glsl';
 import { Color, NoBlending, Vector3 } from 'three';
-import { gsap, Power1 } from 'gsap';
+import { gsap, Linear, Power1 } from 'gsap';
 
 const ParticleMaterial = shaderMaterial(
   {
@@ -23,7 +23,6 @@ const ParticleMaterial = shaderMaterial(
   fragmentShader,
   (mat) => {
     mat.transparent = true;
-    // mat.depthWrite = false;
     mat.premultipliedAlpha = true;
     mat.blending = NoBlending;
   }
@@ -33,6 +32,7 @@ extend({ ParticleMaterial });
 
 const WorkBackground = ({ images, color }) => {
   const ref = useRef();
+  const planeRef = useRef();
   const intersectionRef = useRef();
   const transitionRef = useRef();
   const dpr = useThree((state) => state.viewport.dpr);
@@ -59,7 +59,7 @@ const WorkBackground = ({ images, color }) => {
         value: 1,
 
         duration: 0.25,
-        ease: Power1.easeInOut,
+        ease: Linear.easeInOut,
       });
 
     return intersectionRef.current.kill();
@@ -69,10 +69,13 @@ const WorkBackground = ({ images, color }) => {
     transitionRef.current = gsap
       .timeline({ paused: true })
       .to(ref.current.material.uniforms.uTransition, {
-        value: 1,
+        value: 0.5,
 
         duration: 0.75,
-        ease: Power1.easeInOut,
+        ease: Power1.easeIn,
+        onStart: () => {
+          planeRef.current.visible = false;
+        },
         onComplete: () => {
           imgState.idx = (imgState.idx + 1) % maps.length;
           let nextImg = maps[imgState.idx];
@@ -86,7 +89,10 @@ const WorkBackground = ({ images, color }) => {
         value: 0,
 
         duration: 0.75,
-        ease: Power1.easeInOut,
+        ease: Linear.easeOut,
+        onComplete: () => {
+          planeRef.current.visible = true;
+        },
       });
 
     return transitionRef.current.kill();
@@ -121,7 +127,7 @@ const WorkBackground = ({ images, color }) => {
     }
   });
 
-  var COUNT = 700,
+  var COUNT = 500,
     COUNT2 = COUNT / 2;
 
   const pos = useMemo(() => [], []);
@@ -146,6 +152,7 @@ const WorkBackground = ({ images, color }) => {
   return (
     <>
       <mesh
+        ref={planeRef}
         onPointerEnter={(e) => {
           handleIn(e);
         }}
@@ -155,7 +162,7 @@ const WorkBackground = ({ images, color }) => {
         onPointerMove={(e) => handleMove(e)}
       >
         <planeGeometry args={[10, 10]} />
-        <meshBasicMaterial visible={false} transparent opacity={0.0} />
+        <meshBasicMaterial transparent opacity={0.0} />
       </mesh>
       <points ref={ref} scale={[1, 1, 1]}>
         <bufferGeometry>
