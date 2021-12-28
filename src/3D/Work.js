@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, Suspense } from 'react';
 import useStore from '../store';
 import { Canvas, useFrame } from '@react-three/fiber';
-import WorkBackground from '../3D/WorkBackground';
+import WorkBackground from './WorkBackground';
 
 const DisableRender = () => useFrame(() => null, 1000);
 
@@ -11,6 +11,7 @@ const Work = () => {
   const currentWork = useStore((state) => state.currentWork);
   const viewingWork = useStore((state) => state.viewingWork);
   const view = useStore((state) => state.view);
+  const mobile = useStore((state) => state.mobile);
 
   useEffect(() => {
     if (view !== 'worksEntered') {
@@ -29,20 +30,18 @@ const Work = () => {
       ref={ref}
       id='workPage'
       style={{
-        background: `linear-gradient(180deg, rgba(255,255,255,1) 0%, ${currentWork.color} 100%)`,
+        background: `radial-gradient(circle, ${currentWork.color} -10%, rgba(255,255,255,1) 100%)`,
       }}
     >
       <div className='content'>
-        <div className='text'>
-          <h1>
-            {currentWork.name}
-            <div
-              className='underline'
-              style={{ backgroundColor: currentWork.color }}
-            />
-          </h1>
-          <p className='desc'>{currentWork.description}</p>
-        </div>
+        <h1>
+          {currentWork.name}
+          <div
+            className='underline'
+            style={{ backgroundColor: currentWork.color }}
+          />
+        </h1>
+        <p className='desc'>{currentWork.description}</p>
         <div className='links'>
           {currentWork.live && (
             <a href={currentWork.live} rel='noreferrer' target='_blank'>
@@ -62,10 +61,9 @@ const Work = () => {
           <Canvas
             dpr={[1, 2]}
             ref={canvasRef}
-            linear={false}
             camera={{ fov: 65 }}
             onCreated={({ camera, gl }) => {
-              camera.position.set(0, 0, 1);
+              camera.position.set(0, -0.15, mobile ? 1.2 : 0.9);
             }}
             className='workCanvas'
           >
@@ -73,7 +71,7 @@ const Work = () => {
             <Suspense fallback={null}>
               <WorkBackground
                 images={currentWork.images}
-                color={currentWork.color}
+                color={currentWork.accentColor}
               />
             </Suspense>
           </Canvas>

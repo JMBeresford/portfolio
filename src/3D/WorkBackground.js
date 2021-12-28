@@ -48,8 +48,9 @@ const WorkBackground = ({ images, color }) => {
   const maps = useTexture(images);
 
   useEffect(() => {
-    if (!ref.current.material.uniforms.uTexture.value)
+    if (ref.current) {
       ref.current.material.uniforms.uTexture.value = maps[0];
+    }
   }, [maps]);
 
   useEffect(() => {
@@ -69,30 +70,22 @@ const WorkBackground = ({ images, color }) => {
     transitionRef.current = gsap
       .timeline({ paused: true })
       .to(ref.current.material.uniforms.uTransition, {
-        value: 0.5,
+        value: 0.25,
 
         duration: 0.75,
         ease: Power1.easeIn,
-        onStart: () => {
-          planeRef.current.visible = false;
-        },
         onComplete: () => {
           imgState.idx = (imgState.idx + 1) % maps.length;
           let nextImg = maps[imgState.idx];
-          let aspect = nextImg.image.width / nextImg.image.height;
-          ref.current.scale.x = aspect;
-          ref.current.material.uniforms.uAspect.value = aspect;
           ref.current.material.uniforms.uTexture.value = nextImg;
         },
       })
       .to(ref.current.material.uniforms.uTransition, {
         value: 0,
 
+        delay: 0.2,
         duration: 0.75,
         ease: Linear.easeOut,
-        onComplete: () => {
-          planeRef.current.visible = true;
-        },
       });
 
     return transitionRef.current.kill();
@@ -127,8 +120,8 @@ const WorkBackground = ({ images, color }) => {
     }
   });
 
-  var COUNT = 500,
-    COUNT2 = COUNT / 2;
+  var COUNT = useMemo(() => 750, []),
+    COUNT2 = useMemo(() => COUNT / 2, [COUNT]);
 
   const pos = useMemo(() => [], []);
   const uv = useMemo(() => [], []);
@@ -162,7 +155,7 @@ const WorkBackground = ({ images, color }) => {
         onPointerMove={(e) => handleMove(e)}
       >
         <planeGeometry args={[10, 10]} />
-        <meshBasicMaterial transparent opacity={0.0} />
+        <meshBasicMaterial visible={false} />
       </mesh>
       <points ref={ref} scale={[1, 1, 1]}>
         <bufferGeometry>

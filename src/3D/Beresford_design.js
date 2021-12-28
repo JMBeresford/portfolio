@@ -29,6 +29,8 @@ import bakedVertexShader from '../shaders/baked/vert.glsl';
 import bakedFragmentShader from '../shaders/baked/frag.glsl';
 import screenVertexShader from '../shaders/screen/vert.glsl';
 import screenFragmentShader from '../shaders/screen/frag.glsl';
+import ipadVertexShader from '../shaders/ipads/vert.glsl';
+import ipadFragmentShader from '../shaders/ipads/frag.glsl';
 
 const BakedMaterial = shaderMaterial(
   {
@@ -58,7 +60,16 @@ const ScreenMaterial = shaderMaterial(
   screenFragmentShader
 );
 
-extend({ BakedMaterial, ScreenMaterial });
+const IpadMaterial = shaderMaterial(
+  {
+    uTime: 0,
+    uColor: new Color(),
+  },
+  ipadVertexShader,
+  ipadFragmentShader
+);
+
+extend({ BakedMaterial, ScreenMaterial, IpadMaterial });
 
 export default function Model(props) {
   /**
@@ -119,11 +130,14 @@ export default function Model(props) {
   const scene = useThree((state) => state.scene);
   const renderer = useThree((state) => state.gl);
 
-  const socialRefs = [];
-  socialRefs[0] = useRef();
-  socialRefs[1] = useRef();
-  socialRefs[2] = useRef();
-  socialRefs[3] = useRef();
+  const socialRef0 = useRef();
+  const socialRef1 = useRef();
+  const socialRef2 = useRef();
+  const socialRef3 = useRef();
+
+  const ipadRef0 = useRef();
+  const ipadRef1 = useRef();
+  const ipadRef2 = useRef();
 
   const monitorRef = useRef();
 
@@ -181,7 +195,7 @@ export default function Model(props) {
    */
   useEffect(() => {
     if (useStore.getState().debug.active) {
-      let pane = useStore.getState().debug.pane;
+      const pane = useStore.getState().debug.pane;
 
       pane
         .addButton({
@@ -257,6 +271,12 @@ export default function Model(props) {
             }
           });
         });
+
+      return () => {
+        if (pane && pane.dispose) {
+          pane.dispose();
+        }
+      };
     }
   }, [renderer, scene]);
 
@@ -265,12 +285,16 @@ export default function Model(props) {
    */
   useEffect(() => {
     if (started) {
-      gsap.to(monitorRef.current.material.uniforms.uEntered, {
+      let anim = gsap.to(monitorRef.current.material.uniforms.uEntered, {
         value: 1,
 
         duration: 1.5,
         ease: Power2.easeIn,
       });
+
+      return () => {
+        if (anim && anim.kill) anim.kill();
+      };
     }
   }, [started]);
 
@@ -303,6 +327,12 @@ export default function Model(props) {
         },
         0
       );
+
+    return () => {
+      if (tableTl.current && tableTl.current.kill) {
+        tableTl.current.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -380,6 +410,12 @@ export default function Model(props) {
         },
         0
       );
+
+    return () => {
+      if (socialsTl.current && socialsTl.current.kill) {
+        socialsTl.current.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -403,6 +439,12 @@ export default function Model(props) {
         },
         0
       );
+
+    return () => {
+      if (emailTl.current && emailTl.current.kill) {
+        emailTl.current.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -426,6 +468,12 @@ export default function Model(props) {
         },
         0
       );
+
+    return () => {
+      if (instaTl.current && instaTl.current.kill) {
+        instaTl.current.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -449,6 +497,12 @@ export default function Model(props) {
         },
         0
       );
+
+    return () => {
+      if (linkedinTl.current && linkedinTl.current.kill) {
+        linkedinTl.current.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -472,6 +526,12 @@ export default function Model(props) {
         },
         0
       );
+
+    return () => {
+      if (githubTl.current && githubTl.current.kill) {
+        githubTl.current.kill();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -619,6 +679,12 @@ export default function Model(props) {
         },
         'fourth'
       );
+
+    return () => {
+      if (macTl.current && macTl.current.kill) {
+        macTl.current.kill();
+      }
+    };
   }, [
     CONFIG.macLight.color.r,
     CONFIG.macLight.color.g,
@@ -756,6 +822,10 @@ export default function Model(props) {
     }
 
     monitorRef.current.material.uTime = clock.elapsedTime + 100.0;
+
+    ipadRef0.current.material.uTime = clock.elapsedTime;
+    ipadRef1.current.material.uTime = clock.elapsedTime - 0.15;
+    ipadRef2.current.material.uTime = clock.elapsedTime - 0.3;
   });
 
   /**
@@ -971,20 +1041,22 @@ export default function Model(props) {
         <screenMaterial />
       </mesh>
       <mesh
+        ref={ipadRef0}
         geometry={nodes.ipad_emissive001.geometry}
         position={[-1.33282, 1.3842, -0.76811]}
         userData={{ name: 'aboutPad' }}
         onClick={(e) => handleClick(e)}
       >
-        <meshBasicMaterial toneMapped={false} color='white' />
+        <ipadMaterial uColor={[1.0, 0.5098, 0.4745]} />
       </mesh>
       <mesh
+        ref={ipadRef1}
         geometry={nodes.ipad_emissive002.geometry}
         position={[-0.91018, 0.9881, -0.76811]}
         userData={{ name: 'worksPad' }}
         onClick={(e) => handleClick(e)}
       >
-        <meshBasicMaterial toneMapped={false} color='white' />
+        <ipadMaterial uColor={[0.4745, 0.7451, 1.0]} />
       </mesh>
       <mesh
         geometry={nodes.shelving_emissive.geometry}
@@ -1005,12 +1077,13 @@ export default function Model(props) {
         <meshBasicMaterial color={'#ffffbb'} />
       </mesh>
       <mesh
+        ref={ipadRef2}
         geometry={nodes.ipad_emissive003.geometry}
         position={[-1.34343, 0.61977, -0.76811]}
         userData={{ name: 'labPad' }}
         onClick={(e) => handleClick(e)}
       >
-        <meshBasicMaterial toneMapped={false} color='white' />
+        <ipadMaterial uColor={[0.6706, 0.4196, 1.0]} />
       </mesh>
       <mesh
         ref={bake2Ref}
@@ -1060,7 +1133,7 @@ export default function Model(props) {
         />
       </mesh>
       <mesh
-        ref={socialRefs[0]}
+        ref={socialRef0}
         geometry={nodes.email_emissive.geometry}
         position={[-1.54201, 1.74999, -0.82321]}
         onClick={(e) => handleClick(e, 'email')}
@@ -1069,7 +1142,7 @@ export default function Model(props) {
         <meshBasicMaterial color={'#ddddff'} />
       </mesh>
       <mesh
-        ref={socialRefs[1]}
+        ref={socialRef1}
         geometry={nodes.insta_emissive.geometry}
         position={[-1.2595, 1.74999, -0.82434]}
         onClick={(e) => handleClick(e, 'insta')}
@@ -1078,7 +1151,7 @@ export default function Model(props) {
         <meshBasicMaterial color={'#eeddf0'} />
       </mesh>
       <mesh
-        ref={socialRefs[3]}
+        ref={socialRef3}
         geometry={nodes.github_emissive.geometry}
         position={[-0.70014, 1.74999, -0.82434]}
         onClick={(e) => handleClick(e, 'github')}
@@ -1097,7 +1170,7 @@ export default function Model(props) {
         <meshBasicMaterial />
       </mesh>
       <mesh
-        ref={socialRefs[2]}
+        ref={socialRef2}
         geometry={nodes.linkedin_emissive.geometry}
         position={[-0.9821, 1.74999, -0.82434]}
         onClick={(e) => handleClick(e, 'linkedin')}

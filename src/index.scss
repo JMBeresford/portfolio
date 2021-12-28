@@ -549,8 +549,15 @@ body {
 
   .content {
     z-index: 51;
-    display: flex;
-    justify-content: center;
+    display: grid;
+
+    grid-template-areas:
+      '. header .     .'
+      '. desc   links .';
+
+    grid-template-columns: 1fr clamp(25ch, 100%, 45ch) max-content 1fr;
+    gap: 1rem;
+
     pointer-events: none;
     padding: 2rem 0;
     color: white;
@@ -564,18 +571,24 @@ body {
       rgba(0, 0, 0, 0.95) 0%,
       rgba(0, 0, 0, 0.65) 60%,
       rgba(0, 0, 0, 0.45) 80%,
-      rgba(255, 255, 255, 0) 100%
+      rgba(0, 0, 0, 0) 100%
     );
 
-    > * {
-      width: clamp(300px, 100%, 1500px);
+    h1 {
+      grid-area: header;
+      font-size: 2rem;
     }
 
     .text {
-      width: clamp(25ch, 100%, 45ch);
+      width: fit-content;
+    }
+
+    .desc {
+      grid-area: desc;
     }
 
     .links {
+      grid-area: links;
       display: flex;
       align-items: center;
       width: max-content;
@@ -586,7 +599,6 @@ body {
       }
 
       a {
-        pointer-events: all;
         text-decoration: none;
         display: block;
         font-family: $serif;
@@ -628,6 +640,11 @@ body {
       opacity: 1;
     }
 
+    a {
+      pointer-events: all;
+      touch-action: all;
+    }
+
     h1 {
       opacity: 1;
       transform: translateX(0);
@@ -640,8 +657,7 @@ body {
 }
 
 @media (max-width: 1000px) {
-  #about,
-  #workPage {
+  #about {
     .content {
       grid-template-columns: 100%;
 
@@ -649,19 +665,26 @@ body {
         display: none;
       }
     }
+  }
 
+  #workPage {
     .content {
-      flex-direction: column;
-      justify-content: center;
-      gap: 1rem;
+      padding: 0 5% 5%;
+      gap: 0;
+      grid-template-areas:
+        'header'
+        'desc'
+        'links';
 
-      padding-left: 5%;
-      padding-right: 5%;
+      grid-template-columns: 100%;
+
+      .desc {
+        margin-bottom: 0.5rem;
+      }
     }
 
     .workCanvasWrapper {
-      bottom: 20%;
-      top: 10%;
+      bottom: 10%;
     }
   }
 }

@@ -30,14 +30,24 @@ const AboutImage = React.memo(() => {
         duration: 0.25,
         ease: Power1.easeInOut,
       });
+
+    return () => {
+      if (intersectionRef.current && intersectionRef.current.kill) {
+        intersectionRef.current.kill();
+      }
+    };
   }, []);
 
   const handleIn = (e) => {
-    intersectionRef.current.play();
+    if (intersectionRef.current && intersectionRef.current.play) {
+      intersectionRef.current.play();
+    }
   };
 
   const handleOut = (e) => {
-    intersectionRef.current.reverse();
+    if (intersectionRef.current && intersectionRef.current.reverse) {
+      intersectionRef.current.reverse();
+    }
   };
 
   const handleMove = (e) => {
@@ -58,20 +68,25 @@ const AboutImage = React.memo(() => {
   map.format = RGBFormat;
 
   return (
-    <mesh
-      ref={ref}
-      rotation={[0, -0.1, 0]}
-      onPointerEnter={(e) => {
-        handleIn(e);
-      }}
-      onPointerLeave={(e) => {
-        handleOut(e);
-      }}
-      onPointerMove={(e) => handleMove(e)}
-    >
-      <planeGeometry args={[2, 2, 50, 50]} />
-      <imageMaterial uTexture={map} />
-    </mesh>
+    <>
+      <mesh
+        rotation={[0, -0.1, 0]}
+        onPointerEnter={(e) => {
+          handleIn(e);
+        }}
+        onPointerLeave={(e) => {
+          handleOut(e);
+        }}
+        onPointerMove={(e) => handleMove(e)}
+      >
+        <planeGeometry args={[2.5, 2.5]} />
+        <meshBasicMaterial visible={false} />
+      </mesh>
+      <mesh ref={ref} rotation={[0, -0.1, 0]}>
+        <planeGeometry args={[2, 2, 50, 50]} />
+        <imageMaterial uTexture={map} />
+      </mesh>
+    </>
   );
 });
 

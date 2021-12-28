@@ -17,15 +17,16 @@ const Experience = () => {
   const debugging = useStore((state) => state.debug.active);
   const viewingWork = useStore((state) => state.viewingWork);
   const isPortrait = useMediaQuery({
-    query: '(orientation: portrait)',
+    maxAspectRatio: '1200/820',
   });
 
   const isSmallScreen = useMediaQuery({
-    query: '(max-width: 1200px)',
+    maxWidth: '1200px',
   });
 
   useEffect(() => {
-    if (isPortrait || isSmallScreen) {
+    console.log(isPortrait);
+    if (isSmallScreen || isPortrait) {
       useStore.setState({ mobile: true });
     } else {
       useStore.setState({ mobile: false });
@@ -42,6 +43,7 @@ const Experience = () => {
       <div id='webGL-wrapper'>
         <Cursor />
         <Canvas
+          mode='concurrent'
           dpr={[1, 2]}
           ref={ref}
           gl={{ toneMapping: ACESFilmicToneMapping }}

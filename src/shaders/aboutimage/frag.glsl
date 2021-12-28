@@ -12,11 +12,8 @@ mat2 rotate(float a) {
 }
 
 void main() {
-  float d = clamp(0.2 - distance(uMouse, vPos), 0.0, 0.2);
 
-  float factor = d * uIntersecting;
-
-  vec3 color = texture2D(uTexture, vUv * rotate(factor)).rgb;
+  vec3 color = texture2D(uTexture, vUv).rgb;
 
   gl_FragColor = vec4(color, 1.0);
 }

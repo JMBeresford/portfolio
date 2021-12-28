@@ -4,7 +4,6 @@ import useStore from '../store';
 const Cursor = () => {
   const ref = useRef();
   const intersecting = useStore((state) => state.intersecting);
-  const mobile = useStore((state) => state.mobile);
   const pointerType = useStore((state) => state.pointerType);
 
   const handleMouseMove = (e) => {
@@ -23,7 +22,7 @@ const Cursor = () => {
     <div
       ref={ref}
       id='cursor'
-      hidden={pointerType === 'touch' || mobile}
+      hidden={pointerType === 'touch'}
       className={intersecting ? 'hovering' : ''}
     >
       <div className='ripple'></div>

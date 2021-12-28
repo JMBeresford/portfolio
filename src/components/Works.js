@@ -1,5 +1,5 @@
 import React from 'react';
-import Work from './Work';
+import Work from '../3D/Work';
 import WorkList from './WorkList';
 
 const Works = () => {
