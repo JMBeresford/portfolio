@@ -4,7 +4,7 @@ import { extend, useFrame, useThree } from '@react-three/fiber';
 import vertexShader from '../shaders/particles/vert.glsl';
 import fragmentShader from '../shaders/particles/frag.glsl';
 import { Color, Vector3 } from 'three';
-import { gsap, Linear, Power1, Power4 } from 'gsap';
+import { gsap, Linear, Power4 } from 'gsap';
 
 const ParticleMaterial = shaderMaterial(
   {
@@ -25,8 +25,6 @@ const ParticleMaterial = shaderMaterial(
     mat.transparent = true;
     mat.depthTest = false;
     mat.depthWrite = false;
-    // mat.premultipliedAlpha = true;
-    // mat.blending = NoBlending;
   }
 );
 
