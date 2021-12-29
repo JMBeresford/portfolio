@@ -56,27 +56,25 @@ const Work = () => {
           )}
         </div>
       </div>
-      {view === 'worksEntered' && (
-        <div className='workCanvasWrapper'>
-          <Canvas
-            dpr={[1, 2]}
-            ref={canvasRef}
-            camera={{ fov: 65 }}
-            onCreated={({ camera, gl }) => {
-              camera.position.set(0, -0.15, mobile ? 1.2 : 0.9);
-            }}
-            className='workCanvas'
-          >
-            {!viewingWork && <DisableRender />}
-            <Suspense fallback={null}>
-              <WorkBackground
-                images={currentWork.images}
-                color={currentWork.accentColor}
-              />
-            </Suspense>
-          </Canvas>
-        </div>
-      )}
+      <div className='workCanvasWrapper'>
+        <Canvas
+          dpr={[1, 2]}
+          ref={canvasRef}
+          camera={{ fov: 65 }}
+          onCreated={({ camera, gl }) => {
+            camera.position.set(0, -0.15, mobile ? 1.2 : 0.9);
+          }}
+          className='workCanvas'
+        >
+          {!viewingWork && <DisableRender />}
+          <Suspense fallback={null}>
+            <WorkBackground
+              images={currentWork.images}
+              color={currentWork.accentColor}
+            />
+          </Suspense>
+        </Canvas>
+      </div>
     </div>
   );
 };

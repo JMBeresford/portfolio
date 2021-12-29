@@ -97,6 +97,9 @@ const actions = (set, get) => ({
     return r;
   },
   setView: (newView) => {
+    if (newView === 'aboutEntered') {
+      set({ viewingAbout: true });
+    }
     set({ view: newView, animatingView: false, destination: null });
   },
   back: () => {
@@ -109,6 +112,7 @@ const actions = (set, get) => ({
 
     switch (get().view) {
       case 'aboutEntered': {
+        set({ viewingAbout: false });
         if (mobile) {
           transition('main');
         } else {

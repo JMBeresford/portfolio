@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import useStore from '../store';
 
-const Cursor = () => {
+const Cursor = React.memo(() => {
   const ref = useRef();
   const intersecting = useStore((state) => state.intersecting);
   const pointerType = useStore((state) => state.pointerType);
@@ -28,6 +28,6 @@ const Cursor = () => {
       <div className='ripple'></div>
     </div>
   );
-};
+});
 
 export default Cursor;

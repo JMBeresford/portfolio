@@ -12,6 +12,7 @@ const useStore = create((set, get) => ({
   ready: false,
   started: false,
   mobile: false,
+  viewingAbout: false,
 
   debug: {
     active: false,

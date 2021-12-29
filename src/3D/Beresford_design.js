@@ -71,7 +71,7 @@ const IpadMaterial = shaderMaterial(
 
 extend({ BakedMaterial, ScreenMaterial, IpadMaterial });
 
-export default function Model(props) {
+const Model = React.memo((props) => {
   /**
    * STORE
    */
@@ -1220,6 +1220,8 @@ export default function Model(props) {
       </mesh>
     </group>
   );
-}
+});
 
 useGLTF.preload(modelPath);
+
+export default Model;

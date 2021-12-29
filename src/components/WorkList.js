@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import useStore from '../store';
 
-const WorkList = () => {
+const WorkList = React.memo(() => {
   const ref = useRef();
   const listRef = useRef();
   const worksData = useStore((state) => state.works);
@@ -46,6 +46,6 @@ const WorkList = () => {
       </div>
     </div>
   );
-};
+});
 
 export default WorkList;

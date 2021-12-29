@@ -2,9 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import useStore from '../store';
 import AboutCanvas from '../3D/AboutCanvas';
 
-const About = () => {
+const About = React.memo(() => {
   const ref = useRef();
-  const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
 
   useEffect(() => {
@@ -39,12 +38,10 @@ const About = () => {
             specific topic or element.
           </p>
         </div>
-        {(view === 'aboutEntered' || destination === 'aboutEntered') && (
-          <AboutCanvas />
-        )}
+        <AboutCanvas />
       </div>
     </div>
   );
-};
+});
 
 export default About;

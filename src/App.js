@@ -3,6 +3,7 @@ import Loading from './components/Loading';
 import useStore from './store';
 import About from './components/About';
 import Works from './components/Works';
+import Lab from './components/Lab';
 import Gui from './components/Gui';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Gui />
       <About />
       <Works />
+      <Lab />
     </div>
   );
 }

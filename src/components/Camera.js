@@ -10,7 +10,7 @@ let _v2 = new Vector3();
 let _p = new Vector3();
 let _r = new Vector3();
 
-const Camera = (props) => {
+const Camera = React.memo((props) => {
   const ref = useRef();
   const destination = useStore((state) => state.destination);
   const view = useRef(useStore.getState().view);
@@ -86,7 +86,7 @@ const Camera = (props) => {
       let d = _v1.distanceTo(_p) * 2;
 
       if (view.current === 'start') {
-        d *= 2;
+        d *= 4;
       }
 
       let spring = { value: 0 };
@@ -102,7 +102,6 @@ const Camera = (props) => {
           if (ref.current.position.distanceTo(_p) > 0.0001) {
             ref.current.position.lerp(_p, spring.value);
             ref.current.rotation.setFromVector3(_v2.lerp(_r, spring.value));
-            // console.log(ref.current.position.distanceTo(_v3));
           } else {
             setView(destination);
             tl.kill();
@@ -121,6 +120,6 @@ const Camera = (props) => {
       {...props}
     />
   );
-};
+});
 
 export default Camera;

@@ -30,7 +30,7 @@ const ParticleMaterial = shaderMaterial(
 
 extend({ ParticleMaterial });
 
-const WorkBackground = ({ images, color }) => {
+const WorkBackground = React.memo(({ images, color }) => {
   const ref = useRef();
   const planeRef = useRef();
   const intersectionRef = useRef();
@@ -120,7 +120,7 @@ const WorkBackground = ({ images, color }) => {
     }
   });
 
-  var COUNT = useMemo(() => 750, []),
+  var COUNT = useMemo(() => 1000, []),
     COUNT2 = useMemo(() => COUNT / 2, [COUNT]);
 
   const pos = useMemo(() => [], []);
@@ -180,6 +180,6 @@ const WorkBackground = ({ images, color }) => {
       </points>
     </>
   );
-};
+});
 
 export default WorkBackground;

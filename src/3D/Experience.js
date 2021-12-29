@@ -11,11 +11,12 @@ import { ACESFilmicToneMapping } from 'three';
 
 const DisableRender = () => useFrame(() => null, 1000);
 
-const Experience = () => {
+const Experience = React.memo(() => {
   const ref = useRef();
   const init = useStore((state) => state.actions.init);
   const debugging = useStore((state) => state.debug.active);
   const viewingWork = useStore((state) => state.viewingWork);
+  const viewingAbout = useStore((state) => state.viewingAbout);
   const isPortrait = useMediaQuery({
     maxAspectRatio: '1200/820',
   });
@@ -25,7 +26,6 @@ const Experience = () => {
   });
 
   useEffect(() => {
-    console.log(isPortrait);
     if (isSmallScreen || isPortrait) {
       useStore.setState({ mobile: true });
     } else {
@@ -48,7 +48,7 @@ const Experience = () => {
           ref={ref}
           gl={{ toneMapping: ACESFilmicToneMapping }}
         >
-          {viewingWork && <DisableRender />}
+          {(viewingWork || viewingAbout) && <DisableRender />}
           <Camera near={0.001} />
           <Controls />
           <Suspense fallback={null}>
@@ -59,6 +59,6 @@ const Experience = () => {
       </div>
     </>
   );
-};
+});
 
 export default Experience;

@@ -6,7 +6,7 @@ import { useFrame } from '@react-three/fiber';
 let _v = new Vector3();
 let _v2 = new Vector3();
 
-const Controls = () => {
+const Controls = React.memo(() => {
   const animatingRef = useRef(useStore.getState().animatingView);
   const viewRef = useRef(useStore.getState().view);
   const pointerRef = useRef(useStore.getState().pointerType);
@@ -89,6 +89,6 @@ const Controls = () => {
   });
 
   return <></>;
-};
+});
 
 export default Controls;

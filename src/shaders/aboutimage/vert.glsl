@@ -14,7 +14,7 @@ void main() {
 
   float factor = d * uIntersecting * 5.0;
 
-  float offset = mix((sin(pos.y * 5.0 + uTime) + cos(pos.x * 5.0 + uTime)) * 0.05, 0.2, factor);
+  float offset = mix((sin(pos.y * 5.0 + uTime) + cos(pos.x * 5.0 + uTime)) * 0.025, 0.2, factor);
 
   pos.z += offset;
 
