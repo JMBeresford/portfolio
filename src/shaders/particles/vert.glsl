@@ -9,49 +9,42 @@ varying vec2 vUv;
 varying vec3 vPos;
 varying float vDisplacement;
 
-#pragma glslify: snoise21 = require(glsl-noise/simplex/2d)
-#pragma glslify: snoise31 = require(glsl-noise/simplex/3d)
-#pragma glslify: snoise41 = require(glsl-noise/simplex/4d)
+attribute float aSpeed;
 
-mat2 rotate(float a) {
-  float s = sin(a), c = cos(a);
-
-  return mat2(c,-s,s,c);
-}
+#define S smoothstep
+#define INITIAL_RADIUS 0.05
+#define RADIUS 0.1
+#define DEPTH 1.0
 
 float random(vec3 pos) {
   return fract(sin(dot(pos.xyz, vec3(70.9898, 78.233, 32.4355))) * 43758.5453123);
 }
 
-vec3 snoise33(vec3 x) {
-  float a = snoise31(x);
-  float b = snoise31(vec3(x.x + 123.4, x.y + 376.2, x.z));
-  float c = snoise31(vec3(x.x - 44.2, x.y - 125.6, -x.z));
-
-  return vec3(a,b,c);
-}
-
 void main() {
   vec3 pos = position;
-  vec3 m = uMouse;
-  float maxDist = 0.075;
+  vec3 transisitonPos = position;
+  float r = random(position);
 
-  float d = clamp(maxDist - distance(m, pos), 0.0, maxDist);
+  pos.x += cos(uTime * 0.025) * INITIAL_RADIUS;
+  pos.y += sin(uTime * 0.05) * INITIAL_RADIUS;
+  pos.z += sin(uTime * 0.1) * INITIAL_RADIUS;
 
-  vec3 r = vec3(random(pos.xxx), random(pos.yyy), random(pos.zzz));
+  float d = clamp(distance(uMouse, pos), 0.0, 1.0);
+  float mouseRadius = clamp(S(0.45, 1.0, d) - uTransition, 0.0, 1.0) * uIntersecting;
 
-  float factor = d * uIntersecting;
+  transisitonPos.x += cos(uTime * 2.0 * aSpeed) * RADIUS;
+  transisitonPos.y += sin(uTime * 2.0 * aSpeed) * RADIUS;
+  transisitonPos.z = mod(transisitonPos.z + (-uTime * aSpeed) + DEPTH + r, DEPTH * 2.0) - DEPTH;
 
-  factor -= uTransition;
+  float transition = mouseRadius + uTransition;
 
-  vec3 v = snoise33(r + uTime * 0.1) * 0.05;
+  pos = mix(pos, transisitonPos, transition);
 
-  pos = mix(pos, normalize(pos + v), factor * 5.0);
-  pos = mix(pos, v, uTransition);
+  vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-  gl_PointSize = 3.5 * uDpr * uScale;
-  vDisplacement = distance(position, pos) * 1.2;
+  gl_Position = projectionMatrix * mvPos;
+  gl_PointSize = 3.5 * uDpr * uScale / length(mvPos.xyz);
+  vDisplacement = clamp(1.0 - pos.z, 0.0, 1.0);
   vUv = uv;
   vPos = pos;
 }

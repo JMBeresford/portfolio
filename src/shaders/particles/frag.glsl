@@ -14,19 +14,16 @@ float random(vec3 pos) {
 }
 
 void main() {
-  vec4 color = texture2D(uTexture, vUv);
+  vec4 tex = texture2D(uTexture, vUv);
+  vec3 color = tex.rgb;
 
   float d = 1.0 - distance(vec2(0.5), gl_PointCoord) * 2.0;
 
-  if (d <= 0.0 && vDisplacement > 0.0) {
-    discard;
-  }
+  vec3 transitionColor = uColor * random(vPos);
 
-  vec4 transitionColor = vec4(uColor, 1.0) * clamp((1.0 - length(vPos)), 0.0, 1.0);
+  color = mix(color, transitionColor, uTransition * 0.25);
 
-  color = mix(color, transitionColor, S(0.0, 1.0, vDisplacement * 1.2));
+  float alpha = tex.a * S(0.0, 0.5, d) * S(0.0, 0.9, vDisplacement);
 
-  color.rgb *= color.a;
-
-  gl_FragColor = color;
+  gl_FragColor = vec4(color, alpha);
 } 

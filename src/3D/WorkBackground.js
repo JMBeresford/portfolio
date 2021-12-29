@@ -3,8 +3,8 @@ import { shaderMaterial, useTexture } from '@react-three/drei';
 import { extend, useFrame, useThree } from '@react-three/fiber';
 import vertexShader from '../shaders/particles/vert.glsl';
 import fragmentShader from '../shaders/particles/frag.glsl';
-import { Color, NoBlending, Vector3 } from 'three';
-import { gsap, Linear, Power1 } from 'gsap';
+import { Color, Vector3 } from 'three';
+import { gsap, Linear, Power1, Power4 } from 'gsap';
 
 const ParticleMaterial = shaderMaterial(
   {
@@ -23,8 +23,10 @@ const ParticleMaterial = shaderMaterial(
   fragmentShader,
   (mat) => {
     mat.transparent = true;
-    mat.premultipliedAlpha = true;
-    mat.blending = NoBlending;
+    mat.depthTest = false;
+    mat.depthWrite = false;
+    // mat.premultipliedAlpha = true;
+    // mat.blending = NoBlending;
   }
 );
 
@@ -70,10 +72,10 @@ const WorkBackground = React.memo(({ images, color }) => {
     transitionRef.current = gsap
       .timeline({ paused: true })
       .to(ref.current.material.uniforms.uTransition, {
-        value: 0.25,
+        value: 1,
 
-        duration: 0.75,
-        ease: Power1.easeIn,
+        duration: 0.5,
+        ease: Power4.easeIn,
         onComplete: () => {
           imgState.idx = (imgState.idx + 1) % maps.length;
           let nextImg = maps[imgState.idx];
@@ -83,9 +85,9 @@ const WorkBackground = React.memo(({ images, color }) => {
       .to(ref.current.material.uniforms.uTransition, {
         value: 0,
 
-        delay: 0.2,
-        duration: 0.75,
-        ease: Linear.easeOut,
+        delay: 0.75,
+        duration: 0.5,
+        ease: Power4.easeOut,
       });
 
     return transitionRef.current.kill();
@@ -120,11 +122,12 @@ const WorkBackground = React.memo(({ images, color }) => {
     }
   });
 
-  var COUNT = useMemo(() => 1000, []),
+  var COUNT = useMemo(() => 512, []),
     COUNT2 = useMemo(() => COUNT / 2, [COUNT]);
 
   const pos = useMemo(() => [], []);
   const uv = useMemo(() => [], []);
+  const speed = useMemo(() => [], []);
 
   for (let i = 0; i < COUNT; i++) {
     for (let j = 0; j < COUNT; j++) {
@@ -134,13 +137,17 @@ const WorkBackground = React.memo(({ images, color }) => {
       let u = i / COUNT;
       let v = j / COUNT;
 
+      let s = Math.random() * 0.7 + 0.3;
+
       pos.push(x, y, 0);
       uv.push(u, v);
+      speed.push(s);
     }
   }
 
   const vertices = useMemo(() => new Float32Array(pos), [pos]);
   const uvs = useMemo(() => new Float32Array(uv), [uv]);
+  const speeds = useMemo(() => new Float32Array(speed), [speed]);
 
   return (
     <>
@@ -154,7 +161,7 @@ const WorkBackground = React.memo(({ images, color }) => {
         }}
         onPointerMove={(e) => handleMove(e)}
       >
-        <planeGeometry args={[10, 10]} />
+        <planeGeometry args={[1.1, 1]} />
         <meshBasicMaterial visible={false} />
       </mesh>
       <points ref={ref} scale={[1, 1, 1]}>
@@ -170,6 +177,12 @@ const WorkBackground = React.memo(({ images, color }) => {
             array={uvs}
             itemSize={2}
             count={uvs.length / 2}
+          />
+          <bufferAttribute
+            attachObject={['attributes', 'aSpeed']}
+            array={speeds}
+            itemSize={1}
+            count={speeds.length}
           />
         </bufferGeometry>
         <particleMaterial
