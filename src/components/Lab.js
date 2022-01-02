@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import useStore from '../store';
+import LabCanvas from '../3D/LabCanvas';
 
-const Lab = React.memo(() => {
+const Lab = () => {
   const ref = useRef();
   const destination = useStore((state) => state.destination);
 
@@ -15,13 +16,15 @@ const Lab = React.memo(() => {
 
   return (
     <div ref={ref} id='lab'>
-      <div className='header'>
-        <h1>Lab</h1>
+      <div className='desc'>
+        <h1>
+          The Lab Is Currently Under Construction
+          <div className='underline' />
+        </h1>
       </div>
-
-      <h2>The Lab Is Currently Under Construction</h2>
+      <LabCanvas />
     </div>
   );
-});
+};
 
 export default Lab;

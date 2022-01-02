@@ -1,0 +1,14 @@
+@use 'sass:color';
+
+$primary: #f1f6f9;
+$secondary: #34252f;
+
+$accent-blue: #2374ab;
+
+$accent-pink: #ff9e9e;
+
+$underline-pink: color.adjust(
+  $accent-pink,
+  $lightness: -15%,
+  $saturation: -20%
+);

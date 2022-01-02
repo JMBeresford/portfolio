@@ -1,14 +1,26 @@
-import React from 'react';
-import Work from '../3D/Work';
-import WorkList from './WorkList';
+import React, { useRef, useEffect } from 'react';
+import WorksCanvas from '../3D/WorksCanvas';
+import useStore from '../store';
 
-const Works = React.memo(() => {
+const Works = () => {
+  const ref = useRef();
+  const view = useStore((state) => state.view);
+  const destination = useStore((state) => state.destination);
+
+  useEffect(() => {
+    if (view === 'worksEntered') {
+      ref.current.classList.add('in');
+      if (destination === 'main') {
+        ref.current.classList.remove('in');
+      }
+    }
+  }, [view, destination]);
+
   return (
-    <div id='works'>
-      <WorkList />
-      <Work />
+    <div ref={ref} id='works'>
+      <WorksCanvas />
     </div>
   );
-});
+};
 
 export default Works;

@@ -5,6 +5,7 @@ import About from './components/About';
 import Works from './components/Works';
 import Lab from './components/Lab';
 import Gui from './components/Gui';
+import Cursor from './components/Cursor';
 
 function App() {
   const view = useStore((state) => state.view);
@@ -12,6 +13,7 @@ function App() {
   return (
     <div className='App'>
       {view === 'start' && <Loading />}
+      <Cursor />
       <Experience />
       <Gui />
       <About />

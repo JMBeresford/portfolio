@@ -6,17 +6,16 @@ import Camera from '../components/Camera';
 import Controls from '../components/Controls';
 import { Stats } from '@react-three/drei';
 import { useMediaQuery } from 'react-responsive';
-import Cursor from '../components/Cursor';
 import { ACESFilmicToneMapping } from 'three';
 
 const DisableRender = () => useFrame(() => null, 1000);
 
-const Experience = React.memo(() => {
+const Experience = () => {
   const ref = useRef();
   const init = useStore((state) => state.actions.init);
   const debugging = useStore((state) => state.debug.active);
-  const viewingWork = useStore((state) => state.viewingWork);
-  const viewingAbout = useStore((state) => state.viewingAbout);
+  const view = useStore((state) => state.view);
+  const destination = useStore((state) => state.destination);
   const isPortrait = useMediaQuery({
     maxAspectRatio: '1200/820',
   });
@@ -41,14 +40,13 @@ const Experience = React.memo(() => {
   return (
     <>
       <div id='webGL-wrapper'>
-        <Cursor />
         <Canvas
-          mode='concurrent'
           dpr={[1, 2]}
           ref={ref}
           gl={{ toneMapping: ACESFilmicToneMapping }}
         >
-          {(viewingWork || viewingAbout) && <DisableRender />}
+          {['aboutEntered', 'worksEntered', 'labEntered'].includes(view) &&
+            !destination && <DisableRender />}
           <Camera near={0.001} />
           <Controls />
           <Suspense fallback={null}>
@@ -59,6 +57,6 @@ const Experience = React.memo(() => {
       </div>
     </>
   );
-});
+};
 
 export default Experience;

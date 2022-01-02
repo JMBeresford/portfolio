@@ -1,0 +1,83 @@
+@use 'sass:color';
+@use './fonts' as *;
+@use './colors' as *;
+
+#lab {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  cursor: none;
+
+  // inactive state
+  opacity: 0;
+  pointer-events: none;
+  touch-action: none;
+
+  transition: opacity 0.5s ease-in-out;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  h1,
+  .desc {
+    font-family: $serif;
+    color: white;
+
+    filter: drop-shadow(0rem 0rem 0.2rem black);
+
+    opacity: 0;
+    transform: scale(0.75);
+    transform-origin: center;
+
+    transition: all 0.5s ease-out;
+    transition-delay: 0.5s;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 2rem + 1vw, 5rem);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .desc {
+    width: clamp(25ch, 100%, 45ch);
+    max-width: 95%;
+    text-align: center;
+
+    font-size: clamp(1rem, 0.9rem + 0.75vw, 1.7rem);
+
+    strong {
+      text-decoration: underline;
+      text-decoration-color: $underline-pink;
+      text-decoration-thickness: 0.125rem;
+    }
+  }
+
+  &.in {
+    opacity: 1;
+    pointer-events: all;
+    touch-action: all;
+
+    h1 .underline {
+      transform: scaleX(1);
+    }
+
+    h1,
+    .desc {
+      opacity: 1;
+
+      transform: scale(1);
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  #lab {
+    .desc {
+      width: 25ch;
+    }
+  }
+}

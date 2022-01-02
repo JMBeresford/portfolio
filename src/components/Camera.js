@@ -10,22 +10,16 @@ let _v2 = new Vector3();
 let _p = new Vector3();
 let _r = new Vector3();
 
-const Camera = React.memo((props) => {
+const Camera = (props) => {
   const ref = useRef();
   const destination = useStore((state) => state.destination);
-  const view = useRef(useStore.getState().view);
+  const view = useStore((state) => state.view);
   const getView = useStore((state) => state.actions.getView);
   const setView = useStore((state) => state.actions.setView);
   const { viewport } = useThree();
   const tl = gsap.timeline();
 
   const { position, rotation } = getView('start');
-
-  // bind state w/o re-render
-  useEffect(
-    () => useStore.subscribe((state) => (view.current = state.view)),
-    []
-  );
 
   // INIT
   useEffect(() => {
@@ -70,8 +64,8 @@ const Camera = React.memo((props) => {
 
   // handle view change request
   useEffect(() => {
-    if (destination !== null && destination !== view.current) {
-      let curView = getView(view.current);
+    if (destination !== null && destination !== view) {
+      let curView = getView(view);
       let { position, rotation } = getView(destination);
 
       _p.set(...position);
@@ -85,8 +79,14 @@ const Camera = React.memo((props) => {
 
       let d = _v1.distanceTo(_p) * 2;
 
-      if (view.current === 'start') {
+      if (view === 'start') {
         d *= 4;
+      }
+
+      var delay = 0;
+
+      if (['aboutEntered', 'worksEntered', 'labEntered'].includes(view)) {
+        delay = 0.5;
       }
 
       let spring = { value: 0 };
@@ -97,6 +97,7 @@ const Camera = React.memo((props) => {
         value: 1,
 
         duration: d,
+        delay: delay,
         ease: Linear.easeIn,
         onUpdate: () => {
           if (ref.current.position.distanceTo(_p) > 0.0001) {
@@ -109,7 +110,7 @@ const Camera = React.memo((props) => {
         },
       });
     }
-  }, [destination, getView, setView, viewport, tl]);
+  }, [destination, getView, setView, viewport, tl, view]);
 
   return (
     <PerspectiveCamera
@@ -120,6 +121,6 @@ const Camera = React.memo((props) => {
       {...props}
     />
   );
-});
+};
 
 export default Camera;

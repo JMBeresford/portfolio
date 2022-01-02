@@ -3,7 +3,7 @@ import { Vector2 } from 'three';
 const pointerSlice = (set, get) => ({
   intersecting: false,
   intersections: [],
-  pointerType: 'mouse',
+  pointerType: 'touch',
   mouse: new Vector2(0, 0),
 
   allowedIntersections: {

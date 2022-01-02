@@ -5,7 +5,7 @@ import IpadBackground from './IpadBackground';
 
 const DisableRender = () => useFrame(() => null, 1000);
 
-const AboutCanvas = () => {
+const LabCanvas = () => {
   const ref = useRef();
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
@@ -14,6 +14,7 @@ const AboutCanvas = () => {
     <div className='ipadWebGLWrapper'>
       <Canvas
         dpr={[1, 2]}
+        mode='concurrent'
         ref={ref}
         camera={{ fov: 65 }}
         onCreated={({ camera, gl }) => {
@@ -21,7 +22,7 @@ const AboutCanvas = () => {
           gl.setClearColor('black');
         }}
       >
-        {(view !== 'aboutEntered' || destination) && <DisableRender />}
+        {(view !== 'labEntered' || destination) && <DisableRender />}
         <Suspense fallback={null}>
           <IpadBackground />
         </Suspense>
@@ -30,4 +31,4 @@ const AboutCanvas = () => {
   );
 };
 
-export default AboutCanvas;
+export default LabCanvas;

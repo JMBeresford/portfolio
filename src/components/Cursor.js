@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import useStore from '../store';
 
-const Cursor = React.memo(() => {
+const Cursor = () => {
   const ref = useRef();
   const intersecting = useStore((state) => state.intersecting);
   const pointerType = useStore((state) => state.pointerType);
@@ -9,6 +9,10 @@ const Cursor = React.memo(() => {
   const handleMouseMove = (e) => {
     ref.current.style.top = `${e.clientY}px`;
     ref.current.style.left = `${e.clientX}px`;
+
+    if (e.pointerType) {
+      useStore.setState({ pointerType: e.pointerType });
+    }
   };
 
   useEffect(() => {
@@ -28,6 +32,6 @@ const Cursor = React.memo(() => {
       <div className='ripple'></div>
     </div>
   );
-});
+};
 
 export default Cursor;

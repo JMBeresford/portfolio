@@ -3,6 +3,7 @@ import { Pane } from 'tweakpane';
 import { actions as viewActions, viewSlice } from './views';
 import { actions as pointerActions, pointerSlice } from './pointer';
 import { actions as worksActions, worksSlice } from './works';
+import { actions as carouselActions, carouselSlice } from './carousel';
 
 const useStore = create((set, get) => ({
   canvas: null,
@@ -22,6 +23,7 @@ const useStore = create((set, get) => ({
   ...viewSlice(set, get),
   ...pointerSlice(set, get),
   ...worksSlice(set, get),
+  ...carouselSlice(set, get),
 
   actions: {
     init: (canvas) => {
@@ -39,6 +41,7 @@ const useStore = create((set, get) => ({
     ...viewActions(set, get),
     ...pointerActions(set, get),
     ...worksActions(set, get),
+    ...carouselActions(set, get),
   },
 }));
 

@@ -13,6 +13,7 @@ import lightmap2_1 from '../img/bakes/lightmap2_1.jpg';
 import lightmap1_2 from '../img/bakes/lightmap1_2.jpg';
 import lightmap2_2 from '../img/bakes/lightmap2_2.jpg';
 import { extend, useFrame, useThree } from '@react-three/fiber';
+
 import {
   ACESFilmicToneMapping,
   CineonToneMapping,
@@ -71,7 +72,7 @@ const IpadMaterial = shaderMaterial(
 
 extend({ BakedMaterial, ScreenMaterial, IpadMaterial });
 
-const Model = React.memo((props) => {
+const Model = (props) => {
   /**
    * STORE
    */
@@ -692,6 +693,15 @@ const Model = React.memo((props) => {
   ]);
 
   useFrame(({ clock }) => {
+    if (
+      ['worksEntered', 'aboutEntered', 'labEntered'].includes(
+        viewRef.current
+      ) &&
+      !destinationRef.current
+    ) {
+      return;
+    }
+
     const intersects = intersections.current;
 
     if (intersects.length > 0) {
@@ -842,87 +852,31 @@ const Model = React.memo((props) => {
 
         break;
       }
+
       case 'about': {
-        if (viewRef.current !== 'about') {
-          if (mobile) {
-            transitionView('aboutEntered');
-          } else {
-            transitionView('about');
-          }
-        } else {
-          for (let intersection of intersections.current) {
-            if (intersection.eventObject.userData.name === 'aboutPad') {
-              transitionView('aboutEntered');
-              return;
-            }
-          }
-
-          back();
-        }
-
-        break;
-      }
-      case 'aboutPad': {
-        if (viewRef.current === 'about') {
+        if (viewRef.current !== 'aboutEntered') {
           transitionView('aboutEntered');
         }
 
         break;
       }
+
       case 'works': {
-        if (viewRef.current !== 'works') {
-          if (mobile) {
-            transitionView('worksEntered');
-          } else {
-            transitionView('works');
-          }
-        } else {
-          for (let intersection of intersections.current) {
-            if (intersection.eventObject.userData.name === 'worksPad') {
-              transitionView('worksEntered');
-              return;
-            }
-          }
-
-          back();
-        }
-
-        break;
-      }
-      case 'worksPad': {
-        if (viewRef.current === 'works') {
+        if (viewRef.current !== 'worksEntered') {
           transitionView('worksEntered');
         }
 
         break;
       }
+
       case 'lab': {
-        if (viewRef.current !== 'lab') {
-          if (mobile) {
-            transitionView('labEntered');
-          } else {
-            transitionView('lab');
-          }
-        } else {
-          for (let intersection of intersections.current) {
-            if (intersection.eventObject.userData.name === 'labPad') {
-              transitionView('labEntered');
-              return;
-            }
-          }
-
-          back();
-        }
-
-        break;
-      }
-      case 'labPad': {
-        if (viewRef.current === 'lab') {
+        if (viewRef.current !== 'labEntered') {
           transitionView('labEntered');
         }
 
         break;
       }
+
       case 'email': {
         if (viewRef.current === 'socials' || mobile) {
           window.open('mailto:john@beresford-design.com', '_blank');
@@ -1220,7 +1174,7 @@ const Model = React.memo((props) => {
       </mesh>
     </group>
   );
-});
+};
 
 useGLTF.preload(modelPath);
 

@@ -15,19 +15,6 @@ const viewSlice = (set, get) => ({
       position: [-1.0508, 1.74999, -0.2],
       rotation: [0.0, 0.1, 0],
     },
-    about: {
-      position: [-1.1698, 1.62988, -0.4],
-      rotation: [-0.3, 0, 0],
-    },
-    works: {
-      position: [-1.1698, 1.12988, -0.4],
-      rotation: [-0.15, 0, 0],
-    },
-    lab: {
-      position: [-1.1698, 0.67988, -0.4],
-      rotation: [-0.05, 0, 0],
-    },
-
     aboutEntered: {
       position: [-1.31981, 1.44488, -1.1],
       rotation: [-0.3, 0.1, 0],
@@ -97,9 +84,6 @@ const actions = (set, get) => ({
     return r;
   },
   setView: (newView) => {
-    if (newView === 'aboutEntered') {
-      set({ viewingAbout: true });
-    }
     set({ view: newView, animatingView: false, destination: null });
   },
   back: () => {
@@ -108,34 +92,18 @@ const actions = (set, get) => ({
     }
 
     let transition = get().actions.transitionView;
-    let mobile = get().mobile;
 
     switch (get().view) {
       case 'aboutEntered': {
-        set({ viewingAbout: false });
-        if (mobile) {
-          transition('main');
-        } else {
-          transition('about');
-        }
+        transition('main');
         break;
       }
       case 'worksEntered': {
-        if (get().viewingWork) {
-          set({ viewingWork: false });
-        } else if (mobile) {
-          transition('main');
-        } else {
-          transition('works');
-        }
+        transition('main');
         break;
       }
       case 'labEntered': {
-        if (mobile) {
-          transition('main');
-        } else {
-          transition('lab');
-        }
+        transition('main');
         break;
       }
       default: {

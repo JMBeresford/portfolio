@@ -1,11 +1,17 @@
+#define WORKS_COUNT 3
+
 precision highp float;
 uniform sampler2D uTexture;
-uniform float uTransition;
-uniform vec3 uColor;
+uniform sampler2D uTextureLeft;
+uniform sampler2D uTextureRight;
+uniform float uLeft;
+uniform float uRight;
+uniform vec3 uHoveredColor;
+uniform vec2 uViewport;
 
 varying vec2 vUv;
-varying vec3 vPos;
-varying float vDisplacement;
+varying float vHover;
+varying float vBurn;
 
 #define S smoothstep
 
@@ -14,16 +20,25 @@ float random(vec3 pos) {
 }
 
 void main() {
-  vec4 tex = texture2D(uTexture, vUv);
-  vec3 color = tex.rgb;
+  vec4 texCur = texture2D(uTexture, vUv);
+  vec4 texLeft = texture2D(uTextureLeft, vUv);
+  vec4 texRight = texture2D(uTextureRight, vUv);
+
+  vec4 tex = mix(texCur, texLeft, S(0.2, 1.0, uLeft * vBurn));
+  tex = mix(tex, texRight, S(0.2, 1.0, uRight * vBurn));
 
   float d = 1.0 - distance(vec2(0.5), gl_PointCoord) * 2.0;
+  float particleMask = S(0.0, 0.5, d);
 
-  vec3 transitionColor = uColor * random(vPos);
+  float screenX = gl_FragCoord.x / uViewport.x;
 
-  color = mix(color, transitionColor, uTransition * 0.25);
+  float alpha = tex.a * particleMask * (1.0 - vBurn);
 
-  float alpha = tex.a * S(0.0, 0.5, d) * S(0.0, 0.9, vDisplacement);
+  if (alpha == 0.0) {
+    discard;
+  }
+
+  vec3 color = mix(tex.rgb, uHoveredColor, vHover);
 
   gl_FragColor = vec4(color, alpha);
 } 
