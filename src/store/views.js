@@ -81,7 +81,7 @@ const actions = (set, get) => ({
   getView: (view) => {
     let r = get().mobile ? get().mobileViews[view] : get().views[view];
 
-    return r;
+    return { ...r };
   },
   setView: (newView) => {
     set({ view: newView, animatingView: false, destination: null });
@@ -99,7 +99,11 @@ const actions = (set, get) => ({
         break;
       }
       case 'worksEntered': {
-        transition('main');
+        if (get().viewingWork !== null) {
+          set({ viewingWork: null });
+        } else {
+          transition('main');
+        }
         break;
       }
       case 'labEntered': {

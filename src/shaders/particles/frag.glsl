@@ -6,6 +6,7 @@ uniform sampler2D uTextureLeft;
 uniform sampler2D uTextureRight;
 uniform float uLeft;
 uniform float uRight;
+uniform float opacity;
 uniform vec3 uHoveredColor;
 uniform vec2 uViewport;
 
@@ -34,11 +35,7 @@ void main() {
 
   float alpha = tex.a * particleMask * (1.0 - vBurn);
 
-  if (alpha == 0.0) {
-    discard;
-  }
-
   vec3 color = mix(tex.rgb, uHoveredColor, vHover);
 
-  gl_FragColor = vec4(color, alpha);
+  gl_FragColor = vec4(color, alpha * opacity);
 } 

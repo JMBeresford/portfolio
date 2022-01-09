@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
+import { useDetectGPU } from '@react-three/drei';
 import useStore from '../store';
 
 const Cursor = () => {
   const ref = useRef();
   const intersecting = useStore((state) => state.intersecting);
   const pointerType = useStore((state) => state.pointerType);
+  const GPU = useDetectGPU();
 
   const handleMouseMove = (e) => {
     ref.current.style.top = `${e.clientY}px`;
@@ -14,6 +16,12 @@ const Cursor = () => {
       useStore.setState({ pointerType: e.pointerType });
     }
   };
+
+  useEffect(() => {
+    if (GPU.isMobile) {
+      useStore.setState({ pointerType: 'touch' });
+    }
+  }, [GPU]);
 
   useEffect(() => {
     useStore.setState({ cursor: ref.current });

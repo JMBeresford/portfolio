@@ -25,7 +25,8 @@ body {
 
 .stats {
   bottom: 5px;
-  left: 5px !important;
+  right: 5px !important;
+  left: auto !important;
   top: auto !important;
 }
 
@@ -188,6 +189,7 @@ body {
   z-index: 55;
   pointer-events: none;
   touch-action: none;
+  left: -1000%;
 
   width: 0.75rem;
   height: 0.75rem;
@@ -330,6 +332,16 @@ body {
 
       .icon:hover,
       .icon:active {
+        animation-name: none;
+        ~ h3 {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    }
+
+    &.hovered {
+      .icon {
         animation-name: none;
         ~ h3 {
           transform: translateX(0);

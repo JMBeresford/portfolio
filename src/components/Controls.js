@@ -12,6 +12,7 @@ const Controls = () => {
   const pointerRef = useRef(useStore.getState().pointerType);
   const getView = useStore((state) => state.actions.getView);
   const prevMouse = useStore((state) => state.mouse);
+  const mobile = useStore((state) => state.mobile);
 
   useEffect(
     () =>
@@ -36,7 +37,8 @@ const Controls = () => {
       viewRef.current === 'start' ||
       viewRef.current === 'aboutEntered' ||
       viewRef.current === 'worksEntered' ||
-      viewRef.current === 'labEntered'
+      viewRef.current === 'labEntered' ||
+      mobile
     ) {
       return;
     }

@@ -13,6 +13,7 @@ import lightmap2_1 from '../img/bakes/lightmap2_1.jpg';
 import lightmap1_2 from '../img/bakes/lightmap1_2.jpg';
 import lightmap2_2 from '../img/bakes/lightmap2_2.jpg';
 import { extend, useFrame, useThree } from '@react-three/fiber';
+import { useSpring, animated } from '@react-spring/three';
 
 import {
   ACESFilmicToneMapping,
@@ -64,15 +65,21 @@ const ScreenMaterial = shaderMaterial(
 const IpadMaterial = shaderMaterial(
   {
     uTime: 0,
+    opacity: 1,
     uColor: new Color(),
   },
   ipadVertexShader,
-  ipadFragmentShader
+  ipadFragmentShader,
+  (mat) => {
+    mat.transparent = true;
+  }
 );
 
 extend({ BakedMaterial, ScreenMaterial, IpadMaterial });
 
-const Model = (props) => {
+const AnimIpadMaterial = animated('ipadMaterial');
+
+const OfficeModel = (props) => {
   /**
    * STORE
    */
@@ -82,23 +89,11 @@ const Model = (props) => {
   const mobile = useStore((state) => state.mobile);
   const intersect = useStore((state) => state.actions.intersect);
   const intersections = useRef(useStore.getState().intersections);
-  const viewRef = useRef(useStore.getState().view);
-  const destinationRef = useRef(useStore.getState().destination);
+  const pointerType = useRef(useStore.getState().pointerType);
+  const view = useStore((state) => state.view);
+  const destination = useStore((state) => state.destination);
   const animating = useRef(useStore.getState().animatingView);
   const started = useStore((state) => state.started);
-
-  useEffect(
-    () => useStore.subscribe((state) => (viewRef.current = state.view)),
-    []
-  );
-
-  useEffect(
-    () =>
-      useStore.subscribe(
-        (state) => (destinationRef.current = state.destination)
-      ),
-    []
-  );
 
   useEffect(
     () =>
@@ -113,6 +108,14 @@ const Model = (props) => {
       useStore.subscribe((state) => (animating.current = state.animatingView)),
     []
   );
+
+  const { opacity } = useSpring({
+    opacity:
+      ['worksEntered', 'aboutEntered', 'labEntered'].includes(view) ||
+      ['worksEntered', 'aboutEntered', 'labEntered'].includes(destination)
+        ? 0
+        : 1,
+  });
 
   /**
    * REF's
@@ -694,10 +697,8 @@ const Model = (props) => {
 
   useFrame(({ clock }) => {
     if (
-      ['worksEntered', 'aboutEntered', 'labEntered'].includes(
-        viewRef.current
-      ) &&
-      !destinationRef.current
+      ['worksEntered', 'aboutEntered', 'labEntered'].includes(view) &&
+      !destination
     ) {
       return;
     }
@@ -709,7 +710,7 @@ const Model = (props) => {
         if (obj.eventObject.userData.name) {
           switch (obj.eventObject.userData.name) {
             case 'socials': {
-              if (viewRef.current !== 'socials' && !animating.current) {
+              if (view !== 'socials' && !animating.current) {
                 if (
                   socialsTl.current.reversed() ||
                   !socialsTl.current.isActive()
@@ -721,7 +722,7 @@ const Model = (props) => {
               break;
             }
             case 'email': {
-              if (viewRef.current === 'socials' && !animating.current) {
+              if (view === 'socials' && !animating.current) {
                 if (emailTl.current.reversed() || !emailTl.current.isActive()) {
                   emailTl.current.play();
                 }
@@ -730,7 +731,7 @@ const Model = (props) => {
               break;
             }
             case 'insta': {
-              if (viewRef.current === 'socials' && !animating.current) {
+              if (view === 'socials' && !animating.current) {
                 if (instaTl.current.reversed() || !instaTl.current.isActive()) {
                   instaTl.current.play();
                 }
@@ -739,7 +740,7 @@ const Model = (props) => {
               break;
             }
             case 'linkedin': {
-              if (viewRef.current === 'socials' && !animating.current) {
+              if (view === 'socials' && !animating.current) {
                 if (
                   linkedinTl.current.reversed() ||
                   !linkedinTl.current.isActive()
@@ -751,7 +752,7 @@ const Model = (props) => {
               break;
             }
             case 'github': {
-              if (viewRef.current === 'socials' && !animating.current) {
+              if (view === 'socials' && !animating.current) {
                 if (
                   githubTl.current.reversed() ||
                   !githubTl.current.isActive()
@@ -776,7 +777,7 @@ const Model = (props) => {
       intersects.find((obj) => obj.eventObject.userData.name === 'socials') ===
       undefined
     ) {
-      if (viewRef.current !== 'socials') {
+      if (view !== 'socials') {
         if (!socialsTl.current.reversed() || !socialsTl.current.isActive()) {
           socialsTl.current.reverse();
         }
@@ -787,7 +788,7 @@ const Model = (props) => {
       intersects.find((obj) => obj.eventObject.userData.name === 'email') ===
       undefined
     ) {
-      if (viewRef.current === 'socials') {
+      if (view === 'socials') {
         if (!emailTl.current.reversed() || !emailTl.current.isActive()) {
           emailTl.current.reverse();
         }
@@ -798,7 +799,7 @@ const Model = (props) => {
       intersects.find((obj) => obj.eventObject.userData.name === 'insta') ===
       undefined
     ) {
-      if (viewRef.current === 'socials') {
+      if (view === 'socials') {
         if (!instaTl.current.reversed() || !instaTl.current.isActive()) {
           instaTl.current.reverse();
         }
@@ -809,7 +810,7 @@ const Model = (props) => {
       intersects.find((obj) => obj.eventObject.userData.name === 'linkedin') ===
       undefined
     ) {
-      if (viewRef.current === 'socials') {
+      if (view === 'socials') {
         if (!linkedinTl.current.reversed() || !linkedinTl.current.isActive()) {
           linkedinTl.current.reverse();
         }
@@ -820,7 +821,7 @@ const Model = (props) => {
       intersects.find((obj) => obj.eventObject.userData.name === 'github') ===
       undefined
     ) {
-      if (viewRef.current === 'socials') {
+      if (view === 'socials') {
         if (!githubTl.current.reversed() || !githubTl.current.isActive()) {
           githubTl.current.reverse();
         }
@@ -834,8 +835,8 @@ const Model = (props) => {
     monitorRef.current.material.uTime = clock.elapsedTime + 100.0;
 
     ipadRef0.current.material.uTime = clock.elapsedTime;
-    ipadRef1.current.material.uTime = clock.elapsedTime - 0.15;
-    ipadRef2.current.material.uTime = clock.elapsedTime - 0.3;
+    ipadRef1.current.material.uTime = clock.elapsedTime + 200;
+    ipadRef2.current.material.uTime = clock.elapsedTime + 1000;
   });
 
   /**
@@ -844,7 +845,7 @@ const Model = (props) => {
   const handleClick = (e) => {
     switch (e.eventObject.userData.name) {
       case 'socials': {
-        if (viewRef.current === 'socials' || mobile) {
+        if (view === 'socials' || mobile) {
         } else {
           socialsTl.current.reverse();
           transitionView('socials');
@@ -854,7 +855,7 @@ const Model = (props) => {
       }
 
       case 'about': {
-        if (viewRef.current !== 'aboutEntered') {
+        if (view !== 'aboutEntered') {
           transitionView('aboutEntered');
         }
 
@@ -862,7 +863,7 @@ const Model = (props) => {
       }
 
       case 'works': {
-        if (viewRef.current !== 'worksEntered') {
+        if (view !== 'worksEntered') {
           transitionView('worksEntered');
         }
 
@@ -870,7 +871,7 @@ const Model = (props) => {
       }
 
       case 'lab': {
-        if (viewRef.current !== 'labEntered') {
+        if (view !== 'labEntered') {
           transitionView('labEntered');
         }
 
@@ -878,7 +879,7 @@ const Model = (props) => {
       }
 
       case 'email': {
-        if (viewRef.current === 'socials' || mobile) {
+        if (view === 'socials' || mobile) {
           window.open('mailto:john@beresford-design.com', '_blank');
         } else {
           socialsTl.current.reverse();
@@ -888,7 +889,7 @@ const Model = (props) => {
         break;
       }
       case 'insta': {
-        if (viewRef.current === 'socials' || mobile) {
+        if (view === 'socials' || mobile) {
           window.open('https://www.instagram.com/beresforddesign/', '_blank');
         } else {
           socialsTl.current.reverse();
@@ -899,7 +900,7 @@ const Model = (props) => {
       }
 
       case 'linkedin': {
-        if (viewRef.current === 'socials' || mobile) {
+        if (view === 'socials' || mobile) {
           window.open('https://www.linkedin.com/in/JMBeresford', '_blank');
         } else {
           socialsTl.current.reverse();
@@ -910,7 +911,7 @@ const Model = (props) => {
       }
 
       case 'github': {
-        if (viewRef.current === 'socials' || mobile) {
+        if (view === 'socials' || mobile) {
           window.open('https://github.com/JMBeresford', '_blank');
         } else {
           socialsTl.current.reverse();
@@ -926,7 +927,7 @@ const Model = (props) => {
       }
 
       case 'desk': {
-        if (viewRef.current !== 'start' && viewRef.current !== 'desk') {
+        if (view !== 'start' && view !== 'desk') {
           transitionView('desk');
         } else {
           transitionView('main');
@@ -940,6 +941,10 @@ const Model = (props) => {
           if (intersection.eventObject.userData.name) {
             return;
           }
+        }
+
+        if (pointerType === 'touch' || mobile) {
+          return;
         }
 
         back();
@@ -980,6 +985,9 @@ const Model = (props) => {
         handlePointerMove(e);
       }}
       onPointerDown={(e) => handlePointerDown(e)}
+      position={
+        view === 'worksEntered' && !destination ? [0, 0, -100] : [0, 0, 0]
+      }
     >
       <mesh
         geometry={nodes.phone_emissive.geometry}
@@ -1001,7 +1009,7 @@ const Model = (props) => {
         userData={{ name: 'aboutPad' }}
         onClick={(e) => handleClick(e)}
       >
-        <ipadMaterial uColor={[1.0, 0.5098, 0.4745]} />
+        <AnimIpadMaterial uColor={[1.0, 0.5098, 0.4745]} opacity={opacity} />
       </mesh>
       <mesh
         ref={ipadRef1}
@@ -1010,7 +1018,7 @@ const Model = (props) => {
         userData={{ name: 'worksPad' }}
         onClick={(e) => handleClick(e)}
       >
-        <ipadMaterial uColor={[0.4745, 0.7451, 1.0]} />
+        <AnimIpadMaterial uColor={[0.4745, 0.7451, 1.0]} opacity={opacity} />
       </mesh>
       <mesh
         geometry={nodes.shelving_emissive.geometry}
@@ -1037,7 +1045,7 @@ const Model = (props) => {
         userData={{ name: 'labPad' }}
         onClick={(e) => handleClick(e)}
       >
-        <ipadMaterial uColor={[0.6706, 0.4196, 1.0]} />
+        <AnimIpadMaterial uColor={[0.6706, 0.4196, 1.0]} opacity={opacity} />
       </mesh>
       <mesh
         ref={bake2Ref}
@@ -1130,7 +1138,7 @@ const Model = (props) => {
         onClick={(e) => handleClick(e, 'linkedin')}
         userData={{ name: 'linkedin' }}
       >
-        <meshBasicMaterial color={'#ffeeef'} />
+        <meshBasicMaterial color={'#ffeeef'} transparent={true} />
       </mesh>
       <mesh
         position={[-1.1208, 1.74999, -0.82434]}
@@ -1154,7 +1162,7 @@ const Model = (props) => {
         userData={{ name: 'works' }}
       >
         <boxGeometry args={[0.8, 0.25, 0.45]} />
-        <meshBasicMaterial color='red' visible={false} />
+        <meshBasicMaterial color='red' transparent={true} visible={false} />
       </mesh>
       <mesh
         position={[-1.0708, 0.62999, -0.82434]}
@@ -1178,4 +1186,4 @@ const Model = (props) => {
 
 useGLTF.preload(modelPath);
 
-export default Model;
+export default OfficeModel;

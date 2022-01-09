@@ -1,28 +1,20 @@
-uniform vec3 uColor;
 uniform float uTime;
-
+uniform float opacity;
+uniform vec3 uColor;
 varying vec2 vUv;
 
 #define S smoothstep
 
-mat2 rotate(float a) {
-  float c = cos(a), s = sin(a);
-
-  return mat2(c,-s,s,c);
-}
+#pragma glslify: snoise3 = require(glsl-noise/simplex/3d)
 
 void main() {
-  vec2 newUv = vUv * 2.0 - 1.0;
-  newUv *= 0.25;
+  vec2 st = vUv;
 
-  float radius = pow(fract(uTime * 0.35), 0.75);
-  float d = radius - length(newUv);
+  vec3 color = vec3(0.075, 0.075, 0.075);
 
-  float glow = S(0.01, 0.011, d) * 0.6 - radius;
-  float ring = S(0.05, 0.075, d) - S(0.05, 0.1, d);
-  float intensity = mix(glow, ring, ring);
+  float clouds = snoise3(vec3(st, uTime * 0.1));
 
-  vec3 color = mix(vec3(1.0), uColor, intensity);
+  color = mix(color, uColor, (S(0.0, 1.0, clouds) + S(0.3, 0.7, clouds)) * opacity);
 
   gl_FragColor = vec4(color, 1.0);
 }

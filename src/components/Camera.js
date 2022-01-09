@@ -2,11 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import useStore from '../store';
 import { Vector3 } from 'three';
-import { gsap, Linear } from 'gsap';
+import { gsap, Power1 } from 'gsap';
 import { useThree } from '@react-three/fiber';
 
 let _v1 = new Vector3();
-let _v2 = new Vector3();
 let _p = new Vector3();
 let _r = new Vector3();
 
@@ -17,7 +16,6 @@ const Camera = (props) => {
   const getView = useStore((state) => state.actions.getView);
   const setView = useStore((state) => state.actions.setView);
   const { viewport } = useThree();
-  const tl = gsap.timeline();
 
   const { position, rotation } = getView('start');
 
@@ -77,10 +75,10 @@ const Camera = (props) => {
 
       _v1.set(...curView.position);
 
-      let d = _v1.distanceTo(_p) * 2;
+      let d = _v1.distanceTo(_p) * 0.35;
 
       if (view === 'start') {
-        d *= 4;
+        d *= 2;
       }
 
       var delay = 0;
@@ -89,28 +87,43 @@ const Camera = (props) => {
         delay = 0.5;
       }
 
-      let spring = { value: 0 };
       _r.set(...rotation);
-      ref.current.rotation.toVector3(_v2);
 
-      tl.to(spring, {
-        value: 1,
+      const cam = {
+        px: ref.current.position.x,
+        py: ref.current.position.y,
+        pz: ref.current.position.z,
+        rx: ref.current.rotation.x,
+        ry: ref.current.rotation.y,
+        rz: ref.current.rotation.z,
+      };
+
+      gsap.to(cam, {
+        px: _p.x,
+        py: _p.y,
+        pz: _p.z,
+        rx: _r.x,
+        ry: _r.y,
+        rz: _r.z,
 
         duration: d,
         delay: delay,
-        ease: Linear.easeIn,
+        ease: Power1.easeIn,
         onUpdate: () => {
-          if (ref.current.position.distanceTo(_p) > 0.0001) {
-            ref.current.position.lerp(_p, spring.value);
-            ref.current.rotation.setFromVector3(_v2.lerp(_r, spring.value));
-          } else {
-            setView(destination);
-            tl.kill();
-          }
+          ref.current.position.x = cam.px;
+          ref.current.position.y = cam.py;
+          ref.current.position.z = cam.pz;
+
+          ref.current.rotation.x = cam.rx;
+          ref.current.rotation.y = cam.ry;
+          ref.current.rotation.z = cam.rz;
+        },
+        onComplete: () => {
+          setView(destination);
         },
       });
     }
-  }, [destination, getView, setView, viewport, tl, view]);
+  }, [destination, getView, setView, viewport, view]);
 
   return (
     <PerspectiveCamera

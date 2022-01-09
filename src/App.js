@@ -1,11 +1,9 @@
-import Experience from './3D/Experience';
+import Experience from './components/Experience';
 import Loading from './components/Loading';
 import useStore from './store';
-import About from './components/About';
-import Works from './components/Works';
-import Lab from './components/Lab';
-import Gui from './components/Gui';
+import Gui from './components/gui';
 import Cursor from './components/Cursor';
+import { Suspense } from 'react';
 
 function App() {
   const view = useStore((state) => state.view);
@@ -13,12 +11,11 @@ function App() {
   return (
     <div className='App'>
       {view === 'start' && <Loading />}
-      <Cursor />
-      <Experience />
       <Gui />
-      <About />
-      <Works />
-      <Lab />
+      <Suspense fallback={null}>
+        <Cursor />
+        <Experience />
+      </Suspense>
     </div>
   );
 }
