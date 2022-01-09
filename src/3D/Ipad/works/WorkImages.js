@@ -7,9 +7,7 @@ import { useTexture } from '@react-three/drei';
 
 // preload all textures
 for (let work of useStore.getState().works) {
-  for (let img of work.images) {
-    useTexture.preload(img);
-  }
+  useTexture.preload(work.images);
 }
 
 const WorkImages = React.forwardRef((props, ref) => {

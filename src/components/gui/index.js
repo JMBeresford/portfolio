@@ -3,7 +3,7 @@ import useStore from '../../store';
 import { IoArrowBack, IoInformationCircleOutline } from 'react-icons/io5';
 import WorkGui from './WorkGui';
 
-const Gui = () => {
+const Gui = React.memo(() => {
   // refs
   const backRef = useRef();
   const tooltipRef = useRef();
@@ -71,6 +71,6 @@ const Gui = () => {
       <WorkGui />
     </>
   );
-};
+});
 
 export default Gui;

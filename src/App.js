@@ -14,6 +14,8 @@ function App() {
       <Gui />
       <Suspense fallback={null}>
         <Cursor />
+      </Suspense>
+      <Suspense fallback={null}>
         <Experience />
       </Suspense>
     </div>

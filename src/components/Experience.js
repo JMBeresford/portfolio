@@ -5,7 +5,7 @@ import OfficeModel from '../3D/OfficeModel';
 import Camera from './Camera';
 import Controls from './Controls';
 import Ipad from '../3D/Ipad';
-import { Stats, useDetectGPU } from '@react-three/drei';
+import { Stats, useDetectGPU, useTexture } from '@react-three/drei';
 import { ACESFilmicToneMapping } from 'three';
 
 const Experience = () => {
