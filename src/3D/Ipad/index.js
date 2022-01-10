@@ -8,6 +8,7 @@ const Ipad = React.forwardRef((props, ref) => {
   const view = useStore((state) => state.view);
   const ipadRef = useRef();
   const destination = useStore((state) => state.destination);
+  const leavingIpad = useStore((state) => state.leavingIpad);
   const opacityTl = useRef();
 
   const active = useMemo(
@@ -40,11 +41,17 @@ const Ipad = React.forwardRef((props, ref) => {
     if (ref.current && opacityTl.current) {
       if (active && !destination) {
         opacityTl.current.play();
-      } else {
-        opacityTl.current.reverse();
       }
     }
   }, [destination, ref, active]);
+
+  useEffect(() => {
+    if (ref.current && opacityTl.current) {
+      if (active && leavingIpad) {
+        opacityTl.current.reverse();
+      }
+    }
+  }, [ref, leavingIpad, active]);
 
   return (
     <group ref={ref}>

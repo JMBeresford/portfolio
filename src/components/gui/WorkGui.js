@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import useStore from '../../store';
 
-const WorkGui = React.memo(() => {
+const WorkGui = () => {
   const ref = useRef();
 
   const works = useStore((state) => state.works);
@@ -38,6 +38,6 @@ const WorkGui = React.memo(() => {
       </div>
     </div>
   );
-});
+};
 
 export default WorkGui;

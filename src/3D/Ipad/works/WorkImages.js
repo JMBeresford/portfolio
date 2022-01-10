@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo } from 'react';
 import useStore from '../../../store';
 import { useSpring, animated } from '@react-spring/three';
 import { useFrame, useThree } from '@react-three/fiber';
@@ -29,12 +29,12 @@ const WorkImages = React.forwardRef((props, ref) => {
 
   const textures = useTexture(works[currentWork].images);
 
-  const scale = useMemo(() => Math.min(0.9, size.width / 1500), [size]);
+  const scale = useMemo(() => Math.min(0.9, size.width / 1750), [size]);
   const scrollState = useMemo(() => ({ target: 0, lastTouch: 0 }), []);
   const scrollBounds = useMemo(
     () => ({
       bottom: 0,
-      top: scale * 0.5 + scale * 0.9 * (textures.length - 0.5),
+      top: scale * 0.5 + scale * 0.75 * (textures.length - 0.5),
     }),
     [scale, textures]
   );
@@ -53,38 +53,32 @@ const WorkImages = React.forwardRef((props, ref) => {
     };
   }, [domElement]);
 
-  const handleWheel = useCallback(
-    (e) => {
-      if (
-        animating ||
-        viewingWork === null ||
-        view !== 'worksEntered' ||
-        destination
-      ) {
-        return;
-      }
+  const handleWheel = (e) => {
+    if (
+      animating ||
+      viewingWork === null ||
+      view !== 'worksEntered' ||
+      destination
+    ) {
+      return;
+    }
 
-      if (!animating && viewingWork !== null) {
-        scrollState.target += +e.deltaY * 0.001;
-      }
-    },
-    [scrollState, animating, viewingWork, view, destination]
-  );
+    if (!animating && viewingWork !== null) {
+      scrollState.target += +e.deltaY * 0.001;
+    }
+  };
 
-  const handleMove = useCallback(
-    (e) => {
-      if (
-        dragging &&
-        !animating &&
-        viewingWork !== null &&
-        view === 'worksEntered' &&
-        !destination
-      ) {
-        scrollState.target += e.movementY * -0.0015;
-      }
-    },
-    [dragging, animating, view, destination, viewingWork, scrollState]
-  );
+  const handleMove = (e) => {
+    if (
+      dragging &&
+      !animating &&
+      viewingWork !== null &&
+      view === 'worksEntered' &&
+      !destination
+    ) {
+      scrollState.target += e.movementY * -0.0015;
+    }
+  };
 
   useFrame(() => {
     if (view === 'worksEntered' && viewingWork !== null) {
@@ -125,7 +119,7 @@ const WorkImages = React.forwardRef((props, ref) => {
         {React.Children.toArray(
           textures.map((img, idx) => (
             <animated.mesh
-              position={[0, -scale * 0.35 - scale * idx * 0.9, 0]}
+              position={[0, -scale * 0.35 - scale * idx * 0.75, 0]}
               scale={[scale, scale, 1]}
             >
               <planeGeometry args={[1, 1]} />

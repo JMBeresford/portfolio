@@ -5,6 +5,7 @@ const pointerSlice = (set, get) => ({
   intersections: [],
   pointerType: 'touch',
   mouse: new Vector2(0, 0),
+  nocursor: false,
 
   allowedIntersections: {
     start: [],

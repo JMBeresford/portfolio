@@ -9,8 +9,10 @@ const Cursor = () => {
   const GPU = useDetectGPU();
 
   const handleMouseMove = (e) => {
-    ref.current.style.top = `${e.clientY}px`;
-    ref.current.style.left = `${e.clientX}px`;
+    if (ref.current) {
+      ref.current.style.top = `${e.clientY}px`;
+      ref.current.style.left = `${e.clientX}px`;
+    }
 
     if (e.pointerType) {
       useStore.setState({ pointerType: e.pointerType });

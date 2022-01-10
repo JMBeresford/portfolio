@@ -106,7 +106,7 @@
     width: 25ch;
   }
 }
-#worksGui {
+#workGui {
   position: fixed;
   cursor: none;
   inset: 0;
@@ -115,26 +115,111 @@
   -ms-touch-action: none;
       touch-action: none;
   z-index: 51;
-  display: grid;
-  place-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1.5rem;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 20vh;
   -webkit-transition: opacity 0.5s ease-in-out;
   transition: opacity 0.5s ease-in-out;
+  -webkit-transition-delay: 0s;
+          transition-delay: 0s;
 }
-#worksGui h1 {
-  font-size: clamp(3rem, 2.75rem + 1vw, 5rem);
-  color: rgba(255, 255, 255, 0.8);
+#workGui h3 {
+  font-family: proxima-nova, sans-serif;
+  font-weight: 300;
+  font-size: clamp(1rem, 1rem + 0.75vw, 3rem);
+  color: white;
   pointer-events: none;
+  max-width: 60ch;
+  text-align: center;
   text-shadow: 0px 0px 10px #000000;
   -webkit-transition: color ease-in-out;
   transition: color ease-in-out;
 }
-#worksGui h1.hovered {
-  color: white;
+#workGui .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
 }
-#worksGui.in {
+#workGui .buttons a {
+  color: white;
+  font-size: 1.1rem;
+  font-family: "EB Garamond", serif;
+  text-decoration: none;
+  border: 1px solid white;
+  pointer-events: none;
+  -ms-touch-action: none;
+      touch-action: none;
+  cursor: none;
+  background-color: rgba(255, 255, 255, 0);
+  -webkit-transition: background-color ease-in-out 0.2s;
+  transition: background-color ease-in-out 0.2s;
+  padding: 1rem 1.5rem;
+}
+#workGui .buttons a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#workGui .images {
+  display: grid;
+  position: relative;
+  max-width: 80%;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+}
+#workGui .images::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background-color: red;
+}
+#workGui .images img {
+  max-width: 100%;
+  pointer-events: none;
+  -ms-touch-action: none;
+      touch-action: none;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: -webkit-transform 0.2s ease-in-out;
+  transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+}
+#workGui .images img:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+#workGui.in {
   opacity: 1;
+  -webkit-transition-delay: 1s;
+          transition-delay: 1s;
+}
+#workGui.in .buttons a,
+#workGui.in .images img {
+  pointer-events: all;
+  -ms-touch-action: all;
+      touch-action: all;
+}
+#workGui.viewing {
+  -webkit-transition-delay: 0s;
+          transition-delay: 0s;
 }
 
+@media (max-width: 500px) {
+  #workGui {
+    padding: 17vh 5vw 0;
+  }
+}
 #lab {
   position: fixed;
   inset: 0;

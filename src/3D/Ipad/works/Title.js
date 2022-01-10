@@ -21,6 +21,7 @@ const Title = React.forwardRef((props, ref) => {
   const carousel = useStore((state) => state.carousel);
   const titleHovered = useStore((state) => state.titleHovered);
   const scrolled = useStore((state) => state.scrolled);
+  const leavingIpad = useStore((state) => state.leavingIpad);
 
   const v1 = useMemo(() => new Vector3(), []);
   const size = useMemo(
@@ -31,7 +32,11 @@ const Title = React.forwardRef((props, ref) => {
 
   const { opacity, strokeSizeSpring, sizeSpring, textHeight } = useSpring({
     opacity:
-      view === 'worksEntered' && !destination && !animating && !scrolled
+      view === 'worksEntered' &&
+      !destination &&
+      !animating &&
+      !scrolled &&
+      !leavingIpad
         ? viewingWork !== null || titleHovered || mobile
           ? 1.0
           : 0.5

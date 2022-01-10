@@ -53,6 +53,7 @@ const WorksCarousel = React.forwardRef((props, ref) => {
   const viewingWork = useStore((state) => state.viewingWork);
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
+  const leavingIpad = useStore((state) => state.leavingIpad);
 
   const textures = useTexture(avatars);
   const v1 = useMemo(() => new Vector2(), []);
@@ -79,11 +80,16 @@ const WorksCarousel = React.forwardRef((props, ref) => {
 
   const { opacity, open } = useSpring({
     opacity:
-      view === 'worksEntered' && !destination && viewingWork === null ? 1 : 0,
+      view === 'worksEntered' &&
+      !destination &&
+      viewingWork === null &&
+      !leavingIpad
+        ? 1
+        : 0,
     open:
       viewingWork !== null
         ? 1
-        : view === 'worksEntered' && !destination
+        : view === 'worksEntered' && !destination && !leavingIpad
         ? 0
         : 1,
     config: { duration: 750 },
@@ -235,7 +241,7 @@ const WorksCarousel = React.forwardRef((props, ref) => {
   }, [size, ref]);
 
   useFrame(({ clock, mouse }) => {
-    if (view !== 'worksEntered' || destination || viewingWork !== null) return;
+    if (view !== 'worksEntered' && destination !== 'worksEntered') return;
 
     if (dragging && !animating) {
       let dx = mouse.x - touchStartX;

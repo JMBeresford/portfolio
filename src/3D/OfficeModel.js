@@ -111,10 +111,8 @@ const OfficeModel = (props) => {
 
   const { opacity } = useSpring({
     opacity:
-      ['worksEntered', 'aboutEntered', 'labEntered'].includes(view) ||
-      ['worksEntered', 'aboutEntered', 'labEntered'].includes(destination)
-        ? 0
-        : 1,
+      (view === 'main' && !destination) || destination === 'main' ? 1 : 0,
+    config: { duration: 1000 },
   });
 
   /**
@@ -985,8 +983,12 @@ const OfficeModel = (props) => {
         handlePointerMove(e);
       }}
       onPointerDown={(e) => handlePointerDown(e)}
-      position={
-        view === 'worksEntered' && !destination ? [0, 0, -100] : [0, 0, 0]
+      position={[0, 0, 0]}
+      visible={
+        !(
+          ['worksEntered', 'aboutEntered', 'labEntered'].includes(view) &&
+          !destination
+        )
       }
     >
       <mesh

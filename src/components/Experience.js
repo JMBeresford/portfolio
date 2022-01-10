@@ -5,8 +5,9 @@ import OfficeModel from '../3D/OfficeModel';
 import Camera from './Camera';
 import Controls from './Controls';
 import Ipad from '../3D/Ipad';
-import { Stats, useDetectGPU } from '@react-three/drei';
+import { Preload, Stats, useDetectGPU } from '@react-three/drei';
 import { ACESFilmicToneMapping } from 'three';
+import { useMediaQuery } from 'react-responsive';
 
 const Experience = () => {
   const ref = useRef();
@@ -23,21 +24,21 @@ const Experience = () => {
     }
   }, [GPUInfo]);
 
-  // const isPortrait = useMediaQuery({
-  //   maxAspectRatio: '1200/820',
-  // });
+  const isPortrait = useMediaQuery({
+    maxAspectRatio: '1200/820',
+  });
 
-  // const isSmallScreen = useMediaQuery({
-  //   maxWidth: '1200px',
-  // });
+  const isSmallScreen = useMediaQuery({
+    maxWidth: '1200px',
+  });
 
-  // useEffect(() => {
-  //   if (isSmallScreen || isPortrait) {
-  //     useStore.setState({ mobile: true });
-  //   } else {
-  //     useStore.setState({ mobile: false });
-  //   }
-  // }, [isPortrait, isSmallScreen]);
+  useEffect(() => {
+    if (isSmallScreen || isPortrait) {
+      useStore.setState({ mobile: true });
+    } else {
+      useStore.setState({ mobile: false });
+    }
+  }, [isPortrait, isSmallScreen]);
 
   useEffect(() => {
     init(ref.current);
@@ -78,6 +79,7 @@ const Experience = () => {
                 }
               />
             </group>
+            <Preload all />
           </Suspense>
           {debugging && <Stats className='stats' />}
         </Canvas>

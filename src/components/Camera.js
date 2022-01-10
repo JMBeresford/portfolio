@@ -83,10 +83,6 @@ const Camera = (props) => {
 
       var delay = 0;
 
-      if (['aboutEntered', 'worksEntered', 'labEntered'].includes(view)) {
-        delay = 0.5;
-      }
-
       _r.set(...rotation);
 
       const cam = {

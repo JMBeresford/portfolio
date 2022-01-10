@@ -1,6 +1,7 @@
 const viewSlice = (set, get) => ({
   view: 'start',
   destination: null,
+  leavingIpad: false,
   animatingView: false,
   views: {
     start: {
@@ -76,6 +77,10 @@ const actions = (set, get) => ({
       set({ started: true });
     }
 
+    if (['worksEntered', 'aboutEntered', 'labEntered'].includes(newView)) {
+      set({ leavingIpad: false });
+    }
+
     set({ animatingView: true, destination: newView, intersecting: false });
   },
   getView: (view) => {
@@ -95,19 +100,22 @@ const actions = (set, get) => ({
 
     switch (get().view) {
       case 'aboutEntered': {
-        transition('main');
+        set({ leavingIpad: true });
+        setTimeout(() => transition('main'), 500);
         break;
       }
       case 'worksEntered': {
         if (get().viewingWork !== null) {
           set({ viewingWork: null });
         } else {
-          transition('main');
+          set({ leavingIpad: true });
+          setTimeout(() => transition('main'), 500);
         }
         break;
       }
       case 'labEntered': {
-        transition('main');
+        set({ leavingIpad: true });
+        setTimeout(() => transition('main'), 500);
         break;
       }
       default: {
