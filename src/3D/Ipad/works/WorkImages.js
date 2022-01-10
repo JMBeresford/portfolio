@@ -1,18 +1,13 @@
-import React, { useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
 import useStore from '../../../store';
 import { useSpring, animated } from '@react-spring/three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { lerp } from 'three/src/math/MathUtils';
 import { useTexture } from '@react-three/drei';
 
-// preload all textures
-for (let work of useStore.getState().works) {
-  useTexture.preload(work.images);
-}
+const WorkImages = ({ work, idx, visible }) => {
+  const ref = useRef();
 
-const WorkImages = React.forwardRef((props, ref) => {
-  const works = useStore((state) => state.works);
-  const currentWork = useStore((state) => state.currentWork);
   const viewingWork = useStore((state) => state.viewingWork);
   const animating = useStore((state) => state.animating);
   const dragging = useStore((state) => state.dragging);
@@ -20,14 +15,15 @@ const WorkImages = React.forwardRef((props, ref) => {
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
   const scrolled = useStore((state) => state.scrolled);
+  const currentWork = useStore((state) => state.currentWork);
 
   const { opacity } = useSpring({
-    opacity: viewingWork !== null && !animating ? 1 : 0,
+    opacity: viewingWork === idx && !animating ? 1 : 0,
   });
 
   const size = useThree((state) => state.size);
 
-  const textures = useTexture(works[currentWork].images);
+  const textures = useTexture(work.images);
 
   const scale = useMemo(() => Math.min(0.9, size.width / 1750), [size]);
   const scrollState = useMemo(() => ({ target: 0, lastTouch: 0 }), []);
@@ -39,19 +35,18 @@ const WorkImages = React.forwardRef((props, ref) => {
     [scale, textures]
   );
 
-  useEffect(() => {
-    scrollState.target = 0;
-
-    useStore.setState({ scrolled: false });
-  }, [viewingWork, scrollState, domElement]);
-
   useLayoutEffect(() => {
     domElement.classList.add('viewing');
 
     return () => {
-      domElement.classList.remove('viewing');
+      if (currentWork === idx) {
+        scrollState.target = 0;
+
+        useStore.setState({ scrolled: false });
+        domElement.classList.remove('viewing');
+      }
     };
-  }, [domElement]);
+  }, [domElement, viewingWork, scrollState, idx, currentWork]);
 
   const handleWheel = (e) => {
     if (
@@ -81,7 +76,7 @@ const WorkImages = React.forwardRef((props, ref) => {
   };
 
   useFrame(() => {
-    if (view === 'worksEntered' && viewingWork !== null) {
+    if (view === 'worksEntered' && viewingWork !== null && visible) {
       scrollState.target = Math.max(scrollState.target, scrollBounds.bottom);
       scrollState.target = Math.min(scrollState.target, scrollBounds.top);
 
@@ -111,11 +106,12 @@ const WorkImages = React.forwardRef((props, ref) => {
         position={[0, 0, -0.3]}
         onWheel={(e) => handleWheel(e)}
         onPointerMove={(e) => handleMove(e)}
+        visible={visible}
       >
         <planeGeometry args={[10, 10]} />
         <meshBasicMaterial visible={false} />
       </mesh>
-      <group ref={ref} position={[0, 0, -0.6]}>
+      <group ref={ref} position={[0, 0, -0.6]} visible={visible}>
         {React.Children.toArray(
           textures.map((img, idx) => (
             <animated.mesh
@@ -137,6 +133,6 @@ const WorkImages = React.forwardRef((props, ref) => {
       </group>
     </>
   );
-});
+};
 
 export default WorkImages;

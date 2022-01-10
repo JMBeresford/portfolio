@@ -15,8 +15,10 @@ const WorkGui = () => {
   useEffect(() => {
     if (viewingWork !== null) {
       ref.current.classList.add('in');
+      ref.current.classList.add('viewing');
     } else {
       ref.current.classList.remove('in');
+      ref.current.classList.remove('viewing');
     }
   }, [viewingWork]);
 

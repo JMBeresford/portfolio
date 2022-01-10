@@ -15,6 +15,10 @@ const Ipad = React.forwardRef((props, ref) => {
     () => ['aboutEntered', 'worksEntered', 'labEntered'].includes(view),
     [view]
   );
+  const worksActive = useMemo(
+    () => view === 'worksEntered' || destination === 'worksEntered',
+    [view, destination]
+  );
   const spring = useMemo(() => ({ value: 0 }), []);
 
   useEffect(() => {
@@ -56,7 +60,7 @@ const Ipad = React.forwardRef((props, ref) => {
   return (
     <group ref={ref}>
       {active && <IpadBackground ref={ipadRef} />}
-      <Works />
+      <Works visible={worksActive} />
     </group>
   );
 });

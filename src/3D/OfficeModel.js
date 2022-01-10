@@ -346,6 +346,7 @@ const OfficeModel = (props) => {
           value: 1.5,
           duration: 0.5,
           ease: Power2.easeInOut,
+          onStart: () => console.log('start'),
         },
         0
       )
