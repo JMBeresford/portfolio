@@ -4,6 +4,4 @@
 
 #### Bug Tracker
 
-- Camera movement occasionally speeds up for first transition out of about
-  section
-- About canvas does not re-scale properly when page is resized
+- All is good in the hood :sunglasses:
