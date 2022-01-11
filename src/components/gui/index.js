@@ -26,8 +26,6 @@ const Gui = React.memo(() => {
     } else if (view === 'worksEntered') {
       if (viewingWork === null) {
         setTip('Swipe left or right, or click, to see more');
-      } else {
-        setTip('Swipe or scroll up and down');
       }
     }
   }, [view, mobile, viewingWork]);
@@ -56,7 +54,9 @@ const Gui = React.memo(() => {
           ref={tooltipRef}
           id='tooltip'
           className={
-            !destination && ['main', 'socials', 'worksEntered'].includes(view)
+            !destination &&
+            ['main', 'socials', 'worksEntered'].includes(view) &&
+            viewingWork === null
               ? 'in'
               : ''
           }
@@ -68,7 +68,7 @@ const Gui = React.memo(() => {
           <h3>{tip}</h3>
         </div>
       </div>
-      <WorkGui />
+      {viewingWork !== null && <WorkGui />}
     </>
   );
 });

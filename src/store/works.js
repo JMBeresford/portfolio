@@ -7,7 +7,6 @@ import artofjayavatar from '../img/artofjayjoson/avatar.png';
 import jberesfordimg0 from '../img/johnberesford/0.png';
 import jberesfordimg1 from '../img/johnberesford/1.png';
 import jberesfordimg2 from '../img/johnberesford/2.png';
-import jberesfordimg3 from '../img/johnberesford/3.png';
 import jberesfordavatar from '../img/johnberesford/avatar.png';
 import ucscchessimg0 from '../img/ucscchessclub/0.png';
 import ucscchessimg1 from '../img/ucscchessclub/4.png';
@@ -41,7 +40,7 @@ const worksSlice = (set, get) => ({
       He uses a synthesis of 3D design and standard web technologies.`,
       live: 'http://john-beresford.com',
       source: 'https://github.com/JMBeresford/portfolio',
-      images: [jberesfordimg0, jberesfordimg1, jberesfordimg2, jberesfordimg3],
+      images: [jberesfordimg0, jberesfordimg1, jberesfordimg2],
       textures: [],
       color: '#ca7f7f',
       accentColor: '#ff1b82',

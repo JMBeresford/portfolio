@@ -14,8 +14,6 @@ const Experience = () => {
   const ipadRef = useRef();
   const init = useStore((state) => state.actions.init);
   const debugging = useStore((state) => state.debug.active);
-  const view = useStore((state) => state.view);
-  const destination = useStore((state) => state.destination);
   const GPUInfo = useDetectGPU();
 
   useEffect(() => {
@@ -64,6 +62,7 @@ const Experience = () => {
           dpr={[1, 2]}
           mode='concurrent'
           ref={ref}
+          style={{ touchAction: 'none' }}
           gl={{ toneMapping: ACESFilmicToneMapping }}
         >
           <Suspense fallback={null}>
@@ -71,13 +70,7 @@ const Experience = () => {
               <Controls />
               <Camera near={0.0005} />
               <Ipad ref={ipadRef} />
-              <OfficeModel
-                visible={
-                  !['aboutEntered', 'worksEntered', 'labEntered'].includes(
-                    view
-                  ) || destination
-                }
-              />
+              <OfficeModel />
             </group>
             <Preload all />
           </Suspense>

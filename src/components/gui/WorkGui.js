@@ -1,5 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import useStore from '../../store';
+import { useSpring, animated } from '@react-spring/web';
 
 const WorkGui = () => {
   const ref = useRef();
@@ -8,22 +9,21 @@ const WorkGui = () => {
   const currentWork = useStore((state) => state.currentWork);
   const viewingWork = useStore((state) => state.viewingWork);
 
+  const { opacity } = useSpring({
+    opacity: viewingWork === null ? 0 : 1,
+  });
+
   useLayoutEffect(() => {
     useStore.setState({ domElement: ref.current });
   }, []);
 
-  useEffect(() => {
-    if (viewingWork !== null) {
-      ref.current.classList.add('in');
-      ref.current.classList.add('viewing');
-    } else {
-      ref.current.classList.remove('in');
-      ref.current.classList.remove('viewing');
-    }
-  }, [viewingWork]);
-
   return (
-    <div ref={ref} id='workGui'>
+    <animated.div
+      ref={ref}
+      id='workGui'
+      className={viewingWork !== null ? 'in' : ''}
+      style={{ opacity: opacity }}
+    >
       <h3>{works[currentWork].description}</h3>
 
       <div className='buttons'>
@@ -38,7 +38,18 @@ const WorkGui = () => {
           </a>
         )}
       </div>
-    </div>
+
+      <div className='images'>
+        {React.Children.toArray(
+          works[currentWork].images.map((img, idx) => (
+            <img
+              src={img}
+              alt={`${works[currentWork].name} screenshot ${idx + 1}`}
+            />
+          ))
+        )}
+      </div>
+    </animated.div>
   );
 };
 

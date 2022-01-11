@@ -12,6 +12,7 @@ let _r = new Vector3();
 const Camera = (props) => {
   const ref = useRef();
   const destination = useStore((state) => state.destination);
+  const mobile = useStore((state) => state.mobile);
   const view = useStore((state) => state.view);
   const getView = useStore((state) => state.actions.getView);
   const setView = useStore((state) => state.actions.setView);
@@ -94,32 +95,66 @@ const Camera = (props) => {
         rz: ref.current.rotation.z,
       };
 
-      gsap.to(cam, {
-        px: _p.x,
-        py: _p.y,
-        pz: _p.z,
-        rx: _r.x,
-        ry: _r.y,
-        rz: _r.z,
+      if (destination === 'main' && view === 'start' && mobile) {
+        gsap
+          .timeline()
+          .to(ref.current.position, {
+            y: _p.y,
 
-        duration: d,
-        delay: delay,
-        ease: Power1.easeIn,
-        onUpdate: () => {
-          ref.current.position.x = cam.px;
-          ref.current.position.y = cam.py;
-          ref.current.position.z = cam.pz;
+            duration: d,
+            delay: delay,
+            ease: Power1.easeIn,
+          })
+          .to(cam, {
+            px: _p.x,
+            pz: _p.z,
+            rx: _r.x,
+            ry: _r.y,
+            rz: _r.z,
 
-          ref.current.rotation.x = cam.rx;
-          ref.current.rotation.y = cam.ry;
-          ref.current.rotation.z = cam.rz;
-        },
-        onComplete: () => {
-          setView(destination);
-        },
-      });
+            duration: d,
+            delay: delay,
+            ease: Power1.easeIn,
+            onUpdate: () => {
+              ref.current.position.x = cam.px;
+              ref.current.position.z = cam.pz;
+
+              ref.current.rotation.x = cam.rx;
+              ref.current.rotation.y = cam.ry;
+              ref.current.rotation.z = cam.rz;
+            },
+            onComplete: () => {
+              setView(destination);
+            },
+          });
+      } else {
+        gsap.to(cam, {
+          px: _p.x,
+          py: _p.y,
+          pz: _p.z,
+          rx: _r.x,
+          ry: _r.y,
+          rz: _r.z,
+
+          duration: d,
+          delay: delay,
+          ease: Power1.easeIn,
+          onUpdate: () => {
+            ref.current.position.x = cam.px;
+            ref.current.position.y = cam.py;
+            ref.current.position.z = cam.pz;
+
+            ref.current.rotation.x = cam.rx;
+            ref.current.rotation.y = cam.ry;
+            ref.current.rotation.z = cam.rz;
+          },
+          onComplete: () => {
+            setView(destination);
+          },
+        });
+      }
     }
-  }, [destination, getView, setView, viewport, view]);
+  }, [destination, getView, setView, viewport, view, mobile]);
 
   return (
     <PerspectiveCamera

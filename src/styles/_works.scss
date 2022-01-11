@@ -6,19 +6,25 @@
   position: fixed;
   cursor: none;
   inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  touch-action: none;
+  pointer-events: all;
+  touch-action: all;
   z-index: 51;
+  overflow-y: auto;
+  overflow-x: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
 
   display: flex;
   gap: 1.5rem;
   flex-direction: column;
   align-items: center;
   padding-top: 20vh;
-
-  transition: opacity 0.5s ease-in-out;
-  transition-delay: 0s;
 
   h3 {
     font-family: $sans-serif;
@@ -65,48 +71,28 @@
     position: relative;
     max-width: 80%;
 
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-
-      height: 3rem;
-
-      background-color: red;
-    }
+    grid-template-columns: repeat(auto-fit, minmax(750px, 1fr));
 
     img {
       max-width: 100%;
-      pointer-events: none;
-      touch-action: none;
-
-      transform: scale(1);
-
-      transition: transform 0.2s ease-in-out;
-
-      &:hover {
-        transform: scale(1.2);
-      }
     }
   }
 
   &.in {
-    opacity: 1;
-    transition-delay: 1s;
-
     .buttons a,
     .images img {
       pointer-events: all;
       touch-action: all;
     }
   }
+}
 
-  &.viewing {
-    transition-delay: 0s;
+@media (max-width: 800px) {
+  #workGui {
+    .images {
+      width: 90%;
+      grid-template-columns: 100%;
+    }
   }
 }
 

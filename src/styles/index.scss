@@ -23,6 +23,10 @@ body {
   box-sizing: border-box;
 }
 
+canvas {
+  touch-action: none;
+}
+
 .stats {
   bottom: 5px;
   right: 5px !important;
@@ -271,7 +275,7 @@ body {
 
     opacity: 0;
     transform: translateX(50%);
-    transition: all 0.2s ease-in-out;
+    transition: all 0.5s ease-in-out;
 
     &.in {
       opacity: 1;
@@ -330,8 +334,7 @@ body {
     &.in {
       opacity: 1;
 
-      .icon:hover,
-      .icon:active {
+      .icon:hover {
         animation-name: none;
         ~ h3 {
           transform: translateX(0);

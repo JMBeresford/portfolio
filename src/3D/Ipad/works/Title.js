@@ -21,16 +21,17 @@ const Title = React.forwardRef((props, ref) => {
   const carousel = useStore((state) => state.carousel);
   const titleHovered = useStore((state) => state.titleHovered);
   const scrolled = useStore((state) => state.scrolled);
+  const domElement = useStore((state) => state.domElement);
   const leavingIpad = useStore((state) => state.leavingIpad);
 
   const v1 = useMemo(() => new Vector3(), []);
   const size = useMemo(
-    () => Math.min(Math.max(0.09, sizes.width / 5000), 0.275),
+    () => Math.min(Math.max(0.11, sizes.width / 5000), 0.275),
     [sizes]
   );
   const strokeSize = useMemo(() => (size < 1.2 ? 0.0015 : 0.003), [size]);
 
-  const { opacity, strokeSizeSpring, sizeSpring, textHeight } = useSpring({
+  const { opacity, outlineOpacity, sizeSpring, textHeight } = useSpring({
     opacity:
       view === 'worksEntered' &&
       !destination &&
@@ -40,6 +41,16 @@ const Title = React.forwardRef((props, ref) => {
         ? viewingWork !== null || titleHovered || mobile
           ? 1.0
           : 0.5
+        : 0,
+    outlineOpacity:
+      view === 'worksEntered' &&
+      !destination &&
+      !animating &&
+      !scrolled &&
+      !leavingIpad
+        ? viewingWork !== null || titleHovered || mobile
+          ? 0.5
+          : 0.25
         : 0,
     strokeSizeSpring: viewingWork === null ? strokeSize : strokeSize * 0.5,
     sizeSpring: viewingWork === null ? size : Math.max(size * 0.5, 0.08),
@@ -86,6 +97,16 @@ const Title = React.forwardRef((props, ref) => {
   };
 
   useFrame(({ mouse }) => {
+    if (domElement && domElement.scrollTop > 50) {
+      if (!scrolled) {
+        useStore.setState({ scrolled: true });
+      }
+    } else {
+      if (scrolled) {
+        useStore.setState({ scrolled: false });
+      }
+    }
+
     v1.set(mouse.x * -1, mouse.y * -1, ref.current.position.z);
 
     let d = Math.min(1.0, v1.distanceTo(ref.current.position)) * 10000;
@@ -105,9 +126,9 @@ const Title = React.forwardRef((props, ref) => {
       fontSize={sizeSpring}
       font={font}
       fillOpacity={opacity}
-      strokeOpacity={opacity}
-      strokeColor='black'
-      strokeWidth={strokeSizeSpring}
+      outlineColor='black'
+      outlineOpacity={outlineOpacity}
+      outlineBlur='15%'
       maxWidth={sizes.width / 500}
       textAlign='center'
       onPointerEnter={(e) => handleEnterAndMove(e)}

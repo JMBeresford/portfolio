@@ -35,8 +35,8 @@ const viewSlice = (set, get) => ({
   },
   mobileViews: {
     start: {
-      position: [0.34019, 1.12988, -0.8],
-      rotation: [0, 0, 0],
+      position: [0.0182, 0.80988, -0.78],
+      rotation: [-1.3, 0, 0],
     },
     main: {
       position: [-0.60981, 1.32988, 2],

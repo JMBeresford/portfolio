@@ -110,11 +110,15 @@
   position: fixed;
   cursor: none;
   inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
+  pointer-events: all;
+  -ms-touch-action: all;
+      touch-action: all;
   z-index: 51;
+  overflow-y: auto;
+  overflow-x: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -127,10 +131,9 @@
       -ms-flex-align: center;
           align-items: center;
   padding-top: 20vh;
-  -webkit-transition: opacity 0.5s ease-in-out;
-  transition: opacity 0.5s ease-in-out;
-  -webkit-transition-delay: 0s;
-          transition-delay: 0s;
+}
+#workGui::-webkit-scrollbar {
+  display: none;
 }
 #workGui h3 {
   font-family: proxima-nova, sans-serif;
@@ -172,37 +175,10 @@
   display: grid;
   position: relative;
   max-width: 80%;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-}
-#workGui .images::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3rem;
-  background-color: red;
+  grid-template-columns: repeat(auto-fit, minmax(750px, 1fr));
 }
 #workGui .images img {
   max-width: 100%;
-  pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
-  -webkit-transform: scale(1);
-          transform: scale(1);
-  -webkit-transition: -webkit-transform 0.2s ease-in-out;
-  transition: -webkit-transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-}
-#workGui .images img:hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-}
-#workGui.in {
-  opacity: 1;
-  -webkit-transition-delay: 1s;
-          transition-delay: 1s;
 }
 #workGui.in .buttons a,
 #workGui.in .images img {
@@ -210,11 +186,13 @@
   -ms-touch-action: all;
       touch-action: all;
 }
-#workGui.viewing {
-  -webkit-transition-delay: 0s;
-          transition-delay: 0s;
-}
 
+@media (max-width: 800px) {
+  #workGui .images {
+    width: 90%;
+    grid-template-columns: 100%;
+  }
+}
 @media (max-width: 500px) {
   #workGui {
     padding: 17vh 5vw 0;
@@ -313,6 +291,11 @@ body {
   margin: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+canvas {
+  -ms-touch-action: none;
+      touch-action: none;
 }
 
 .stats {
@@ -572,8 +555,8 @@ body {
   opacity: 0;
   -webkit-transform: translateX(50%);
           transform: translateX(50%);
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 #gui .back.in {
   opacity: 1;
@@ -635,13 +618,11 @@ body {
 #gui #tooltip.in {
   opacity: 1;
 }
-#gui #tooltip.in .icon:hover,
-#gui #tooltip.in .icon:active {
+#gui #tooltip.in .icon:hover {
   -webkit-animation-name: none;
           animation-name: none;
 }
-#gui #tooltip.in .icon:hover ~ h3,
-#gui #tooltip.in .icon:active ~ h3 {
+#gui #tooltip.in .icon:hover ~ h3 {
   -webkit-transform: translateX(0);
           transform: translateX(0);
   opacity: 1;

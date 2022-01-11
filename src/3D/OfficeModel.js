@@ -12,19 +12,10 @@ import lightmap1_1 from '../img/bakes/lightmap1_1.jpg';
 import lightmap2_1 from '../img/bakes/lightmap2_1.jpg';
 import lightmap1_2 from '../img/bakes/lightmap1_2.jpg';
 import lightmap2_2 from '../img/bakes/lightmap2_2.jpg';
-import { extend, useFrame, useThree } from '@react-three/fiber';
+import { extend, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
 
-import {
-  ACESFilmicToneMapping,
-  CineonToneMapping,
-  Color,
-  LinearToneMapping,
-  Mesh,
-  NoToneMapping,
-  ReinhardToneMapping,
-  RGBFormat,
-} from 'three';
+import { Color, RGBFormat } from 'three';
 import { gsap, Power2 } from 'gsap';
 
 import bakedVertexShader from '../shaders/baked/vert.glsl';
@@ -77,6 +68,7 @@ const IpadMaterial = shaderMaterial(
 
 extend({ BakedMaterial, ScreenMaterial, IpadMaterial });
 
+const AnimBakedMaterial = animated('bakedMaterial');
 const AnimIpadMaterial = animated('ipadMaterial');
 
 const OfficeModel = (props) => {
@@ -85,15 +77,19 @@ const OfficeModel = (props) => {
    */
   const transitionView = useStore((state) => state.actions.transitionView);
   const back = useStore((state) => state.actions.back);
-  const mouse = useStore((state) => state.mouse);
   const mobile = useStore((state) => state.mobile);
   const intersect = useStore((state) => state.actions.intersect);
   const intersections = useRef(useStore.getState().intersections);
   const pointerType = useRef(useStore.getState().pointerType);
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
-  const animating = useRef(useStore.getState().animatingView);
+  const animating = useStore((state) => state.animating);
   const started = useStore((state) => state.started);
+  const emailHovered = useStore((state) => state.emailHovered);
+  const instaHovered = useStore((state) => state.instaHovered);
+  const linkedinHovered = useStore((state) => state.linkedinHovered);
+  const githubHovered = useStore((state) => state.githubHovered);
+  const socialsHovered = useStore((state) => state.socialsHovered);
 
   useEffect(
     () =>
@@ -103,17 +99,51 @@ const OfficeModel = (props) => {
     []
   );
 
-  useEffect(
-    () =>
-      useStore.subscribe((state) => (animating.current = state.animatingView)),
-    []
-  );
-
+  // iPad springs
   const { opacity } = useSpring({
     opacity:
-      (view === 'main' && !destination) || destination === 'main' ? 1 : 0,
+      (['main', 'socials', 'desk'].includes(view) && !destination) ||
+      destination === 'main'
+        ? 1
+        : 0,
     config: { duration: 1000 },
   });
+
+  const { emailIntensity, instaIntensity, linkedinIntensity, githubIntensity } =
+    useSpring({
+      emailIntensity:
+        view === 'socials'
+          ? emailHovered
+            ? 2.5
+            : 1.0
+          : socialsHovered
+          ? 2.5
+          : 1.0,
+      instaIntensity:
+        view === 'socials'
+          ? instaHovered
+            ? 2.5
+            : 1.0
+          : socialsHovered
+          ? 2.5
+          : 1.0,
+      linkedinIntensity:
+        view === 'socials'
+          ? linkedinHovered
+            ? 2.5
+            : 1.0
+          : socialsHovered
+          ? 2.5
+          : 1.0,
+      githubIntensity:
+        view === 'socials'
+          ? githubHovered
+            ? 2.5
+            : 1.0
+          : socialsHovered
+          ? 2.5
+          : 1.0,
+    });
 
   /**
    * REF's
@@ -122,20 +152,8 @@ const OfficeModel = (props) => {
   const macRef = useRef();
   const bake1Ref = useRef();
   const bake2Ref = useRef();
-  const socialsTl = useRef();
-  const emailTl = useRef();
-  const instaTl = useRef();
-  const linkedinTl = useRef();
-  const githubTl = useRef();
   const tableTl = useRef();
   const macTl = useRef();
-  const scene = useThree((state) => state.scene);
-  const renderer = useThree((state) => state.gl);
-
-  const socialRef0 = useRef();
-  const socialRef1 = useRef();
-  const socialRef2 = useRef();
-  const socialRef3 = useRef();
 
   const ipadRef0 = useRef();
   const ipadRef1 = useRef();
@@ -193,96 +211,6 @@ const OfficeModel = (props) => {
   }, []);
 
   /**
-   * DEBUGGING
-   */
-  useEffect(() => {
-    if (useStore.getState().debug.active) {
-      const pane = useStore.getState().debug.pane;
-
-      pane
-        .addButton({
-          title: 'No Tonemapping',
-        })
-        .on('click', () => {
-          renderer.toneMapping = NoToneMapping;
-          renderer.toneMappingExposure = 1;
-
-          scene.traverse((child) => {
-            if (child instanceof Mesh) {
-              child.material.needsUpdate = true;
-            }
-          });
-        });
-
-      pane
-        .addButton({
-          title: 'Linear Tonemapping',
-        })
-        .on('click', () => {
-          renderer.toneMapping = LinearToneMapping;
-          renderer.toneMappingExposure = 1;
-
-          scene.traverse((child) => {
-            if (child instanceof Mesh) {
-              child.material.needsUpdate = true;
-            }
-          });
-        });
-
-      pane
-        .addButton({
-          title: 'Reinhard Tonemapping',
-        })
-        .on('click', () => {
-          renderer.toneMapping = ReinhardToneMapping;
-          renderer.toneMappingExposure = 1.5;
-
-          scene.traverse((child) => {
-            if (child instanceof Mesh) {
-              child.material.needsUpdate = true;
-            }
-          });
-        });
-
-      pane
-        .addButton({
-          title: 'ACES Filmic Tonemapping',
-        })
-        .on('click', () => {
-          renderer.toneMapping = ACESFilmicToneMapping;
-          renderer.toneMappingExposure = 1;
-
-          scene.traverse((child) => {
-            if (child instanceof Mesh) {
-              child.material.needsUpdate = true;
-            }
-          });
-        });
-
-      pane
-        .addButton({
-          title: 'Cineon Tonemapping',
-        })
-        .on('click', () => {
-          renderer.toneMapping = CineonToneMapping;
-          renderer.toneMappingExposure = 1;
-
-          scene.traverse((child) => {
-            if (child instanceof Mesh) {
-              child.material.needsUpdate = true;
-            }
-          });
-        });
-
-      return () => {
-        if (pane && pane.dispose) {
-          pane.dispose();
-        }
-      };
-    }
-  }, [renderer, scene]);
-
-  /**
    * ANIMATION HANDLING
    */
   useEffect(() => {
@@ -333,206 +261,6 @@ const OfficeModel = (props) => {
     return () => {
       if (tableTl.current && tableTl.current.kill) {
         tableTl.current.kill();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    socialsTl.current = gsap
-      .timeline({ paused: true })
-      .to(
-        bake2Ref.current.material.uniforms.uEmailIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-          onStart: () => console.log('start'),
-        },
-        0
-      )
-      .to(
-        bake2Ref.current.material.uniforms.uInstaIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake2Ref.current.material.uniforms.uLinkedinIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake2Ref.current.material.uniforms.uGithubIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uEmailIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uInstaIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uLinkedinIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uGithubIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      );
-
-    return () => {
-      if (socialsTl.current && socialsTl.current.kill) {
-        socialsTl.current.kill();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    emailTl.current = gsap
-      .timeline({ paused: true })
-      .to(
-        bake2Ref.current.material.uniforms.uEmailIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uEmailIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      );
-
-    return () => {
-      if (emailTl.current && emailTl.current.kill) {
-        emailTl.current.kill();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    instaTl.current = gsap
-      .timeline({ paused: true })
-      .to(
-        bake2Ref.current.material.uniforms.uInstaIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uInstaIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      );
-
-    return () => {
-      if (instaTl.current && instaTl.current.kill) {
-        instaTl.current.kill();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    linkedinTl.current = gsap
-      .timeline({ paused: true })
-      .to(
-        bake2Ref.current.material.uniforms.uLinkedinIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uLinkedinIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      );
-
-    return () => {
-      if (linkedinTl.current && linkedinTl.current.kill) {
-        linkedinTl.current.kill();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    githubTl.current = gsap
-      .timeline({ paused: true })
-      .to(
-        bake2Ref.current.material.uniforms.uGithubIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      )
-      .to(
-        bake1Ref.current.material.uniforms.uGithubIntensity,
-        {
-          value: 1.5,
-          duration: 0.5,
-          ease: Power2.easeInOut,
-        },
-        0
-      );
-
-    return () => {
-      if (githubTl.current && githubTl.current.kill) {
-        githubTl.current.kill();
       }
     };
   }, []);
@@ -702,133 +430,22 @@ const OfficeModel = (props) => {
       return;
     }
 
-    const intersects = intersections.current;
+    if (!mobile) {
+      const intersects = intersections.current;
 
-    if (intersects.length > 0) {
-      for (let obj of intersects) {
-        if (obj.eventObject.userData.name) {
-          switch (obj.eventObject.userData.name) {
-            case 'socials': {
-              if (view !== 'socials' && !animating.current) {
-                if (
-                  socialsTl.current.reversed() ||
-                  !socialsTl.current.isActive()
-                ) {
-                  socialsTl.current.play();
-                }
-              }
-
-              break;
-            }
-            case 'email': {
-              if (view === 'socials' && !animating.current) {
-                if (emailTl.current.reversed() || !emailTl.current.isActive()) {
-                  emailTl.current.play();
-                }
-              }
-
-              break;
-            }
-            case 'insta': {
-              if (view === 'socials' && !animating.current) {
-                if (instaTl.current.reversed() || !instaTl.current.isActive()) {
-                  instaTl.current.play();
-                }
-              }
-
-              break;
-            }
-            case 'linkedin': {
-              if (view === 'socials' && !animating.current) {
-                if (
-                  linkedinTl.current.reversed() ||
-                  !linkedinTl.current.isActive()
-                ) {
-                  linkedinTl.current.play();
-                }
-              }
-
-              break;
-            }
-            case 'github': {
-              if (view === 'socials' && !animating.current) {
-                if (
-                  githubTl.current.reversed() ||
-                  !githubTl.current.isActive()
-                ) {
-                  githubTl.current.play();
-                }
-              }
-
-              break;
-            }
-            default: {
-              break;
-            }
+      if (intersects.length > 0) {
+        for (let obj of intersects) {
+          if (obj.eventObject.userData.name) {
+            intersect(intersects);
           }
-
-          intersect(intersects);
         }
       }
-    }
 
-    if (
-      intersects.find((obj) => obj.eventObject.userData.name === 'socials') ===
-      undefined
-    ) {
-      if (view !== 'socials') {
-        if (!socialsTl.current.reversed() || !socialsTl.current.isActive()) {
-          socialsTl.current.reverse();
-        }
+      if (
+        intersects.find((obj) => obj.eventObject.userData.name) === undefined
+      ) {
+        useStore.setState({ intersecting: false });
       }
-    }
-
-    if (
-      intersects.find((obj) => obj.eventObject.userData.name === 'email') ===
-      undefined
-    ) {
-      if (view === 'socials') {
-        if (!emailTl.current.reversed() || !emailTl.current.isActive()) {
-          emailTl.current.reverse();
-        }
-      }
-    }
-
-    if (
-      intersects.find((obj) => obj.eventObject.userData.name === 'insta') ===
-      undefined
-    ) {
-      if (view === 'socials') {
-        if (!instaTl.current.reversed() || !instaTl.current.isActive()) {
-          instaTl.current.reverse();
-        }
-      }
-    }
-
-    if (
-      intersects.find((obj) => obj.eventObject.userData.name === 'linkedin') ===
-      undefined
-    ) {
-      if (view === 'socials') {
-        if (!linkedinTl.current.reversed() || !linkedinTl.current.isActive()) {
-          linkedinTl.current.reverse();
-        }
-      }
-    }
-
-    if (
-      intersects.find((obj) => obj.eventObject.userData.name === 'github') ===
-      undefined
-    ) {
-      if (view === 'socials') {
-        if (!githubTl.current.reversed() || !githubTl.current.isActive()) {
-          githubTl.current.reverse();
-        }
-      }
-    }
-
-    if (intersects.find((obj) => obj.eventObject.userData.name) === undefined) {
-      useStore.setState({ intersecting: false });
     }
 
     monitorRef.current.material.uTime = clock.elapsedTime + 100.0;
@@ -846,7 +463,6 @@ const OfficeModel = (props) => {
       case 'socials': {
         if (view === 'socials' || mobile) {
         } else {
-          socialsTl.current.reverse();
           transitionView('socials');
         }
 
@@ -881,7 +497,6 @@ const OfficeModel = (props) => {
         if (view === 'socials' || mobile) {
           window.open('mailto:john@beresford-design.com', '_blank');
         } else {
-          socialsTl.current.reverse();
           transitionView('socials');
         }
 
@@ -891,7 +506,6 @@ const OfficeModel = (props) => {
         if (view === 'socials' || mobile) {
           window.open('https://www.instagram.com/beresforddesign/', '_blank');
         } else {
-          socialsTl.current.reverse();
           transitionView('socials');
         }
 
@@ -902,7 +516,6 @@ const OfficeModel = (props) => {
         if (view === 'socials' || mobile) {
           window.open('https://www.linkedin.com/in/JMBeresford', '_blank');
         } else {
-          socialsTl.current.reverse();
           transitionView('socials');
         }
 
@@ -913,7 +526,6 @@ const OfficeModel = (props) => {
         if (view === 'socials' || mobile) {
           window.open('https://github.com/JMBeresford', '_blank');
         } else {
-          socialsTl.current.reverse();
           transitionView('socials');
         }
 
@@ -950,14 +562,6 @@ const OfficeModel = (props) => {
         break;
       }
     }
-
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1.0;
-    mouse.y = (e.clientY / window.innerHeight) * -2 + 1.0;
-  };
-
-  const handlePointerDown = (e) => {
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1.0;
-    mouse.y = (e.clientY / window.innerHeight) * -2 + 1.0;
   };
 
   const handlePointerMove = (e) => {
@@ -965,7 +569,7 @@ const OfficeModel = (props) => {
       useStore.setState({ pointerType: e.pointerType });
     }
 
-    if (!animating.current) {
+    if (!animating) {
       useStore.setState({ intersections: e.intersections });
     }
   };
@@ -983,20 +587,16 @@ const OfficeModel = (props) => {
       onPointerMove={(e) => {
         handlePointerMove(e);
       }}
-      onPointerDown={(e) => handlePointerDown(e)}
       position={[0, 0, 0]}
       visible={
-        !(
-          ['worksEntered', 'aboutEntered', 'labEntered'].includes(view) &&
-          !destination
-        )
+        ['main', 'socials', 'desk'].includes(view) || destination === 'main'
       }
     >
       <mesh
         geometry={nodes.phone_emissive.geometry}
         position={[0.01893, 0.78195, -0.80597]}
       >
-        <meshBasicMaterial />
+        <meshBasicMaterial color={mobile ? 'white' : '#222225'} />
       </mesh>
       <mesh
         ref={monitorRef}
@@ -1055,11 +655,14 @@ const OfficeModel = (props) => {
         geometry={nodes.wallsFloorsMerge.geometry}
         position={[0.12731, 0.04368, 0.49887]}
       >
-        <bakedMaterial
+        <AnimBakedMaterial
+          uEmailIntensity={emailIntensity}
+          uInstaIntensity={instaIntensity}
+          uLinkedinIntensity={linkedinIntensity}
+          uGithubIntensity={githubIntensity}
           uMap={bake2map}
           uLightMap={bake2lightmap}
           uLightMap2={bake2lightmap2}
-          uEmailIntensity={1.0}
           uMacIntensity={CONFIG.macLight.intensity}
           uMacColor={[
             CONFIG.macLight.color.r / 255,
@@ -1079,7 +682,11 @@ const OfficeModel = (props) => {
         geometry={nodes.itemsMerge.geometry}
         position={[-1.34119, 0.93352, -0.83501]}
       >
-        <bakedMaterial
+        <AnimBakedMaterial
+          uEmailIntensity={emailIntensity}
+          uInstaIntensity={instaIntensity}
+          uLinkedinIntensity={linkedinIntensity}
+          uGithubIntensity={githubIntensity}
           uMap={bake1map}
           uLightMap={bake1lightmap}
           uLightMap2={bake1lightmap2}
@@ -1098,29 +705,32 @@ const OfficeModel = (props) => {
         />
       </mesh>
       <mesh
-        ref={socialRef0}
         geometry={nodes.email_emissive.geometry}
         position={[-1.54201, 1.74999, -0.82321]}
         onClick={(e) => handleClick(e, 'email')}
         userData={{ name: 'email' }}
+        onPointerEnter={() => useStore.setState({ emailHovered: true })}
+        onPointerLeave={() => useStore.setState({ emailHovered: false })}
       >
         <meshBasicMaterial color={'#ddddff'} />
       </mesh>
       <mesh
-        ref={socialRef1}
         geometry={nodes.insta_emissive.geometry}
         position={[-1.2595, 1.74999, -0.82434]}
         onClick={(e) => handleClick(e, 'insta')}
         userData={{ name: 'insta' }}
+        onPointerEnter={() => useStore.setState({ instaHovered: true })}
+        onPointerLeave={() => useStore.setState({ instaHovered: false })}
       >
         <meshBasicMaterial color={'#eeddf0'} />
       </mesh>
       <mesh
-        ref={socialRef3}
         geometry={nodes.github_emissive.geometry}
         position={[-0.70014, 1.74999, -0.82434]}
         onClick={(e) => handleClick(e, 'github')}
         userData={{ name: 'github' }}
+        onPointerEnter={() => useStore.setState({ githubHovered: true })}
+        onPointerLeave={() => useStore.setState({ githubHovered: false })}
       >
         <meshBasicMaterial color={'#ffdfdf'} />
       </mesh>
@@ -1135,22 +745,27 @@ const OfficeModel = (props) => {
         <meshBasicMaterial />
       </mesh>
       <mesh
-        ref={socialRef2}
         geometry={nodes.linkedin_emissive.geometry}
         position={[-0.9821, 1.74999, -0.82434]}
         onClick={(e) => handleClick(e, 'linkedin')}
         userData={{ name: 'linkedin' }}
+        onPointerEnter={() => useStore.setState({ linkedinHovered: true })}
+        onPointerLeave={() => useStore.setState({ linkedinHovered: false })}
       >
         <meshBasicMaterial color={'#ffeeef'} transparent={true} />
       </mesh>
-      <mesh
-        position={[-1.1208, 1.74999, -0.82434]}
-        onClick={(e) => handleClick(e, 'socials')}
-        userData={{ name: 'socials' }}
-      >
-        <boxGeometry args={[1.15, 0.35, 0.45]} />
-        <meshBasicMaterial color='red' visible={false} />
-      </mesh>
+      {view !== 'socials' && (
+        <mesh
+          position={[-1.1208, 1.74999, -0.82434]}
+          onClick={(e) => handleClick(e, 'socials')}
+          userData={{ name: 'socials' }}
+          onPointerEnter={() => useStore.setState({ socialsHovered: true })}
+          onPointerLeave={() => useStore.setState({ socialsHovered: false })}
+        >
+          <boxGeometry args={[1.15, 0.35, 0.45]} />
+          <meshBasicMaterial color='red' visible={false} />
+        </mesh>
+      )}
       <mesh
         position={[-1.0708, 1.40999, -0.82434]}
         onClick={(e) => handleClick(e, 'about')}

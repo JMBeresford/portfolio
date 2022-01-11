@@ -76,10 +76,6 @@ const WorksCarousel = React.forwardRef((props, ref) => {
     [resolution]
   );
 
-  useEffect(() => {
-    console.log('carousel');
-  }, []);
-
   const { opacity, open } = useSpring({
     opacity:
       view === 'worksEntered' &&
