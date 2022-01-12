@@ -6,6 +6,7 @@ const carouselSlice = (set, get) => ({
   touchStartX: 0,
   titleHovered: false,
   resolution: 512,
+  backgroundParticleCount: 100,
   dragging: false,
   direction: null,
   animating: false,

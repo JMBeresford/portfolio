@@ -3,10 +3,13 @@ import useStore from '../../store';
 import IpadBackground from './IpadBackground';
 import Works from './works';
 import { gsap, Linear } from 'gsap';
+import Particles from './Particles';
+import About from './about';
 
 const Ipad = React.forwardRef((props, ref) => {
   const view = useStore((state) => state.view);
   const ipadRef = useRef();
+  const particlesRef = useRef();
   const destination = useStore((state) => state.destination);
   const leavingIpad = useStore((state) => state.leavingIpad);
   const opacityTl = useRef();
@@ -19,6 +22,10 @@ const Ipad = React.forwardRef((props, ref) => {
     () => view === 'worksEntered' || destination === 'worksEntered',
     [view, destination]
   );
+  const aboutActive = useMemo(
+    () => view === 'aboutEntered' || destination === 'aboutEntered',
+    [view, destination]
+  );
   const spring = useMemo(() => ({ value: 0 }), []);
 
   useEffect(() => {
@@ -29,6 +36,9 @@ const Ipad = React.forwardRef((props, ref) => {
       onUpdate: () => {
         if (ipadRef.current) {
           ipadRef.current.material.opacity = spring.value;
+        }
+        if (particlesRef.current) {
+          particlesRef.current.material.opacity = spring.value;
         }
       },
       ease: Linear.easeInOut,
@@ -59,8 +69,14 @@ const Ipad = React.forwardRef((props, ref) => {
 
   return (
     <group ref={ref}>
-      {active && <IpadBackground ref={ipadRef} />}
+      {active && (
+        <group>
+          <IpadBackground ref={ipadRef} />
+          <Particles ref={particlesRef} />
+        </group>
+      )}
       <Works visible={worksActive} />
+      <About visible={aboutActive} />
     </group>
   );
 });

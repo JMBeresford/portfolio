@@ -40,7 +40,7 @@ const Title = React.forwardRef((props, ref) => {
       !leavingIpad
         ? viewingWork !== null || titleHovered || mobile
           ? 1.0
-          : 0.5
+          : 0.75
         : 0,
     outlineOpacity:
       view === 'worksEntered' &&
@@ -128,7 +128,7 @@ const Title = React.forwardRef((props, ref) => {
       fillOpacity={opacity}
       outlineColor='black'
       outlineOpacity={outlineOpacity}
-      outlineBlur='15%'
+      outlineBlur='12%'
       maxWidth={sizes.width / 500}
       textAlign='center'
       onPointerEnter={(e) => handleEnterAndMove(e)}
