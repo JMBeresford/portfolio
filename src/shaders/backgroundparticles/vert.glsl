@@ -14,14 +14,14 @@ varying float vRandom;
 void main() {
   vec3 pos = position;
 
-  pos.x += cos(uTime * aRandom) * RADIUS;
-  pos.y += sin(uTime * aRandom) * RADIUS;
-  pos.z = mod(uTime * aRandom, DEPTH);
+  pos.x += cos(uTime * 0.2 * aRandom) * RADIUS;
+  pos.y += sin(uTime * 0.2 * aRandom) * RADIUS;
+  pos.z = mod(uTime * 0.2 * aRandom, DEPTH);
 
   vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
 
   gl_Position = projectionMatrix * mvPos;
-  gl_PointSize = 10.5 * uDpr * uScale;
+  gl_PointSize = uDpr * uScale * pos.z;
 
   vDepth = pos.z;
   vRandom = aRandom;

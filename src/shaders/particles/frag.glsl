@@ -29,7 +29,7 @@ void main() {
   tex = mix(tex, texRight, S(0.2, 1.0, uRight * vBurn));
 
   float d = 1.0 - distance(vec2(0.5), gl_PointCoord) * 2.0;
-  float particleMask = S(0.0, 0.5, d);
+  float particleMask = S(0.0, 0.35, d);
 
   float screenX = gl_FragCoord.x / uViewport.x;
 

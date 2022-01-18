@@ -2,7 +2,7 @@ import { shaderMaterial } from '@react-three/drei';
 import { extend, useFrame, useThree } from '@react-three/fiber';
 import useStore from '../../store';
 import React, { useMemo, useEffect } from 'react';
-import { Color } from 'three';
+import { AdditiveBlending, Color } from 'three';
 import vertexShader from '../../shaders/backgroundparticles/vert.glsl';
 import fragmentShader from '../../shaders/backgroundparticles/frag.glsl';
 import { gsap, Linear } from 'gsap';
@@ -15,6 +15,7 @@ const ParticleMaterial = shaderMaterial(
     mat.transparent = true;
     mat.depthTest = false;
     mat.depthWrite = false;
+    mat.blending = AdditiveBlending;
   }
 );
 

@@ -36,7 +36,7 @@ void main() {
   pos.y -= uOffset.y * 0.05;
 
   float d = length(position.xy);
-  float distFromCenter = S(0.4, 0.55, d);
+  float distFromCenter = S(0.35, 0.6, d);
 
   burnedPos.x += cos(uTime * 2.0 * aSpeed) * RADIUS;
   burnedPos.y += mod((uTime * aSpeed * 0.2) + DEPTH + r, DEPTH * 2.0);
@@ -51,7 +51,7 @@ void main() {
   burnedPos.z += burn * aSpeed;
   burnedPos.x *= 1.0 + burn * aSpeed;
 
-  pos = mix(pos, burnedPos, distFromCenter * snoise3(vec3(pos.xy, uTime * 0.1)));
+  pos = mix(pos, burnedPos, distFromCenter * snoise3(vec3(pos.xy, uTime * 0.035)));
   pos = mix(pos, burnedPos, burn);
 
   pos = mix(pos, aOpenedPosition, uOpen);
@@ -63,6 +63,6 @@ void main() {
   gl_Position = projectionMatrix * mvPos;
   gl_PointSize = 3.5 * uDpr * uScale;
   vUv = uv;
-  vBurn = burn * 4.25 + distFromCenter;
+  vBurn = burn + distFromCenter + uLeft + uRight;
   vHover = distFromCenter;
 }

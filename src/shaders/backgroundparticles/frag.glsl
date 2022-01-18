@@ -8,7 +8,7 @@ varying float vRandom;
 #define S smoothstep
 
 void main() {
-  float mask = S(0.7, 0.0, distance(vec2(0.5), gl_PointCoord.xy) * 2.0);
+  float mask = S(0.7, 0.35, distance(vec2(0.5), gl_PointCoord.xy) * 2.0);
 
   vec3 color = mix(uColor, vec3(1.0), vRandom);
 
