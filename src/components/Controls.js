@@ -84,9 +84,7 @@ const Controls = () => {
       _v.y += mouse.y * 0.1;
       _v.z = camera.position.z;
 
-      let d = Math.min(1.0, _v.distanceTo(camera.position) * 100);
-
-      camera.position.lerp(_v, 1.2 - d);
+      camera.position.lerp(_v, 0.1);
     }
   });
 

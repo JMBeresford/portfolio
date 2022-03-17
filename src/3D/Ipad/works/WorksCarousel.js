@@ -75,6 +75,14 @@ const WorksCarousel = React.forwardRef((props, ref) => {
     () => new Float32Array(resolution * resolution),
     [resolution]
   );
+  const scale = useMemo(() => {
+    let minDim = Math.min(size.width, size.height);
+    let factor = Math.min(1.0, 1000 / minDim);
+
+    console.log(5 * factor, minDim);
+
+    return 5 * factor;
+  }, [size]);
 
   const { opacity, open } = useSpring({
     opacity:
@@ -257,16 +265,15 @@ const WorksCarousel = React.forwardRef((props, ref) => {
       ref.current.material.uTime = clock.elapsedTime;
 
       v1.copy(mouse);
-      let d = v1.distanceTo(ref.current.material.uOffset);
 
-      ref.current.material.uOffset.lerp(v1, Math.max(1.0 - d, 0.0));
+      ref.current.material.uOffset.lerp(v1, 0.1);
     }
   });
 
   return (
     <points
       position={[0, 0, -5]}
-      scale={[5, 5, 5]}
+      scale={[scale, scale, scale]}
       ref={ref}
       raycast={meshBounds}
       {...props}
@@ -300,7 +307,7 @@ const WorksCarousel = React.forwardRef((props, ref) => {
       <AnimMaterial
         uDpr={viewport.dpr}
         uOpen={open}
-        uScale={Math.min(size.width / 650, size.height / 650)}
+        uScale={5 / scale}
         uViewport={[size.width, size.height]}
         opacity={opacity}
       />

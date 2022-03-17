@@ -76,7 +76,7 @@ const Camera = (props) => {
 
       _v1.set(...curView.position);
 
-      let d = _v1.distanceTo(_p) * 0.35;
+      let d = 1;
 
       if (view === 'start') {
         d *= 2;

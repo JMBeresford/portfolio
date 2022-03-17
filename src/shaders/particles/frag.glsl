@@ -1,6 +1,6 @@
 #define WORKS_COUNT 3
 
-precision highp float;
+// precision highp float;
 uniform sampler2D uTexture;
 uniform sampler2D uTextureLeft;
 uniform sampler2D uTextureRight;
@@ -33,7 +33,7 @@ void main() {
 
   float screenX = gl_FragCoord.x / uViewport.x;
 
-  float alpha = tex.a * particleMask * (1.0 - vBurn);
+  float alpha = tex.a * particleMask * (1.0 - vBurn * 1.2) * (1.0 - vHover);
 
   vec3 color = mix(tex.rgb, uHoveredColor, vHover);
 

@@ -1,5 +1,5 @@
 import { Text } from '@react-three/drei';
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import useStore from '../../../store';
 import font from '../../../fonts/EBGaramond-Bold.ttf';
@@ -9,6 +9,8 @@ import { useSpring, animated } from '@react-spring/three';
 const AnimText = animated(Text);
 
 const Title = React.forwardRef((props, ref) => {
+  const wrapperRef = useRef();
+
   const sizes = useThree((state) => state.size);
 
   const works = useStore((state) => state.works);
@@ -53,9 +55,17 @@ const Title = React.forwardRef((props, ref) => {
           : 0.25
         : 0,
     strokeSizeSpring: viewingWork === null ? strokeSize : strokeSize * 0.5,
-    sizeSpring: viewingWork === null ? size : Math.max(size * 0.5, 0.08),
+    sizeSpring:
+      viewingWork === null
+        ? titleHovered
+          ? size * 1.1
+          : size
+        : Math.max(size * 0.5, 0.08),
     textHeight: viewingWork === null ? 0 : 0.75,
-    config: { duration: view === 'worksEntered' && animating ? 200 : 500 },
+    config: {
+      duration:
+        view === 'worksEntered' && animating ? 200 : titleHovered ? 200 : 500,
+    },
   });
 
   const handleEnterAndMove = (e) => {
@@ -107,36 +117,34 @@ const Title = React.forwardRef((props, ref) => {
       }
     }
 
-    v1.set(mouse.x * -1, mouse.y * -1, ref.current.position.z);
+    v1.set(mouse.x * -0.1, mouse.y * -0.1, wrapperRef.current.position.z);
 
-    let d = Math.min(1.0, v1.distanceTo(ref.current.position)) * 10000;
-
-    d = Math.pow(d, 2);
-
-    ref.current.position.lerp(v1, Math.max(1.0 - d, 0.0));
+    wrapperRef.current.position.lerp(v1, 0.035);
   });
 
   return (
-    <AnimText
-      ref={ref}
-      position-y={textHeight}
-      text={works[currentWork].name}
-      color='white'
-      position={[0, 0, -2]}
-      fontSize={sizeSpring}
-      font={font}
-      fillOpacity={opacity}
-      outlineColor='black'
-      outlineOpacity={outlineOpacity}
-      outlineBlur='12%'
-      maxWidth={sizes.width / 500}
-      textAlign='center'
-      onPointerEnter={(e) => handleEnterAndMove(e)}
-      onPointerMove={(e) => handleEnterAndMove(e)}
-      onPointerLeave={(e) => handleLeave(e)}
-      onClick={(e) => handleClick(e)}
-      {...props}
-    />
+    <group ref={wrapperRef}>
+      <AnimText
+        ref={ref}
+        position-y={textHeight}
+        text={works[currentWork].name}
+        color='white'
+        position={[0, 0, -2]}
+        fontSize={sizeSpring}
+        font={font}
+        fillOpacity={opacity}
+        outlineColor='black'
+        outlineOpacity={outlineOpacity}
+        outlineBlur='12%'
+        maxWidth={sizes.width / 500}
+        textAlign='center'
+        onPointerEnter={(e) => handleEnterAndMove(e)}
+        onPointerMove={(e) => handleEnterAndMove(e)}
+        onPointerLeave={(e) => handleLeave(e)}
+        onClick={(e) => handleClick(e)}
+        {...props}
+      />
+    </group>
   );
 });
 

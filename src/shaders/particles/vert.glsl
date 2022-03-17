@@ -35,12 +35,12 @@ void main() {
   pos.x -= uOffset.x * 0.05;
   pos.y -= uOffset.y * 0.05;
 
-  float d = length(position.xy);
+  float d = length(pos.xy) * 1.25;
   float distFromCenter = S(0.35, 0.6, d);
 
-  burnedPos.x += cos(uTime * 2.0 * aSpeed) * RADIUS;
+  burnedPos.x += cos(uTime * 0.2 * aSpeed) * RADIUS;
   burnedPos.y += mod((uTime * aSpeed * 0.2) + DEPTH + r, DEPTH * 2.0);
-  burnedPos.z += sin(uTime * 2.0 * aSpeed) * RADIUS;
+  burnedPos.z += sin(uTime * 0.2 * aSpeed) * RADIUS;
 
   pos.x += uRight;
   pos.x -= uLeft;
@@ -59,9 +59,8 @@ void main() {
 
   vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
 
-  // gl_Position = vec4(pos, 1.0);
   gl_Position = projectionMatrix * mvPos;
-  gl_PointSize = 3.5 * uDpr * uScale;
+  gl_PointSize = min(3.5 * uDpr * uScale, 19.0);
   vUv = uv;
   vBurn = burn + distFromCenter + uLeft + uRight;
   vHover = distFromCenter;
