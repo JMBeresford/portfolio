@@ -70,6 +70,7 @@
     display: grid;
     position: relative;
     max-width: 80%;
+    padding-bottom: 5rem;
 
     grid-template-columns: repeat(auto-fit, minmax(750px, 1fr));
 
