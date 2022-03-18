@@ -68,7 +68,7 @@ const Gui = React.memo(() => {
           <h3>{tip}</h3>
         </div>
       </div>
-      {viewingWork !== null && <WorkGui />}
+      {view === 'worksEntered' && <WorkGui />}
     </>
   );
 });

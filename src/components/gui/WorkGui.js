@@ -10,7 +10,8 @@ const WorkGui = () => {
   const viewingWork = useStore((state) => state.viewingWork);
 
   const { opacity } = useSpring({
-    opacity: viewingWork === null ? 0 : 1,
+    opacity: viewingWork === null ? -1 : 1,
+    config: { duration: 500 },
   });
 
   useLayoutEffect(() => {

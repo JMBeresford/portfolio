@@ -589,7 +589,8 @@ const OfficeModel = (props) => {
       }}
       position={[0, 0, 0]}
       visible={
-        ['main', 'socials', 'desk'].includes(view) || destination === 'main'
+        ['main', 'socials', 'desk', 'start'].includes(view) ||
+        destination === 'main'
       }
     >
       <mesh

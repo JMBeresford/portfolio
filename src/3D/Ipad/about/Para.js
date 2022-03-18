@@ -34,11 +34,12 @@ const Para = (props) => {
     [size]
   );
 
-  const { opacity } = useSpring({
+  const { opacity, scale } = useSpring({
     opacity:
       view === 'aboutEntered' && !destination && !animating && !leavingIpad
         ? 1.0
         : 0,
+    scale: view === 'aboutEntered' && !leavingIpad ? 1 : 0,
   });
 
   useFrame(({ mouse }) => {
@@ -60,7 +61,13 @@ const Para = (props) => {
   });
 
   return (
-    <group {...props} ref={ref} position={[0, 0, -3]}>
+    <animated.group
+      {...props}
+      ref={ref}
+      position={[0, 0, -3]}
+      scale-x={scale}
+      scale-y={scale}
+    >
       <AnimText
         ref={paraRef}
         font={font}
@@ -75,7 +82,7 @@ const Para = (props) => {
         outlineBlur='10%'
         outlineColor='black'
       />
-    </group>
+    </animated.group>
   );
 };
 

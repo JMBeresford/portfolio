@@ -14,6 +14,12 @@ import ucscchessimg2 from '../img/ucscchessclub/2.png';
 import ucscchessimg3 from '../img/ucscchessclub/3.png';
 import ucscchessimg4 from '../img/ucscchessclub/1.png';
 import ucscchessavatar from '../img/ucscchessclub/avatar.png';
+import deforestation0 from '../img/deforestationdetector/0.png';
+import deforestation1 from '../img/deforestationdetector/1.png';
+import deforestation2 from '../img/deforestationdetector/2.png';
+import deforestation3 from '../img/deforestationdetector/3.png';
+import deforestation4 from '../img/deforestationdetector/4.png';
+import deforestationAvatar from '../img/deforestationdetector/avatar.png';
 
 const worksSlice = (set, get) => ({
   works: [
@@ -47,7 +53,7 @@ const worksSlice = (set, get) => ({
     },
     {
       name: 'UCSC Chess Club',
-      description: `A digital chess application for users to play against colleagues in a controlled, 
+      description: `A digital chess application for users to play against peers in a controlled, 
       local environment. Uses a standard ELO rating system to rate players relative to others.`,
       live: null,
       source: 'https://github.com/JMBeresford/UCSC-chessclub',
@@ -62,8 +68,30 @@ const worksSlice = (set, get) => ({
       color: '#837546',
       accentColor: '#ffe4ab',
     },
+    {
+      name: 'Deforestation\nDetector',
+      description: `Web application to promote awareness of deforestation in the amazon and how to
+      assist with conservation efforts.`,
+      live: 'http://deforestationdetector.com',
+      source: 'https://github.com/Deforestation-Detector/web',
+      images: [
+        deforestation0,
+        deforestation1,
+        deforestation2,
+        deforestation3,
+        deforestation4,
+      ],
+      textures: [],
+      color: '#52d187',
+      accentColor: '#2d5e00',
+    },
   ],
-  avatars: [artofjayavatar, jberesfordavatar, ucscchessavatar],
+  avatars: [
+    artofjayavatar,
+    jberesfordavatar,
+    ucscchessavatar,
+    deforestationAvatar,
+  ],
 });
 
 const actions = (set, get) => ({});

@@ -6,6 +6,8 @@
 @use './about';
 @use './works';
 @use './lab';
+@use './loading';
+@use './cursor';
 
 $loading-width: clamp(250px, 100%, 15vw);
 
@@ -49,209 +51,6 @@ canvas {
   z-index: 2;
   overflow: hidden;
   position: relative;
-
-  cursor: none;
-}
-
-#loading {
-  position: fixed;
-  cursor: none;
-  opacity: 1;
-  inset: 0;
-  z-index: 5;
-
-  background: rgba(0, 0, 0, 1);
-  background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(20, 20, 20, 1) 100%
-  );
-
-  transition: opacity 0.5s ease-in-out;
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 1fr auto auto 1fr;
-  place-items: center;
-
-  .text {
-    grid-row: 2/3;
-    grid-column: 1/2;
-
-    text-align: center;
-    font-family: $sans-serif;
-    color: white;
-    margin: 2rem 0;
-
-    h1 {
-      font-size: 3rem;
-      letter-spacing: 1px;
-    }
-
-    h3 {
-      font-size: 1.5rem;
-      letter-spacing: 1px;
-      font-weight: 300;
-    }
-  }
-
-  .loadBar {
-    font-family: $serif;
-    letter-spacing: 2px;
-    margin: 2rem 0;
-    color: white;
-    grid-row: 3/4;
-    grid-column: 1/2;
-    z-index: 15;
-    text-align: center;
-
-    padding: 5px 2rem;
-  }
-
-  .rule {
-    grid-row: 3/4;
-    grid-column: 1/2;
-    width: 100vw;
-    height: 2px;
-    z-index: 10;
-    background-color: rgba(255, 255, 255, 0.753);
-    transition: transform 0.2s ease-in-out;
-  }
-
-  button {
-    opacity: 0;
-    z-index: -1;
-    cursor: none;
-    position: absolute;
-    z-index: 15;
-
-    grid-row: 3/4;
-    grid-column: 1/2;
-
-    font-family: $serif;
-    letter-spacing: 2px;
-    font-weight: 500;
-
-    background-color: rgba(0, 0, 0, 0);
-
-    color: white;
-    border: 1px solid white;
-    padding: 0.75rem 2rem;
-
-    transition: all 0.2s ease-in-out;
-
-    &:hover {
-      background-color: rgba(56, 56, 56, 1);
-    }
-  }
-
-  &.ready {
-    .loadBar,
-    .rule {
-      animation-name: out;
-      animation-duration: 1s;
-      animation-fill-mode: both;
-      animation-timing-function: ease-in;
-    }
-
-    button {
-      animation-name: out;
-      animation-delay: 1s;
-      animation-duration: 1s;
-      animation-timing-function: ease-out;
-      animation-fill-mode: both;
-      animation-direction: reverse;
-    }
-  }
-
-  &.out {
-    opacity: 0;
-    pointer-events: none;
-    touch-action: none;
-  }
-}
-
-@keyframes out {
-  0% {
-    opacity: 1;
-  }
-
-  99% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 0;
-    pointer-events: none;
-    touch-action: none;
-  }
-}
-
-#cursor {
-  position: fixed;
-  inset: 0;
-  transform: translate(-50%, -50%);
-  z-index: 55;
-  pointer-events: none;
-  touch-action: none;
-  left: -1000%;
-
-  width: 0.75rem;
-  height: 0.75rem;
-
-  border-radius: 50%;
-  border: 1px solid #aaa;
-
-  background-color: white;
-  opacity: 0.8;
-  box-shadow: 0px 0px 0.25rem 0.1rem #525252;
-
-  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  transform-origin: center;
-
-  &.hovering {
-    transform: translate(-50%, -50%) scale(2);
-  }
-
-  &.hoveringGui {
-    transform: translate(-50%, -50%) scale(2);
-    opacity: 0.4;
-  }
-
-  .ripple {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-
-    background: radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0) 35%,
-      rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0) 65%,
-      rgba(255, 255, 255, 0) 100%
-    );
-
-    mix-blend-mode: lighten;
-
-    animation-name: rippleAnimation;
-    animation-timing-function: ease-out;
-    animation-iteration-count: infinite;
-    animation-duration: 1.25s;
-  }
-}
-
-@keyframes rippleAnimation {
-  0% {
-    opacity: 1;
-
-    transform: scale(1);
-  }
-
-  100% {
-    opacity: 0;
-
-    transform: scale(3.5);
-  }
 }
 
 #gui {
@@ -263,12 +62,12 @@ canvas {
 
   .back {
     pointer-events: all;
-    cursor: none;
     touch-action: all;
     color: white;
     font-size: 2rem;
     position: absolute;
     margin-right: 0;
+    cursor: pointer;
 
     top: 2rem;
     left: 2rem;
@@ -305,7 +104,6 @@ canvas {
     color: white;
 
     opacity: 0;
-    cursor: none;
 
     transition: all 0.4s ease-in-out;
 
@@ -363,7 +161,4 @@ canvas {
   100% {
     opacity: 0.5;
   }
-}
-
-@media (max-width: 1200px) {
 }

@@ -13,40 +13,24 @@
   cursor: none;
   opacity: 0;
   pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
-  -webkit-transition: opacity 0.5s ease-in-out;
+  touch-action: none;
   transition: opacity 0.5s ease-in-out;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 #about h1,
 #about .desc {
   font-family: "EB Garamond", serif;
   color: white;
-  -webkit-filter: drop-shadow(0rem 0rem 0.2rem black);
-          filter: drop-shadow(0rem 0rem 0.2rem black);
+  filter: drop-shadow(0rem 0rem 0.2rem black);
   opacity: 0;
-  -webkit-transform: scale(0.75);
-          transform: scale(0.75);
-  -webkit-transform-origin: center;
-          transform-origin: center;
-  -webkit-transition: all 0.5s ease-out;
+  transform: scale(0.75);
+  transform-origin: center;
   transition: all 0.5s ease-out;
-  -webkit-transition-delay: 0.2s;
-          transition-delay: 0.2s;
+  transition-delay: 0.2s;
 }
 #about h1 {
   font-size: clamp(2.5rem, 2rem + 2vw, 5rem);
@@ -65,13 +49,9 @@
   top: 65%;
   right: -10%;
   background-color: #ee6363;
-  -webkit-transform-origin: left center;
-          transform-origin: left center;
-  -webkit-transform: scaleX(0);
-          transform: scaleX(0);
-  -webkit-transition-delay: 0.5s;
-          transition-delay: 0.5s;
-  -webkit-transition: all 0.75s ease-out;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition-delay: 0.5s;
   transition: all 0.75s ease-out;
 }
 #about .desc {
@@ -87,18 +67,15 @@
 #about.in {
   opacity: 1;
   pointer-events: all;
-  -ms-touch-action: all;
-      touch-action: all;
+  touch-action: all;
 }
 #about.in h1 .underline {
-  -webkit-transform: scaleX(1);
-          transform: scaleX(1);
+  transform: scaleX(1);
 }
 #about.in h1,
 #about.in .desc {
   opacity: 1;
-  -webkit-transform: scale(1);
-          transform: scale(1);
+  transform: scale(1);
 }
 
 @media (max-width: 500px) {
@@ -108,28 +85,19 @@
 }
 #workGui {
   position: fixed;
-  cursor: none;
   inset: 0;
   pointer-events: all;
-  -ms-touch-action: all;
-      touch-action: all;
+  touch-action: all;
   z-index: 51;
   overflow-y: auto;
   overflow-x: none;
   -ms-overflow-style: none;
   scrollbar-width: none;
   scroll-behavior: smooth;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 1.5rem;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  align-items: center;
   padding-top: 20vh;
 }
 #workGui::-webkit-scrollbar {
@@ -144,12 +112,9 @@
   max-width: 60ch;
   text-align: center;
   text-shadow: 0px 0px 10px #000000;
-  -webkit-transition: color ease-in-out;
   transition: color ease-in-out;
 }
 #workGui .buttons {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   gap: 1rem;
 }
@@ -160,11 +125,9 @@
   text-decoration: none;
   border: 1px solid white;
   pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
-  cursor: none;
+  touch-action: none;
+  cursor: pointer;
   background-color: rgba(255, 255, 255, 0);
-  -webkit-transition: background-color ease-in-out 0.2s;
   transition: background-color ease-in-out 0.2s;
   padding: 1rem 1.5rem;
 }
@@ -175,16 +138,20 @@
   display: grid;
   position: relative;
   max-width: 80%;
+  padding-bottom: 5rem;
   grid-template-columns: repeat(auto-fit, minmax(750px, 1fr));
 }
 #workGui .images img {
   max-width: 100%;
 }
+#workGui:not(.in) {
+  pointer-events: none;
+  touch-action: none;
+}
 #workGui.in .buttons a,
 #workGui.in .images img {
   pointer-events: all;
-  -ms-touch-action: all;
-      touch-action: all;
+  touch-action: all;
 }
 
 @media (max-width: 800px) {
@@ -205,40 +172,24 @@
   cursor: none;
   opacity: 0;
   pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
-  -webkit-transition: opacity 0.5s ease-in-out;
+  touch-action: none;
   transition: opacity 0.5s ease-in-out;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 #lab h1,
 #lab .desc {
   font-family: "EB Garamond", serif;
   color: white;
-  -webkit-filter: drop-shadow(0rem 0rem 0.2rem black);
-          filter: drop-shadow(0rem 0rem 0.2rem black);
+  filter: drop-shadow(0rem 0rem 0.2rem black);
   opacity: 0;
-  -webkit-transform: scale(0.75);
-          transform: scale(0.75);
-  -webkit-transform-origin: center;
-          transform-origin: center;
-  -webkit-transition: all 0.5s ease-out;
+  transform: scale(0.75);
+  transform-origin: center;
   transition: all 0.5s ease-out;
-  -webkit-transition-delay: 0.5s;
-          transition-delay: 0.5s;
+  transition-delay: 0.5s;
 }
 #lab h1 {
   font-size: clamp(2.5rem, 2rem + 1vw, 5rem);
@@ -260,18 +211,15 @@
 #lab.in {
   opacity: 1;
   pointer-events: all;
-  -ms-touch-action: all;
-      touch-action: all;
+  touch-action: all;
 }
 #lab.in h1 .underline {
-  -webkit-transform: scaleX(1);
-          transform: scaleX(1);
+  transform: scaleX(1);
 }
 #lab.in h1,
 #lab.in .desc {
   opacity: 1;
-  -webkit-transform: scale(1);
-          transform: scale(1);
+  transform: scale(1);
 }
 
 @media (max-width: 500px) {
@@ -279,59 +227,13 @@
     width: 25ch;
   }
 }
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  height: 100vh;
-  background-color: #010102;
-  overflow: hidden;
-}
-
-* {
-  margin: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
-canvas {
-  -ms-touch-action: none;
-      touch-action: none;
-}
-
-.stats {
-  bottom: 5px;
-  right: 5px !important;
-  left: auto !important;
-  top: auto !important;
-}
-
-.tp-dfwv {
-  z-index: 20;
-}
-
-#root,
-.App,
-#webGL-wrapper {
-  height: 100%;
-  width: 100%;
-}
-
-#webGL-wrapper {
-  z-index: 2;
-  overflow: hidden;
-  position: relative;
-  cursor: none;
-}
-
 #loading {
   position: fixed;
-  cursor: none;
   opacity: 1;
   inset: 0;
   z-index: 5;
   background: black;
   background: radial-gradient(circle, black 0%, #141414 100%);
-  -webkit-transition: opacity 0.5s ease-in-out;
   transition: opacity 0.5s ease-in-out;
   display: grid;
   grid-template-columns: 100%;
@@ -373,17 +275,14 @@ canvas {
   height: 2px;
   z-index: 10;
   background-color: rgba(255, 255, 255, 0.753);
-  -webkit-transition: -webkit-transform 0.2s ease-in-out;
-  transition: -webkit-transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
 }
 #loading button {
   opacity: 0;
   z-index: -1;
-  cursor: none;
   position: absolute;
   z-index: 15;
+  cursor: pointer;
   grid-row: 3/4;
   grid-column: 1/2;
   font-family: "EB Garamond", serif;
@@ -393,7 +292,6 @@ canvas {
   color: white;
   border: 1px solid white;
   padding: 0.75rem 2rem;
-  -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 #loading button:hover {
@@ -426,8 +324,7 @@ canvas {
 #loading.out {
   opacity: 0;
   pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
+  touch-action: none;
 }
 
 @-webkit-keyframes out {
@@ -454,49 +351,48 @@ canvas {
   100% {
     opacity: 0;
     pointer-events: none;
-    -ms-touch-action: none;
-        touch-action: none;
+    touch-action: none;
   }
 }
-#cursor {
+#cursorWrapper {
   position: fixed;
-  inset: 0;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  z-index: 55;
+  overflow: visible;
+  z-index: 1000;
+  width: clamp(50px, 6vw, 150px);
+  height: clamp(50px, 6vw, 150px);
+  display: grid;
+  place-items: center;
+}
+#cursorWrapper, #cursorWrapper * {
   pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
-  left: -1000%;
-  width: 0.75rem;
-  height: 0.75rem;
+  touch-action: none;
+}
+#cursorWrapper.mobile {
+  display: none;
+}
+
+#cursor {
+  position: relative;
+  overflow: visible;
+  z-index: 100;
+  width: clamp(50px, 6vw, 150px);
+  height: clamp(50px, 6vw, 150px);
+  opacity: 0;
+  transform: scale(1);
+  transform-origin: center;
   border-radius: 50%;
-  border: 1px solid #aaa;
-  background-color: white;
-  opacity: 0.8;
-  -webkit-box-shadow: 0px 0px 0.25rem 0.1rem #525252;
-          box-shadow: 0px 0px 0.25rem 0.1rem #525252;
-  -webkit-transition: opacity 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-  transition: opacity 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
-  -webkit-transform-origin: center;
-          transform-origin: center;
+  background-color: rgba(255, 255, 255, 0);
+  transition: opacity 0.5s ease-in-out, transform ease-in-out 0.25s, background-color ease-in-out 0.25s;
 }
-#cursor.hovering {
-  -webkit-transform: translate(-50%, -50%) scale(2);
-          transform: translate(-50%, -50%) scale(2);
-}
-#cursor.hoveringGui {
-  -webkit-transform: translate(-50%, -50%) scale(2);
-          transform: translate(-50%, -50%) scale(2);
-  opacity: 0.4;
+#cursor.in.intersecting {
+  opacity: 1;
 }
 #cursor .ripple {
   position: absolute;
   inset: 0;
+  opacity: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 65%, rgba(255, 255, 255, 0) 100%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 65%, rgba(255, 255, 255, 0) 100%);
   mix-blend-mode: lighten;
   -webkit-animation-name: rippleAnimation;
           animation-name: rippleAnimation;
@@ -511,57 +407,89 @@ canvas {
 @-webkit-keyframes rippleAnimation {
   0% {
     opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(0.5);
   }
   100% {
     opacity: 0;
-    -webkit-transform: scale(3.5);
-            transform: scale(3.5);
+    transform: scale(1.5);
   }
 }
 
 @keyframes rippleAnimation {
   0% {
     opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(0.5);
   }
   100% {
     opacity: 0;
-    -webkit-transform: scale(3.5);
-            transform: scale(3.5);
+    transform: scale(1.5);
   }
 }
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  background-color: #010102;
+  overflow: hidden;
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+canvas {
+  touch-action: none;
+}
+
+.stats {
+  bottom: 5px;
+  right: 5px !important;
+  left: auto !important;
+  top: auto !important;
+}
+
+.tp-dfwv {
+  z-index: 20;
+}
+
+#root,
+.App,
+#webGL-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+#webGL-wrapper {
+  z-index: 2;
+  overflow: hidden;
+  position: relative;
+}
+
 #gui {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  -ms-touch-action: none;
-      touch-action: none;
+  touch-action: none;
   z-index: 100;
 }
 #gui .back {
   pointer-events: all;
-  cursor: none;
-  -ms-touch-action: all;
-      touch-action: all;
+  touch-action: all;
   color: white;
   font-size: 2rem;
   position: absolute;
   margin-right: 0;
+  cursor: pointer;
   top: 2rem;
   left: 2rem;
   opacity: 0;
-  -webkit-transform: translateX(50%);
-          transform: translateX(50%);
-  -webkit-transition: all 0.5s ease-in-out;
+  transform: translateX(50%);
   transition: all 0.5s ease-in-out;
 }
 #gui .back.in {
   opacity: 1;
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
+  transform: translateX(0);
 }
 #gui .back:hover {
   left: 1.5rem;
@@ -573,26 +501,19 @@ canvas {
   position: fixed;
   bottom: 2rem;
   left: 2rem;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   gap: 1rem;
   font-family: "EB Garamond", serif;
   font-size: 1.5rem;
   color: white;
   opacity: 0;
-  cursor: none;
-  -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
 }
 #gui #tooltip .icon {
   z-index: 100;
   pointer-events: all;
-  -ms-touch-action: all;
-      touch-action: all;
+  touch-action: all;
   -webkit-animation-name: iconAnimation;
           animation-name: iconAnimation;
   -webkit-animation-timing-function: ease-in-out;
@@ -605,15 +526,12 @@ canvas {
           animation-direction: alternate;
 }
 #gui #tooltip h3 {
-  -webkit-transform: translateX(-1rem);
-          transform: translateX(-1rem);
+  transform: translateX(-1rem);
   opacity: 0;
-  -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 #gui #tooltip > * {
-  -webkit-filter: drop-shadow(0.15rem 0.15rem 2px black);
-          filter: drop-shadow(0.15rem 0.15rem 2px black);
+  filter: drop-shadow(0.15rem 0.15rem 2px black);
 }
 #gui #tooltip.in {
   opacity: 1;
@@ -623,8 +541,7 @@ canvas {
           animation-name: none;
 }
 #gui #tooltip.in .icon:hover ~ h3 {
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
+  transform: translateX(0);
   opacity: 1;
 }
 #gui #tooltip.hovered .icon {
@@ -632,8 +549,7 @@ canvas {
           animation-name: none;
 }
 #gui #tooltip.hovered .icon ~ h3 {
-  -webkit-transform: translateX(0);
-          transform: translateX(0);
+  transform: translateX(0);
   opacity: 1;
 }
 
