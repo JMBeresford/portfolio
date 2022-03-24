@@ -24,6 +24,23 @@ import deforestationAvatar from '../img/deforestationdetector/avatar.png';
 const worksSlice = (set, get) => ({
   works: [
     {
+      name: 'Deforestation\nDetector',
+      description: `Web application to promote awareness of deforestation in the amazon and how to
+      assist with conservation efforts.`,
+      live: 'http://deforestationdetector.com',
+      source: 'https://github.com/Deforestation-Detector/web',
+      images: [
+        deforestation0,
+        deforestation1,
+        deforestation2,
+        deforestation3,
+        deforestation4,
+      ],
+      textures: [],
+      color: '#52d187',
+      accentColor: '#2d5e00',
+    },
+    {
       name: 'Art of Jay Joson',
       description: `Jay Joson is a character animator and illustrator based in California. 
         This project is a web showcase of some of his curated works.`,
@@ -68,29 +85,12 @@ const worksSlice = (set, get) => ({
       color: '#837546',
       accentColor: '#ffe4ab',
     },
-    {
-      name: 'Deforestation\nDetector',
-      description: `Web application to promote awareness of deforestation in the amazon and how to
-      assist with conservation efforts.`,
-      live: 'http://deforestationdetector.com',
-      source: 'https://github.com/Deforestation-Detector/web',
-      images: [
-        deforestation0,
-        deforestation1,
-        deforestation2,
-        deforestation3,
-        deforestation4,
-      ],
-      textures: [],
-      color: '#52d187',
-      accentColor: '#2d5e00',
-    },
   ],
   avatars: [
+    deforestationAvatar,
     artofjayavatar,
     jberesfordavatar,
     ucscchessavatar,
-    deforestationAvatar,
   ],
 });
 

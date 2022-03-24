@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import useStore from '../../store';
 import { IoArrowBack, IoInformationCircleOutline } from 'react-icons/io5';
 import WorkGui from './WorkGui';
+import LabGui from './LabGui';
 
 const Gui = React.memo(() => {
   // refs
@@ -69,6 +70,7 @@ const Gui = React.memo(() => {
         </div>
       </div>
       {view === 'worksEntered' && <WorkGui />}
+      {view === 'labEntered' && <LabGui />}
     </>
   );
 });

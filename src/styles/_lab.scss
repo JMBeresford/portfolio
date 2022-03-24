@@ -3,11 +3,6 @@
 @use './colors' as *;
 
 #lab {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  cursor: none;
-
   // inactive state
   opacity: 0;
   pointer-events: none;
@@ -15,44 +10,35 @@
 
   transition: opacity 0.5s ease-in-out;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
 
-  h1,
-  .desc {
-    font-family: $serif;
+  grid-template-columns: 100%;
+  grid-template-rows: 50% 50%;
+
+  a {
+    // display: block;
+    grid-row: 2/3;
+
     color: white;
+    font-size: 1.1rem;
+    font-family: $serif;
+    text-decoration: none;
+    border: 1px solid white;
+    pointer-events: none;
+    touch-action: none;
 
-    filter: drop-shadow(0rem 0rem 0.2rem black);
+    background-color: rgba(255, 255, 255, 0);
 
-    opacity: 0;
-    transform: scale(0.75);
-    transform-origin: center;
+    transition: background-color ease-in-out 0.2s;
 
-    transition: all 0.5s ease-out;
-    transition-delay: 0.5s;
-  }
+    padding: 1rem 1.5rem;
 
-  h1 {
-    font-size: clamp(2.5rem, 2rem + 1vw, 5rem);
-    margin-bottom: 1rem;
-    position: relative;
-  }
-
-  .desc {
-    width: clamp(25ch, 100%, 45ch);
-    max-width: 95%;
-    text-align: center;
-
-    font-size: clamp(1rem, 0.9rem + 0.75vw, 1.7rem);
-
-    strong {
-      text-decoration: underline;
-      text-decoration-color: $underline-pink;
-      text-decoration-thickness: 0.125rem;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 
@@ -61,23 +47,10 @@
     pointer-events: all;
     touch-action: all;
 
-    h1 .underline {
-      transform: scaleX(1);
-    }
-
-    h1,
-    .desc {
-      opacity: 1;
-
-      transform: scale(1);
-    }
-  }
-}
-
-@media (max-width: 500px) {
-  #lab {
-    .desc {
-      width: 25ch;
+    a {
+      pointer-events: all;
+      touch-action: all;
+      cursor: pointer;
     }
   }
 }

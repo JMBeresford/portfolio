@@ -5,6 +5,7 @@ import Works from './works';
 import { gsap, Linear } from 'gsap';
 import Particles from './Particles';
 import About from './about';
+import Lab from './lab';
 
 const Ipad = React.forwardRef((props, ref) => {
   const view = useStore((state) => state.view);
@@ -24,6 +25,10 @@ const Ipad = React.forwardRef((props, ref) => {
   );
   const aboutActive = useMemo(
     () => view === 'aboutEntered' || destination === 'aboutEntered',
+    [view, destination]
+  );
+  const labActive = useMemo(
+    () => view === 'labEntered' || destination === 'labEntered',
     [view, destination]
   );
   const spring = useMemo(() => ({ value: 0 }), []);
@@ -77,6 +82,7 @@ const Ipad = React.forwardRef((props, ref) => {
       )}
       <Works visible={worksActive} />
       <About visible={aboutActive} />
+      <Lab visible={labActive} />
     </group>
   );
 });

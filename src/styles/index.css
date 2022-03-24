@@ -166,67 +166,37 @@
   }
 }
 #lab {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  cursor: none;
   opacity: 0;
   pointer-events: none;
   touch-action: none;
   transition: opacity 0.5s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 50% 50%;
 }
-#lab h1,
-#lab .desc {
-  font-family: "EB Garamond", serif;
+#lab a {
+  grid-row: 1/2;
   color: white;
-  filter: drop-shadow(0rem 0rem 0.2rem black);
-  opacity: 0;
-  transform: scale(0.75);
-  transform-origin: center;
-  transition: all 0.5s ease-out;
-  transition-delay: 0.5s;
+  font-size: 1.1rem;
+  font-family: "EB Garamond", serif;
+  text-decoration: none;
+  border: 1px solid white;
+  pointer-events: none;
+  touch-action: none;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0);
+  transition: background-color ease-in-out 0.2s;
+  padding: 1rem 1.5rem;
 }
-#lab h1 {
-  font-size: clamp(2.5rem, 2rem + 1vw, 5rem);
-  margin-bottom: 1rem;
-  position: relative;
-}
-#lab .desc {
-  width: clamp(25ch, 100%, 45ch);
-  max-width: 95%;
-  text-align: center;
-  font-size: clamp(1rem, 0.9rem + 0.75vw, 1.7rem);
-}
-#lab .desc strong {
-  text-decoration: underline;
-  -webkit-text-decoration-color: #ee6363;
-          text-decoration-color: #ee6363;
-  text-decoration-thickness: 0.125rem;
+#lab a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 #lab.in {
   opacity: 1;
   pointer-events: all;
   touch-action: all;
 }
-#lab.in h1 .underline {
-  transform: scaleX(1);
-}
-#lab.in h1,
-#lab.in .desc {
-  opacity: 1;
-  transform: scale(1);
-}
 
-@media (max-width: 500px) {
-  #lab .desc {
-    width: 25ch;
-  }
-}
 #loading {
   position: fixed;
   opacity: 1;
@@ -378,13 +348,16 @@
   width: clamp(50px, 6vw, 150px);
   height: clamp(50px, 6vw, 150px);
   opacity: 0;
-  transform: scale(1);
+  transform: scale(0.75);
   transform-origin: center;
   border-radius: 50%;
+  border: 0.125rem solid rgba(255, 255, 255, 0);
   background-color: rgba(255, 255, 255, 0);
-  transition: opacity 0.5s ease-in-out, transform ease-in-out 0.25s, background-color ease-in-out 0.25s;
+  transition: opacity 0.5s ease-in-out, transform ease-in-out 0.25s, border ease-in-out 0.25s;
 }
 #cursor.in.intersecting {
+  transform: scale(1);
+  border: 0.125rem solid rgba(255, 255, 255, 0.5);
   opacity: 1;
 }
 #cursor .ripple {
