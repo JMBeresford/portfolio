@@ -34,10 +34,14 @@ const Para = (props) => {
     [size]
   );
 
-  const { opacity, scale } = useSpring({
+  const { opacity, outlineOpacity, scale } = useSpring({
     opacity:
       view === 'aboutEntered' && !destination && !animating && !leavingIpad
         ? 1.0
+        : 0,
+    outlineOpacity:
+      view === 'aboutEntered' && !destination && !animating && !leavingIpad
+        ? 0.75
         : 0,
     scale: view === 'aboutEntered' && !leavingIpad ? 1 : 0,
   });
@@ -75,12 +79,13 @@ const Para = (props) => {
         maxWidth={maxWidth}
         fontSize={fontSize}
         fillOpacity={opacity}
-        outlineOpacity={opacity}
-        curveRadius={2}
+        outlineOpacity={outlineOpacity}
+        curveRadius={0}
         textAlign='center'
         lineHeight={1.5}
-        outlineBlur='10%'
+        outlineBlur='20%'
         outlineColor='black'
+        depthOffset={1}
       />
     </animated.group>
   );

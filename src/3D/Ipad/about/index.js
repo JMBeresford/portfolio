@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Para from './Para';
 import Name from './Name';
-import FloatingItems from './FloatingItems';
 import { useThree } from '@react-three/fiber';
+import ExampleImages from './ExampleImages';
 
 const About = (props) => {
   const ref = useRef();
@@ -16,7 +16,7 @@ const About = (props) => {
     <group ref={ref}>
       <Para visible={props.visible} />
       <Name visible={props.visible} />
-      <FloatingItems visible={props.visible} position={[0, 0, -3.5]} />
+      <ExampleImages position={[0, 0, -4]} visible={props.visible} />
     </group>
   );
 };

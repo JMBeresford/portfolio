@@ -23,6 +23,7 @@ extend({ BackgroundMaterial });
 const IpadBackground = React.forwardRef((props, ref) => {
   const viewport = useThree((state) => state.viewport);
   const currentWork = useStore((state) => state.currentWork);
+  const view = useStore((state) => state.view);
   const color = useMemo(() => new Color(), []);
   const spring = useMemo(() => ({ value: 0 }), []);
 
@@ -49,6 +50,36 @@ const IpadBackground = React.forwardRef((props, ref) => {
       });
     }
   }, [currentWork, color, spring, ref]);
+
+  useEffect(() => {
+    if (color && spring) {
+      if (view === 'aboutEntered') {
+        color.setRGB(1.0, 0.5098, 0.4745);
+      } else if (view === 'labEntered') {
+        color.setRGB(0.6706, 0.4196, 1.0);
+      } else {
+        return;
+      }
+
+      gsap.killTweensOf(spring);
+
+      gsap.to(spring, {
+        value: 1,
+
+        duration: 0.75,
+        onUpdate: () => {
+          ref.current.material.uniforms.uCloudColor.value.lerp(
+            color,
+            spring.value
+          );
+        },
+        onComplete: () => {
+          spring.value = 0;
+        },
+        ease: Linear.easeInOut,
+      });
+    }
+  }, [view, color, spring, ref]);
 
   useEffect(() => {
     ref.current.material.uAspect = viewport.aspect;

@@ -79,8 +79,6 @@ const WorksCarousel = React.forwardRef((props, ref) => {
     let minDim = Math.min(size.width, size.height);
     let factor = Math.min(1.0, 1000 / minDim);
 
-    console.log(5 * factor, minDim);
-
     return 5 * factor;
   }, [size]);
 

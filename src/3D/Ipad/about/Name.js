@@ -19,7 +19,7 @@ const Name = (props) => {
   const { opacity } = useSpring({
     opacity:
       view === 'aboutEntered' && !destination && !animating && !leavingIpad
-        ? 0.075
+        ? 0.275
         : 0,
   });
 
@@ -41,7 +41,7 @@ const Name = (props) => {
         color={[0.8, 0.8, 0.8]}
         fontSize={0.65}
         fillOpacity={opacity}
-        position={[-0.55, 0.9, -3]}
+        position={[-0.55, 0.9, -3.1]}
       />
       <AnimText
         ref={ref2}
@@ -51,7 +51,7 @@ const Name = (props) => {
         color={[0.8, 0.8, 0.8]}
         fontSize={0.65}
         fillOpacity={opacity}
-        position={[-0.85, 0.9, -3]}
+        position={[-0.85, 0.9, -3.1]}
       />
     </group>
   );

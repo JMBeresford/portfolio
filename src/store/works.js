@@ -92,8 +92,25 @@ const worksSlice = (set, get) => ({
     jberesfordavatar,
     ucscchessavatar,
   ],
+  allImages: null,
 });
 
-const actions = (set, get) => ({});
+const actions = (set, get) => ({
+  getAllImages: () => {
+    if (get().allImages === null) {
+      const images = [];
+      get().works.forEach((work) => {
+        work.images.forEach((image) => {
+          images.push(image);
+        });
+      });
+
+      set({ allImages: images });
+      return images;
+    } else {
+      return get().allImages;
+    }
+  },
+});
 
 export { actions, worksSlice };
