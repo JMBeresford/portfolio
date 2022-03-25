@@ -5,7 +5,6 @@ import Gui from './components/gui';
 import Cursor from './components/Cursor';
 import { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
-import banner from './img/banner.jpg';
 
 function App() {
   const view = useStore((state) => state.view);
