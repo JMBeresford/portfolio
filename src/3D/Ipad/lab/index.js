@@ -12,6 +12,7 @@ const Lab = (props) => {
 
   const camera = useThree((state) => state.camera);
   const viewport = useThree((state) => state.viewport);
+  const size = useThree((state) => state.size);
 
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
@@ -40,6 +41,7 @@ const Lab = (props) => {
     <group ref={ref} {...props}>
       <AnimText
         font={font}
+        fontSize={size.width >= 768 ? 0.1 : 0.075}
         textAlign='center'
         maxWidth={Math.min(0.2 * viewport.width, 2.3)}
         position={[0, 0.25, -2]}
