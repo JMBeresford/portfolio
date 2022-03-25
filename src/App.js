@@ -19,10 +19,7 @@ function App() {
           itemprop='description'
           content='John Beresford is a multi-disciplinary designer and developer with a focus on 3D, computer graphics and web technologies.'
         />
-        <meta
-          itemprop='image'
-          content={`https://john-beresford.com${banner}`}
-        />
+        <meta itemprop='image' content='https://i.imgur.com/h09DAlo.jpg' />
 
         {/* Facebook Meta Tags */}
         <meta property='og:url' content='https://www.john-beresford.com' />
@@ -35,10 +32,7 @@ function App() {
           property='og:description'
           content='John Beresford is a multi-disciplinary designer and developer with a focus on 3D, computer graphics and web technologies.'
         />
-        <meta
-          property='og:image'
-          content={`https://john-beresford.com${banner}`}
-        />
+        <meta property='og:image' content='https://i.imgur.com/h09DAlo.jpg' />
 
         {/* Twitter Meta Tags */}
         <meta name='twitter:card' content='summary_large_image' />
@@ -50,10 +44,7 @@ function App() {
           name='twitter:description'
           content='John Beresford is a multi-disciplinary designer and developer with a focus on 3D, computer graphics and web technologies.'
         />
-        <meta
-          name='twitter:image'
-          content={`https://john-beresford.com${banner}`}
-        />
+        <meta name='twitter:image' content='https://i.imgur.com/h09DAlo.jpg' />
       </Helmet>
       {view === 'start' && <Loading />}
       <Gui />
