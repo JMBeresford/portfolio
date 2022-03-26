@@ -35,9 +35,9 @@ const Gui = React.memo(() => {
     } else if (view === 'worksEntered') {
       if (viewingWork === null) {
         if (mobile) {
-          setTip('Swipe left or right, or click, to see more');
-        } else {
           setTip('Swipe left or right, or tap, to see more');
+        } else {
+          setTip('Swipe left or right, or click, to see more');
         }
       }
     }
