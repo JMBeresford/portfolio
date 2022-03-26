@@ -27,11 +27,11 @@ const Name = (props) => {
 
   useFrame(({ clock }) => {
     ref1.current.position.x = -0.55 + Math.cos(clock.elapsedTime * 0.12) * 0.2;
-    ref1.current.position.x *= size.width / 1200;
+    ref1.current.position.x *= Math.min(size.width / 1200, 1.0);
     ref1.current.position.y = 0.9 + Math.sin(clock.elapsedTime * -0.24) * 0.2;
 
     ref2.current.position.x = -0.85 + Math.cos(clock.elapsedTime * -0.14) * 0.2;
-    ref2.current.position.x *= size.width / 1200;
+    ref2.current.position.x *= Math.min(size.width / 1200, 1.0);
     ref2.current.position.y = 0.9 + Math.sin(clock.elapsedTime * 0.21) * 0.2;
   });
 
@@ -43,9 +43,9 @@ const Name = (props) => {
         anchorX={'right'}
         font={font}
         color={[0.8, 0.8, 0.8]}
-        fontSize={(0.65 * size.width) / 1200}
+        fontSize={Math.min((0.65 * size.width) / 1200, 0.65)}
         fillOpacity={opacity}
-        position={[(-0.55 * size.width) / 1200, 0.9, -3.1]}
+        position={[0, 0.9, -3.1]}
       />
       <AnimText
         ref={ref2}
@@ -53,9 +53,9 @@ const Name = (props) => {
         anchorX={'left'}
         font={font}
         color={[0.8, 0.8, 0.8]}
-        fontSize={(0.65 * size.width) / 1200}
+        fontSize={Math.min((0.65 * size.width) / 1200, 0.65)}
         fillOpacity={opacity}
-        position={[(-0.85 * size.width) / 1200, 0.9, -3.1]}
+        position={[0, 0.9, -3.1]}
       />
     </group>
   );
