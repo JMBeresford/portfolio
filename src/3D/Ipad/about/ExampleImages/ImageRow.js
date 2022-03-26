@@ -57,8 +57,8 @@ const ImageRow = (props) => {
     ref.current.position.x += delta * 0.1 * direction;
 
     if (
-      ref.current.position.x > rowWidth * 0.5 ||
-      ref.current.position.x < -rowWidth * 0.5
+      ref.current.position.x > rowWidth * 0.5 - imageSize.width * 2 ||
+      ref.current.position.x < -rowWidth * 0.5 + imageSize.width * 2
     ) {
       direction *= -1;
     }

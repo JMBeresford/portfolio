@@ -170,12 +170,16 @@
   pointer-events: none;
   touch-action: none;
   transition: opacity 0.5s ease-in-out;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
   display: grid;
+  place-items: center;
   grid-template-columns: 100%;
   grid-template-rows: 50% 50%;
 }
 #lab a {
-  grid-row: 1/2;
+  grid-row: 2/3;
   color: white;
   font-size: 1.1rem;
   font-family: "EB Garamond", serif;
@@ -183,7 +187,6 @@
   border: 1px solid white;
   pointer-events: none;
   touch-action: none;
-  cursor: pointer;
   background-color: rgba(255, 255, 255, 0);
   transition: background-color ease-in-out 0.2s;
   padding: 1rem 1.5rem;
@@ -195,6 +198,11 @@
   opacity: 1;
   pointer-events: all;
   touch-action: all;
+}
+#lab.in a {
+  pointer-events: all;
+  touch-action: all;
+  cursor: pointer;
 }
 
 #loading {
@@ -459,6 +467,7 @@ canvas {
   opacity: 0;
   transform: translateX(50%);
   transition: all 0.5s ease-in-out;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.85));
 }
 #gui .back.in {
   opacity: 1;

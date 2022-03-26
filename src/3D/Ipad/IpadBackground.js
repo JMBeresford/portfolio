@@ -54,7 +54,7 @@ const IpadBackground = React.forwardRef((props, ref) => {
   useEffect(() => {
     if (color && spring) {
       if (view === 'aboutEntered') {
-        color.setRGB(1.0, 0.5098, 0.4745);
+        color.setStyle('#472221');
       } else if (view === 'labEntered') {
         color.setRGB(0.6706, 0.4196, 1.0);
       } else {
