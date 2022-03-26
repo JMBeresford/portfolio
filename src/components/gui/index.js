@@ -20,13 +20,25 @@ const Gui = React.memo(() => {
   const [tip, setTip] = useState('');
 
   useEffect(() => {
-    if (view === 'main' && !mobile) {
-      setTip('Use your mouse to explore');
+    if (view === 'main') {
+      if (mobile) {
+        setTip('Tap to explore');
+      } else {
+        setTip('Use your mouse to explore');
+      }
     } else if (view === 'socials') {
-      setTip('Click on a box to visit my social media');
+      if (mobile) {
+        setTip('Tap on a box to visit my social media');
+      } else {
+        setTip('Click on a box to visit my social media');
+      }
     } else if (view === 'worksEntered') {
       if (viewingWork === null) {
-        setTip('Swipe left or right, or click, to see more');
+        if (mobile) {
+          setTip('Swipe left or right, or click, to see more');
+        } else {
+          setTip('Swipe left or right, or tap, to see more');
+        }
       }
     }
   }, [view, mobile, viewingWork]);

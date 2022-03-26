@@ -121,10 +121,8 @@ canvas {
     }
 
     h3 {
-      transform: translateX(-1rem);
-      opacity: 0;
-
-      transition: all 0.2s ease-in-out;
+      font-weight: 300;
+      font-size: clamp(1rem, 1rem + 0.75vw, 3rem);
     }
 
     > * {
@@ -136,20 +134,12 @@ canvas {
 
       .icon:hover {
         animation-name: none;
-        ~ h3 {
-          transform: translateX(0);
-          opacity: 1;
-        }
       }
     }
 
     &.hovered {
       .icon {
         animation-name: none;
-        ~ h3 {
-          transform: translateX(0);
-          opacity: 1;
-        }
       }
     }
   }
