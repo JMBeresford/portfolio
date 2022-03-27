@@ -32,6 +32,7 @@ const LabBackgroundMaterial = shaderMaterial(
     uAspect: [1, 1],
     uCloudColor: new Color(),
     opacity: 0,
+    uProgress: 0,
     uFbmOctaves: 3,
     uMouse: new Vector2(),
   },
@@ -52,6 +53,7 @@ const IpadBackground = React.forwardRef((props, ref) => {
   const currentWork = useStore((state) => state.currentWork);
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
+  const leavingIpad = useStore((state) => state.leavingIpad);
   const color = useMemo(() => new Color(), []);
   const spring = useMemo(() => ({ value: 0 }), []);
 
@@ -112,22 +114,23 @@ const IpadBackground = React.forwardRef((props, ref) => {
   }, [view, color, spring, ref]);
 
   useEffect(() => {
-    if (view === 'labEntered') {
-      gsap.to(ref.current.material.uniforms.uLabTransition, {
+    if (view === 'labEntered' && !leavingIpad) {
+      gsap.to(ref.current.material.uniforms.uProgress, {
         value: 1,
 
-        duration: 0.1,
+        duration: 0.75,
+        delay: 0.25,
         ease: Linear.easeOut,
       });
-    } else {
-      gsap.to(ref.current.material.uniforms.uLabTransition, {
+    } else if (leavingIpad) {
+      gsap.to(ref.current.material.uniforms.uProgress, {
         value: 0,
 
         duration: 0.75,
-        ease: Linear.easeInOut,
+        ease: Linear.easeIn,
       });
     }
-  }, [ref, view]);
+  }, [ref, view, leavingIpad]);
 
   useEffect(() => {
     let aspect =

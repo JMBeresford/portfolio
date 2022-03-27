@@ -2,6 +2,7 @@
 
 uniform float uTime;
 uniform float opacity;
+uniform float uProgress;
 uniform int uFbmOctaves;
 uniform vec3 uCloudColor;
 uniform vec2 uMouse;
@@ -60,29 +61,31 @@ float fbmDistorted(vec2 p) {
 float circle(vec2 p) {
   float r = log(sqrt(length(p)));
 
-  return abs(mod(r * 1.7, PI * 2.0) - 4.5) * 2.5 + 0.15;
+  return abs(mod(r * 1.7, PI * 2.0) - 4.5) * 2.5 + 0.05;
 }
 
 void main() {
   float distFromCenter = length(vUv2);
 
-  vec2 p = vUv2 * rot(uTime * 0.25 - S(0.3, 2.0, pow(distFromCenter, 2.0)));
+  vec2 p = vUv2 * rot(uTime * 0.25 - pow(distFromCenter, 1.0));
 
   float noise = fbmDistorted(p);
 
   float rim = noise * pow(abs((-circle(vec2(p.x / 5.0, p.y / 5.0)))), 1.05);
 
-  rim = pow(rim, 0.99);
+  // rim = pow(rim, 0.99);
 
-  vec3 portal = uCloudColor * 0.1/rim * (1.0 - S(0.45, 2.0, distFromCenter));
+  vec3 portal = uCloudColor * 0.1/rim * (1.0 - S(0.65, 2.0, distFromCenter));
 
   vec3 color = portal + uCloudColor * 0.1 * distFromCenter;
 
-  color = max(color, vec3(0.075));
+  float inPortal = S(0.0, 0.6085, distFromCenter) - step(0.6085, distFromCenter);
 
-  // fix for artifact at center
-  // float center = S(0.0, 0.2, distFromCenter);
-  // portal = mix(vec3(0.075), portal, center);
+  color += max(inPortal * 0.25, 0.0) * vec3(1.0, 0.2941, 0.4471);
+
+  color *= uProgress;
+
+  color = max(color, vec3(0.075));
 
   gl_FragColor = vec4(color, opacity);
 }
