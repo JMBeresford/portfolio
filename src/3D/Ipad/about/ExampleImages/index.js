@@ -6,7 +6,7 @@ const ExampleImages = (props) => {
   const leavingIpad = useStore((state) => state.leavingIpad);
 
   const { opacity } = useSpring({
-    opacity: props.visible && !leavingIpad ? 1 : 0,
+    opacity: props.visible && !leavingIpad ? 0.65 : 0,
   });
 
   return (

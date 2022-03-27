@@ -9,9 +9,9 @@ import { Vector2 } from 'three';
 
 const ImageMaterial = shaderMaterial(
   {
-    map: { value: null },
-    opacity: { value: 1 },
-    uAspect: { value: new Vector2(1, 1) },
+    map: null,
+    opacity: 1,
+    uAspect: new Vector2(1, 1),
   },
   vertexShader,
   fragmentShader,

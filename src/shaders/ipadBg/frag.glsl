@@ -1,6 +1,7 @@
 uniform float uTime;
 uniform float opacity;
 uniform vec3 uCloudColor;
+
 varying vec2 vUv;
 
 #define S smoothstep

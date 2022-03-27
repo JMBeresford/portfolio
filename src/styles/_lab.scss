@@ -16,13 +16,7 @@
   display: grid;
   place-items: center;
 
-  grid-template-columns: 100%;
-  grid-template-rows: 50% 50%;
-
   a {
-    // display: block;
-    grid-row: 2/3;
-
     color: white;
     font-size: 1.1rem;
     font-family: $serif;
@@ -44,8 +38,6 @@
 
   &.in {
     opacity: 1;
-    pointer-events: all;
-    touch-action: all;
 
     a {
       pointer-events: all;
