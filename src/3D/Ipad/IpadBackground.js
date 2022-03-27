@@ -12,7 +12,7 @@ import { gsap, Linear } from 'gsap/all';
 const BackgroundMaterial = shaderMaterial(
   {
     uTime: 0,
-    uAspect: 1,
+    uAspect: [1, 1],
     uCloudColor: new Color(),
     opacity: 0,
     uMouse: new Vector2(),
@@ -29,10 +29,10 @@ const BackgroundMaterial = shaderMaterial(
 const LabBackgroundMaterial = shaderMaterial(
   {
     uTime: 0,
-    uAspect: 1,
+    uAspect: [1, 1],
     uCloudColor: new Color(),
     opacity: 0,
-    uFbmOctaves: 2,
+    uFbmOctaves: 3,
     uMouse: new Vector2(),
   },
   labVertexShader,
@@ -48,13 +48,14 @@ extend({ BackgroundMaterial, LabBackgroundMaterial });
 
 const IpadBackground = React.forwardRef((props, ref) => {
   const viewport = useThree((state) => state.viewport);
+  const gl = useThree((state) => state.gl);
   const currentWork = useStore((state) => state.currentWork);
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
   const color = useMemo(() => new Color(), []);
   const spring = useMemo(() => ({ value: 0 }), []);
 
-  const GPU = useDetectGPU();
+  const GPU = useDetectGPU({ glContext: gl.context });
 
   useEffect(() => {
     if (color && spring) {
@@ -129,22 +130,24 @@ const IpadBackground = React.forwardRef((props, ref) => {
   }, [ref, view]);
 
   useEffect(() => {
-    ref.current.material.uAspect = viewport.aspect;
+    let aspect =
+      viewport.aspect >= 1 ? [viewport.aspect, 1] : [1, 1 / viewport.aspect];
+
+    ref.current.material.uAspect = aspect;
   }, [viewport, ref]);
 
   useEffect(() => {
-    console.log(GPU);
     switch (GPU.tier) {
       case 2: {
-        ref.current.material.uFbmOctaves = 6;
+        ref.current.material.uFbmOctaves = 5;
         break;
       }
       case 3: {
-        ref.current.material.uFbmOctaves = 8;
+        ref.current.material.uFbmOctaves = 7;
         break;
       }
       default: {
-        ref.current.material.uFbmOctaves = 2;
+        ref.current.material.uFbmOctaves = 3;
         break;
       }
     }

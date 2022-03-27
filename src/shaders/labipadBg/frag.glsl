@@ -1,7 +1,10 @@
+// HIGHLY insprired by https://www.shadertoy.com/view/ldKGDh
+
 uniform float uTime;
 uniform float opacity;
 uniform int uFbmOctaves;
 uniform vec3 uCloudColor;
+uniform vec2 uMouse;
 uniform sampler2D uNoiseTex;
 
 varying vec2 vUv;
@@ -47,7 +50,8 @@ float fbm(vec2 x) {
 }
 
 float fbmDistorted(vec2 p) {
-  vec2 f = vec2(fbm(p * 2.5 + uTime * 0.1), fbm(p * 2.5 + uTime * 0.2));
+  vec2 newP = p + uMouse * 0.1;
+  vec2 f = vec2(fbm(newP * 2.5 + uTime * -0.1), fbm(newP * 2.5 + uTime * -0.2));
 
   // domain distortion
   return fbm(p + f);
@@ -56,25 +60,29 @@ float fbmDistorted(vec2 p) {
 float circle(vec2 p) {
   float r = log(sqrt(length(p)));
 
-  return abs(mod(r * 2., PI * 2.0) - 4.5) * 3.0 + 0.5;
+  return abs(mod(r * 1.7, PI * 2.0) - 4.5) * 2.5 + 0.15;
 }
 
 void main() {
   float distFromCenter = length(vUv2);
 
-  vec2 p = vUv2 * rot(uTime * 0.25 + S(0.3, 0.8, distFromCenter) - pow(distFromCenter, 2.0));
+  vec2 p = vUv2 * rot(uTime * 0.25 - S(0.3, 2.0, pow(distFromCenter, 2.0)));
 
   float noise = fbmDistorted(p);
 
-  float rim = noise * pow(abs((-circle(vec2(p.x / 5.0, p.y / 5.0)))), 3.0);
+  float rim = noise * pow(abs((-circle(vec2(p.x / 5.0, p.y / 5.0)))), 1.05);
 
-  rim = pow(rim, 0.89);
+  rim = pow(rim, 0.99);
 
-  vec3 portal = max(uCloudColor * 0.1/rim, vec3(0.075));
+  vec3 portal = uCloudColor * 0.1/rim * (1.0 - S(0.45, 2.0, distFromCenter));
+
+  vec3 color = portal + uCloudColor * 0.1 * distFromCenter;
+
+  color = max(color, vec3(0.075));
 
   // fix for artifact at center
-  float center = S(0.0, 0.2, distFromCenter);
-  portal = mix(vec3(0.075), portal, center);
+  // float center = S(0.0, 0.2, distFromCenter);
+  // portal = mix(vec3(0.075), portal, center);
 
-  gl_FragColor = vec4(portal, opacity);
+  gl_FragColor = vec4(color, opacity);
 }
