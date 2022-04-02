@@ -42,11 +42,11 @@ void main() {
   burnedPos.y += mod((uTime * aSpeed * 0.2) + DEPTH + r, DEPTH * 2.0);
   burnedPos.z += sin(uTime * 0.2 * aSpeed) * RADIUS;
 
-  pos.x += uRight;
-  pos.x -= uLeft;
+  pos.x -= uRight;
+  pos.x += uLeft;
 
-  float burn = (1.0 - uv.x) * uLeft + uv.x * uRight;
-  burn = S(0.25 * (0.75 - max(uLeft, uRight)), 0.7525, burn);
+  float burn = (1.0 - uv.x) * uRight + uv.x * uLeft;
+  burn = S(0.25 * (0.75 - max(uRight, uLeft)), 0.7525, burn);
   
   burnedPos.z += burn * aSpeed;
   burnedPos.x *= 1.0 + burn * aSpeed;

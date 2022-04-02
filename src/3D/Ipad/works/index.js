@@ -3,6 +3,7 @@ import WorksCarousel from './WorksCarousel';
 import Title from './Title';
 import useStore from '../../../store';
 import { useThree } from '@react-three/fiber';
+import Counter from './Counter';
 
 const Works = (props) => {
   const ref = useRef();
@@ -20,6 +21,7 @@ const Works = (props) => {
   return (
     <group ref={ref} {...props}>
       <Title ref={titleRef} />
+      <Counter position={[-1.85, 1.5, -6.1]} />
       <WorksCarousel ref={carouselRef} />
     </group>
   );

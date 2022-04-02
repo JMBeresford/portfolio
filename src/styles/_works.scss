@@ -92,6 +92,54 @@
   }
 }
 
+#workIndicator {
+  position: fixed;
+  z-index: 51;
+  bottom: 2rem;
+  left: 50%;
+  border-radius: 15px;
+  opacity: 0;
+
+  transition: opacity 0.5s ease-in-out;
+
+  transform: translate(-50%, -50%);
+
+  width: clamp(200px, 100%, 350px);
+  max-width: 85vw;
+  height: 0.5rem;
+
+  background-color: rgb(56, 56, 56);
+
+  pointer-events: none;
+  touch-action: none;
+
+  &.in {
+    opacity: 1;
+  }
+
+  .position {
+    position: absolute;
+
+    display: grid;
+    place-items: center;
+
+    height: 100%;
+
+    transition: left 0.5s ease-in-out;
+
+    &::after {
+      content: '';
+
+      border-radius: 10px;
+
+      background-color: white;
+
+      height: 50%;
+      width: 95%;
+    }
+  }
+}
+
 @media (max-width: 800px) {
   #workGui {
     .images {

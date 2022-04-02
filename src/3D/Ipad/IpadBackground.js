@@ -1,4 +1,4 @@
-import { shaderMaterial, useDetectGPU } from '@react-three/drei';
+import { shaderMaterial, useDetectGPU, useTexture } from '@react-three/drei';
 import React, { useEffect, useMemo } from 'react';
 import { extend, useFrame, useThree } from '@react-three/fiber';
 import vertexShader from '../../shaders/ipadBg/vert.glsl';
@@ -8,6 +8,7 @@ import labFragmentShader from '../../shaders/labipadBg/frag.glsl';
 import { Color, Vector2 } from 'three';
 import useStore from '../../store';
 import { gsap, Linear } from 'gsap/all';
+import portalImage from '../../img/portalImage.png';
 
 const BackgroundMaterial = shaderMaterial(
   {
@@ -35,6 +36,7 @@ const LabBackgroundMaterial = shaderMaterial(
     uProgress: 0,
     uFbmOctaves: 3,
     uMouse: new Vector2(),
+    uPortalTexture: null,
   },
   labVertexShader,
   labFragmentShader,
@@ -56,6 +58,8 @@ const IpadBackground = React.forwardRef((props, ref) => {
   const leavingIpad = useStore((state) => state.leavingIpad);
   const color = useMemo(() => new Color(), []);
   const spring = useMemo(() => ({ value: 0 }), []);
+
+  const portalTexture = useTexture(portalImage);
 
   const GPU = useDetectGPU({ glContext: gl.context });
 
@@ -166,7 +170,7 @@ const IpadBackground = React.forwardRef((props, ref) => {
     <mesh ref={ref} position={[0, 0, -100]}>
       <planeGeometry args={[2, 2]} />
       {view === 'labEntered' || destination === 'labEntered' ? (
-        <labBackgroundMaterial uMouse={[0, 0]} />
+        <labBackgroundMaterial uMouse={[0, 0]} uPortalTexture={portalTexture} />
       ) : (
         <backgroundMaterial uMouse={[0, 0]} />
       )}

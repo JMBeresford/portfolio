@@ -33,7 +33,7 @@ void main() {
 
   float screenX = gl_FragCoord.x / uViewport.x;
 
-  float alpha = tex.a * particleMask * (1.0 - vBurn * 1.2) * (1.0 - vHover);
+  float alpha = tex.a * particleMask * (1.0 - vBurn) * (1.0 - vHover);
 
   vec3 color = mix(tex.rgb, uHoveredColor, vHover);
 

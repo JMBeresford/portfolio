@@ -6,7 +6,7 @@ uniform float uProgress;
 uniform int uFbmOctaves;
 uniform vec3 uCloudColor;
 uniform vec2 uMouse;
-uniform sampler2D uNoiseTex;
+uniform sampler2D uPortalTexture;
 
 varying vec2 vUv;
 varying vec2 vUv2;
@@ -52,7 +52,7 @@ float fbm(vec2 x) {
 
 float fbmDistorted(vec2 p) {
   vec2 newP = p + uMouse * 0.1;
-  vec2 f = vec2(fbm(newP * 2.5 + uTime * -0.1), fbm(newP * 2.5 + uTime * -0.2));
+  vec2 f = vec2(fbm(newP * 2.5 + uTime * -0.35), fbm(newP * 2.5 + uTime * -0.5));
 
   // domain distortion
   return fbm(p + f);
@@ -67,21 +67,25 @@ float circle(vec2 p) {
 void main() {
   float distFromCenter = length(vUv2);
 
-  vec2 p = vUv2 * rot(uTime * 0.25 - pow(distFromCenter, 1.0));
+  vec3 tex = texture2D(uPortalTexture, vUv).rgb;
 
-  float noise = fbmDistorted(p);
+  vec2 p = vUv2 * rot(uTime * 0.025 - pow(distFromCenter, 1.25));
+
+  float noise = fbmDistorted(p * 10.0);
 
   float rim = noise * pow(abs((-circle(vec2(p.x / 5.0, p.y / 5.0)))), 1.05);
 
   // rim = pow(rim, 0.99);
 
-  vec3 portal = uCloudColor * 0.1/rim * (1.0 - S(0.65, 2.0, distFromCenter));
+  vec3 portal = uCloudColor * 0.1/rim * (1.0 - S(0.45, 2.0, distFromCenter));
 
   vec3 color = portal + uCloudColor * 0.1 * distFromCenter;
 
-  float inPortal = S(0.0, 0.6085, distFromCenter) - step(0.6085, distFromCenter);
+  float inPortal = S(1.0, 0.0, distFromCenter) - step(0.6085, distFromCenter);
 
-  color += max(inPortal * 0.25, 0.0) * vec3(1.0, 0.2941, 0.4471);
+  // inPortal = clamp(1.0 - inPortal, 0.0, 1.0);
+
+  color = mix(color, tex, clamp(inPortal, 0.0, 1.0));
 
   color *= uProgress;
 

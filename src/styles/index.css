@@ -154,6 +154,40 @@
   touch-action: all;
 }
 
+#workIndicator {
+  position: fixed;
+  z-index: 51;
+  bottom: 2rem;
+  left: 50%;
+  border-radius: 15px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  transform: translate(-50%, -50%);
+  width: clamp(200px, 100%, 350px);
+  max-width: 85vw;
+  height: 0.5rem;
+  background-color: #383838;
+  pointer-events: none;
+  touch-action: none;
+}
+#workIndicator.in {
+  opacity: 1;
+}
+#workIndicator .position {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  transition: left 0.5s ease-in-out;
+}
+#workIndicator .position::after {
+  content: "";
+  border-radius: 10px;
+  background-color: white;
+  height: 50%;
+  width: 95%;
+}
+
 @media (max-width: 800px) {
   #workGui .images {
     width: 90%;
@@ -175,29 +209,24 @@
   z-index: 50;
   display: grid;
   place-items: center;
-  grid-template-columns: 100%;
-  grid-template-rows: 50% 50%;
 }
 #lab a {
-  grid-row: 2/3;
-  color: white;
+  color: black;
   font-size: 1.1rem;
   font-family: "EB Garamond", serif;
   text-decoration: none;
-  border: 1px solid white;
+  border: 1px solid black;
   pointer-events: none;
   touch-action: none;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.75);
   transition: background-color ease-in-out 0.2s;
   padding: 1rem 1.5rem;
 }
 #lab a:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: white;
 }
 #lab.in {
   opacity: 1;
-  pointer-events: all;
-  touch-action: all;
 }
 #lab.in a {
   pointer-events: all;
@@ -454,19 +483,24 @@ canvas {
   touch-action: none;
   z-index: 100;
 }
+#gui .backWrapper {
+  width: 100%;
+  height: 15vh;
+  position: relative;
+  max-width: min(1500px, 95%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
 #gui .back {
   pointer-events: all;
   touch-action: all;
   color: white;
   font-size: 2rem;
-  position: absolute;
   margin-right: 0;
   cursor: pointer;
-  top: 2rem;
-  left: 2rem;
   opacity: 0;
-  transform: translateX(50%);
-  transition: all 0.5s ease-in-out;
+  transition: all 0.15s ease-in-out;
   filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.85));
 }
 #gui .back.in {
@@ -474,7 +508,7 @@ canvas {
   transform: translateX(0);
 }
 #gui .back:hover {
-  left: 1.5rem;
+  transform: translateX(-15%);
 }
 #gui .back:hover > * {
   margin-right: 0.5rem;

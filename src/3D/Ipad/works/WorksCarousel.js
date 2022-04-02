@@ -250,11 +250,11 @@ const WorksCarousel = React.forwardRef((props, ref) => {
     if (dragging && !animating) {
       let dx = mouse.x - touchStartX;
 
-      if (dx < 0) {
-        ref.current.material.uLeft = -dx;
+      if (dx > 0) {
+        ref.current.material.uLeft = dx;
         direction.current = 'left';
-      } else if (dx > 0) {
-        ref.current.material.uRight = dx;
+      } else if (dx < 0) {
+        ref.current.material.uRight = -dx;
         direction.current = 'right';
       }
     }

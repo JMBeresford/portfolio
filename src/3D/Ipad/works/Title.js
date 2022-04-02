@@ -33,10 +33,24 @@ const Title = React.forwardRef((props, ref) => {
   );
   const strokeSize = useMemo(() => (size < 1.2 ? 0.0015 : 0.003), [size]);
 
-  const { opacity, outlineOpacity, sizeSpring, textHeight } = useSpring({
+  const { sizeSpring, textHeight } = useSpring({
+    strokeSizeSpring: viewingWork === null ? strokeSize : strokeSize * 0.5,
+    sizeSpring:
+      viewingWork === null
+        ? titleHovered
+          ? size * 1.1
+          : size
+        : Math.max(size * 0.5, 0.08),
+    textHeight: viewingWork === null ? 0 : 0.75,
+    config: {
+      duration: 200,
+    },
+  });
+
+  const { opacity, outlineOpacity } = useSpring({
     opacity:
       view === 'worksEntered' &&
-      !destination &&
+      destination === null &&
       !animating &&
       !scrolled &&
       !leavingIpad
@@ -54,14 +68,6 @@ const Title = React.forwardRef((props, ref) => {
           ? 0.5
           : 0.25
         : 0,
-    strokeSizeSpring: viewingWork === null ? strokeSize : strokeSize * 0.5,
-    sizeSpring:
-      viewingWork === null
-        ? titleHovered
-          ? size * 1.1
-          : size
-        : Math.max(size * 0.5, 0.08),
-    textHeight: viewingWork === null ? 0 : 0.75,
     config: {
       duration:
         view === 'worksEntered' && animating ? 200 : titleHovered ? 200 : 500,
@@ -139,7 +145,7 @@ const Title = React.forwardRef((props, ref) => {
         maxWidth={sizes.width / 500}
         textAlign='center'
         onPointerEnter={(e) => handleEnterAndMove(e)}
-        onPointerMove={(e) => handleEnterAndMove(e)}
+        // onPointerMove={(e) => handleEnterAndMove(e)}
         onPointerLeave={(e) => handleLeave(e)}
         onClick={(e) => handleClick(e)}
         {...props}

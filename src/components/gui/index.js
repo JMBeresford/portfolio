@@ -3,6 +3,7 @@ import useStore from '../../store';
 import { IoArrowBack, IoInformationCircleOutline } from 'react-icons/io5';
 import WorkGui from './WorkGui';
 import LabGui from './LabGui';
+import WorkIndicator from './WorkIndicator';
 
 const Gui = React.memo(() => {
   // refs
@@ -54,21 +55,27 @@ const Gui = React.memo(() => {
   return (
     <>
       <div id='gui'>
-        <div
-          ref={backRef}
-          className={!['main', 'start'].includes(view) ? 'back in' : 'back'}
-          onClick={(e) => back(e)}
-          onPointerEnter={(e) => handlePointerEnter(e)}
-          onPointerLeave={(e) => handlePointerExit(e)}
-        >
-          <IoArrowBack />
+        <div className='backWrapper'>
+          <div
+            ref={backRef}
+            className={
+              !['main', 'start'].includes(view) && destination === null
+                ? 'back in'
+                : 'back'
+            }
+            onClick={(e) => back(e)}
+            onPointerEnter={(e) => handlePointerEnter(e)}
+            onPointerLeave={(e) => handlePointerExit(e)}
+          >
+            <IoArrowBack />
+          </div>
         </div>
         <div
           ref={tooltipRef}
           id='tooltip'
           className={
             !destination &&
-            ['main', 'socials', 'worksEntered'].includes(view) &&
+            ['main', 'socials'].includes(view) &&
             viewingWork === null
               ? 'in'
               : ''
@@ -81,8 +88,13 @@ const Gui = React.memo(() => {
           <h3>{tip}</h3>
         </div>
       </div>
-      {view === 'worksEntered' && <WorkGui />}
-      {view === 'labEntered' && <LabGui />}
+      {view === 'worksEntered' && (
+        <>
+          <WorkGui />
+          <WorkIndicator />
+        </>
+      )}
+      {(view === 'labEntered' || destination === 'labEntered') && <LabGui />}
     </>
   );
 });
