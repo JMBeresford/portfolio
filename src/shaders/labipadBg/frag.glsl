@@ -3,6 +3,7 @@
 uniform float uTime;
 uniform float opacity;
 uniform float uProgress;
+uniform float uHovered;
 uniform int uFbmOctaves;
 uniform vec3 uCloudColor;
 uniform vec2 uMouse;
@@ -69,7 +70,11 @@ void main() {
 
   vec3 tex = texture2D(uPortalTexture, vUv).rgb;
 
-  vec2 p = vUv2 * rot(uTime * 0.025 - pow(distFromCenter, 1.25));
+  vec3 cloudColor = mix(
+    uCloudColor, vec3(1.0, 0.0, 0.0), min(uHovered * pow(distFromCenter, 1.5) * 0.2, 1.0)
+  );
+
+  vec2 p = vUv2 / (1.0 + uHovered / 2.0) * rot(uTime * 0.025 - pow(distFromCenter, 1.25));
 
   float noise = fbmDistorted(p * 10.0);
 
@@ -77,15 +82,15 @@ void main() {
 
   // rim = pow(rim, 0.99);
 
-  vec3 portal = uCloudColor * 0.1/rim * (1.0 - S(0.45, 2.0, distFromCenter));
+  vec3 portal = cloudColor * 0.1/rim * (1.0 - S(0.45, 2.0, distFromCenter));
 
-  vec3 color = portal + uCloudColor * 0.1 * distFromCenter;
+  vec3 color = portal + cloudColor * 0.1 * distFromCenter;
 
-  float inPortal = S(1.0, 0.0, distFromCenter) - step(0.6085, distFromCenter);
+  float inPortal = S(1.2, 0.0, distFromCenter) - step(0.6085 + 0.5 * uHovered, distFromCenter);
 
   // inPortal = clamp(1.0 - inPortal, 0.0, 1.0);
 
-  color = mix(color, tex, clamp(inPortal, 0.0, 1.0));
+  color = mix(color, tex, S(0.0, 1.0 - 0.3 * uHovered, inPortal));
 
   color *= uProgress;
 

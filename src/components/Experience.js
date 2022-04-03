@@ -1,17 +1,17 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import useStore from '../store';
-import OfficeModel from '../3D/OfficeModel';
 import Camera from './Camera';
 import Controls from './Controls';
-import Ipad from '../3D/Ipad';
-import { Preload, Stats, useDetectGPU } from '@react-three/drei';
+import { Stats, useDetectGPU } from '@react-three/drei';
 import { ACESFilmicToneMapping } from 'three';
 import { useMediaQuery } from 'react-responsive';
 
+const Ipad = React.lazy(() => import('../3D/Ipad'));
+const OfficeModel = React.lazy(() => import('../3D/OfficeModel'));
+
 const Experience = () => {
   const ref = useRef();
-  const ipadRef = useRef();
   const init = useStore((state) => state.actions.init);
   const debugging = useStore((state) => state.debug.active);
   const GPUInfo = useDetectGPU();
@@ -66,13 +66,12 @@ const Experience = () => {
           gl={{ toneMapping: ACESFilmicToneMapping }}
         >
           <Suspense fallback={null}>
-            <group>
-              <Controls />
-              <Camera near={0.0005} />
-              <Ipad ref={ipadRef} />
-              <OfficeModel />
-            </group>
-            <Preload all />
+            <Ipad />
+          </Suspense>
+          <Controls />
+          <Camera near={0.0005} />
+          <Suspense fallback={null}>
+            <OfficeModel />
           </Suspense>
           {debugging && <Stats className='stats' />}
         </Canvas>

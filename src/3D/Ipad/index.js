@@ -6,7 +6,8 @@ import { gsap, Linear } from 'gsap';
 import Particles from './Particles';
 import About from './about';
 
-const Ipad = React.forwardRef((props, ref) => {
+const Ipad = (props) => {
+  const ref = useRef();
   const view = useStore((state) => state.view);
   const ipadRef = useRef();
   const particlesRef = useRef();
@@ -58,7 +59,7 @@ const Ipad = React.forwardRef((props, ref) => {
         opacityTl.current.play();
       }
     }
-  }, [destination, ref, active]);
+  }, [destination, active]);
 
   useEffect(() => {
     if (ref.current && opacityTl.current) {
@@ -66,7 +67,7 @@ const Ipad = React.forwardRef((props, ref) => {
         opacityTl.current.reverse();
       }
     }
-  }, [ref, leavingIpad, active]);
+  }, [leavingIpad, active]);
 
   return (
     <group ref={ref}>
@@ -80,6 +81,6 @@ const Ipad = React.forwardRef((props, ref) => {
       <About visible={aboutActive} />
     </group>
   );
-});
+};
 
 export default Ipad;

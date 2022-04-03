@@ -8,7 +8,8 @@ import labFragmentShader from '../../shaders/labipadBg/frag.glsl';
 import { Color, Vector2 } from 'three';
 import useStore from '../../store';
 import { gsap, Linear } from 'gsap/all';
-import portalImage from '../../img/portalImage.png';
+import portalImage from '../../img/portalImage.webp';
+import { useSpring, animated } from '@react-spring/three';
 
 const BackgroundMaterial = shaderMaterial(
   {
@@ -34,6 +35,7 @@ const LabBackgroundMaterial = shaderMaterial(
     uCloudColor: new Color(),
     opacity: 0,
     uProgress: 0,
+    uHovered: 0,
     uFbmOctaves: 3,
     uMouse: new Vector2(),
     uPortalTexture: null,
@@ -49,6 +51,8 @@ const LabBackgroundMaterial = shaderMaterial(
 
 extend({ BackgroundMaterial, LabBackgroundMaterial });
 
+const AnimLabBackgroundMaterial = animated('labBackgroundMaterial');
+
 const IpadBackground = React.forwardRef((props, ref) => {
   const viewport = useThree((state) => state.viewport);
   const gl = useThree((state) => state.gl);
@@ -56,12 +60,13 @@ const IpadBackground = React.forwardRef((props, ref) => {
   const view = useStore((state) => state.view);
   const destination = useStore((state) => state.destination);
   const leavingIpad = useStore((state) => state.leavingIpad);
+  const labTextHovered = useStore((state) => state.labTextHovered);
   const color = useMemo(() => new Color(), []);
   const spring = useMemo(() => ({ value: 0 }), []);
 
   const portalTexture = useTexture(portalImage);
 
-  const GPU = useDetectGPU({ glContext: gl.context });
+  const GPU = useDetectGPU({ glContext: gl.getContext() });
 
   useEffect(() => {
     if (color && spring) {
@@ -160,6 +165,10 @@ const IpadBackground = React.forwardRef((props, ref) => {
     }
   }, [GPU, ref]);
 
+  const { hovered } = useSpring({
+    hovered: labTextHovered ? 1 : 0,
+  });
+
   useFrame(({ clock, mouse }) => {
     ref.current.material.uTime = clock.elapsedTime;
 
@@ -170,7 +179,11 @@ const IpadBackground = React.forwardRef((props, ref) => {
     <mesh ref={ref} position={[0, 0, -100]}>
       <planeGeometry args={[2, 2]} />
       {view === 'labEntered' || destination === 'labEntered' ? (
-        <labBackgroundMaterial uMouse={[0, 0]} uPortalTexture={portalTexture} />
+        <AnimLabBackgroundMaterial
+          uMouse={[0, 0]}
+          uPortalTexture={portalTexture}
+          uHovered={hovered}
+        />
       ) : (
         <backgroundMaterial uMouse={[0, 0]} />
       )}

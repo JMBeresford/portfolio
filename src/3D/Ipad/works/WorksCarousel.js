@@ -37,9 +37,9 @@ extend({ AvatarMaterial }); // R3F extend
 
 const AnimMaterial = animated('avatarMaterial');
 
-useTexture.preload(useStore.getState().avatars);
-
 const WorksCarousel = React.forwardRef((props, ref) => {
+  useTexture.preload(useStore.getState().avatars);
+
   const direction = useRef('left');
   const avatars = useStore.getState().avatars;
   const viewport = useThree((state) => state.viewport);

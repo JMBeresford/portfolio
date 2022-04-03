@@ -1,10 +1,11 @@
-import Experience from './components/Experience';
 import Loading from './components/Loading';
 import useStore from './store';
 import Gui from './components/gui';
 import Cursor from './components/Cursor';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Helmet } from 'react-helmet';
+
+const Experience = React.lazy(() => import('./components/Experience'));
 
 function App() {
   const view = useStore((state) => state.view);

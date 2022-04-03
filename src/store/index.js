@@ -6,6 +6,7 @@ import { actions as worksActions, worksSlice } from './works';
 import { actions as carouselActions, carouselSlice } from './carousel';
 import { actions as officeActions, officeSlice } from './office';
 import { actions as aboutActions, aboutSlice } from './about';
+import { actions as labActions, labSlice } from './lab';
 
 const useStore = create((set, get) => ({
   canvas: null,
@@ -28,6 +29,7 @@ const useStore = create((set, get) => ({
   ...carouselSlice(set, get),
   ...officeSlice(set, get),
   ...aboutSlice(set, get),
+  ...labSlice(set, get),
 
   actions: {
     init: (canvas) => {
@@ -48,6 +50,7 @@ const useStore = create((set, get) => ({
     ...carouselActions(set, get),
     ...officeActions(set, get),
     ...aboutActions(set, get),
+    ...labActions(set, get),
   },
 }));
 

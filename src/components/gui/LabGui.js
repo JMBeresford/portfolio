@@ -17,7 +17,15 @@ const LabGui = () => {
       id='lab'
       className={view === 'labEntered' && !leavingIpad ? 'in' : ''}
     >
-      <a href='https://lab.john-beresford.com'>Enter The Lab</a>
+      <div className='btnWrapper'>
+        <a
+          href='https://lab.john-beresford.com'
+          onPointerOver={() => useStore.setState({ labTextHovered: true })}
+          onPointerLeave={() => useStore.setState({ labTextHovered: false })}
+        >
+          Enter The Lab
+        </a>
+      </div>
     </div>
   );
 };

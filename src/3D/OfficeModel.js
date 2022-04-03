@@ -6,12 +6,13 @@ import React, { useEffect, useRef } from 'react';
 import { useGLTF, useTexture, shaderMaterial } from '@react-three/drei';
 import useStore from '../store';
 import modelPath from '../models/beresford_design.glb';
-import bake1 from '../img/bakes/bake1.jpg';
-import bake2 from '../img/bakes/bake2.jpg';
-import lightmap1_1 from '../img/bakes/lightmap1_1.jpg';
-import lightmap2_1 from '../img/bakes/lightmap2_1.jpg';
-import lightmap1_2 from '../img/bakes/lightmap1_2.jpg';
-import lightmap2_2 from '../img/bakes/lightmap2_2.jpg';
+
+import bake1 from '../img/bakes/bake1.webp';
+import bake2 from '../img/bakes/bake2.webp';
+import lightmap1_1 from '../img/bakes/lightmap1_1.webp';
+import lightmap2_1 from '../img/bakes/lightmap2_1.webp';
+import lightmap1_2 from '../img/bakes/lightmap1_2.webp';
+import lightmap2_2 from '../img/bakes/lightmap2_2.webp';
 import { extend, useFrame } from '@react-three/fiber';
 import { useSpring, animated } from '@react-spring/three';
 
@@ -640,7 +641,7 @@ const OfficeModel = (props) => {
         geometry={nodes.wall_emissive.geometry}
         position={[0.00167, 0.03201, -0.39003]}
       >
-        <meshBasicMaterial color={'#ffffbb'} />
+        <meshBasicMaterial color={'#ffffff'} />
       </mesh>
       <mesh
         ref={ipadRef2}
