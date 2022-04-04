@@ -20,7 +20,7 @@ const Loading = () => {
     <div id='loading' className={ready ? 'ready' : ''} ref={ref}>
       <div className='text'>
         <h1>john beresford</h1>
-        <h3>creative developer</h3>
+        <h2>creative developer</h2>
       </div>
       {progress >= 100 && (
         <button onClick={(e) => handleClick(e)}>Enter</button>
