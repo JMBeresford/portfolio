@@ -14,7 +14,13 @@ function App({ Component, pageProps = { title: 'index' } }) {
   const router = useRouter();
 
   useEffect(() => {
-    useStore.setState({ router });
+    useStore.setState({ debug: window.location.hash.includes('debug') });
+  }, []);
+
+  useEffect(() => {
+    useStore.setState({
+      router,
+    });
   }, [router]);
 
   return (

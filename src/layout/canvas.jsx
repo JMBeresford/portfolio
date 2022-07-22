@@ -1,22 +1,27 @@
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Preload } from '@react-three/drei';
+import { OrbitControls, Preload, Stats } from '@react-three/drei';
 import useStore from '@/store';
-import { useEffect, useRef } from 'react';
+import { Perf } from 'r3f-perf';
 
 const LCanvas = ({ children }) => {
-  const dom = useStore((state) => state.dom);
+  const { debug } = useStore();
 
   return (
     <Canvas
       mode='concurrent'
+      camera={{ fov: 65 }}
       style={{
         position: 'absolute',
-        top: 0,
+        inset: 0,
       }}
-      // onCreated={(state) => state.events.connect(dom.current)}
+      onCreated={({ gl }) => gl.setClearColor('#000005', 1)}
     >
-      <Preload all />
+      {/* <Preload all /> */}
       {children}
+
+      <OrbitControls />
+      {debug && <Perf position='bottom-left' />}
+      {debug && <Stats />}
     </Canvas>
   );
 };
