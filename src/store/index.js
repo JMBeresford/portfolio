@@ -9,11 +9,22 @@ const useStore = create((set, get) => {
     dom: null,
     debug: false,
 
+    sceneLoaded: false,
+    experienceStarted: false,
+
     ...hoverSlice(set, get),
     ...assetsSlice(set, get),
     ...viewSlice(set, get),
 
     actions: {
+      startExperience: () => {
+        set({ experienceStarted: true });
+
+        setTimeout(() => {
+          get().actions.setView('home');
+        }, 500);
+      },
+
       ...hoverActions(set, get),
       ...assetsActions(set, get),
       ...viewActions(set, get),

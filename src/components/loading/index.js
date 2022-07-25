@@ -1,9 +1,31 @@
-import React from 'react';
+import useStore from '@/store';
+import { useProgress } from '@react-three/drei';
+import React, { useMemo } from 'react';
+import { useCallback } from 'react';
 
 const Loading = () => {
+  const { progress } = useProgress();
+
+  const { experienceStarted, sceneLoaded, actions } = useStore();
+
+  const doneLoading = useMemo(
+    () => progress >= 100 && sceneLoaded,
+    [sceneLoaded, progress]
+  );
+
   return (
-    <div id='loading'>
+    <div id='loading' className={experienceStarted ? 'out' : ''}>
       <h1>Loading</h1>
+
+      <div className='wrapper'>
+        <button
+          onClick={actions.startExperience}
+          className={doneLoading ? '' : 'out'}
+        >
+          enter
+        </button>
+        <p>{Math.floor(progress)}%</p>
+      </div>
     </div>
   );
 };

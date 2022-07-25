@@ -1,4 +1,3 @@
-import { Effects, useTexture } from '@react-three/drei';
 import Socials from './main/Socials';
 import About from './shelf/About';
 import Works from './shelf/Works';
@@ -9,29 +8,49 @@ import WallLight from './lights/WallLight';
 import Lamp from './lights/Lamp';
 import Partition1 from './main/Partition1';
 import Partition2 from './main/Partition2';
-import useStore from '@/store';
 import MacPro from './main/MacPro';
+import { useThree } from '@react-three/fiber';
+import { Suspense, useEffect } from 'react';
+import useStore from '@/store';
 
-useTexture.preload(useStore.getState().maps);
+// useTexture.preload(useStore.getState().maps);
+
+const SceneLoading = () => {
+  useEffect(() => {
+    return () => {
+      useStore.setState({ sceneLoaded: true });
+    };
+  }, []);
+
+  return <></>;
+};
 
 const Office = () => {
+  const { camera } = useThree();
+
   return (
-    <group>
-      <Partition1 />
-      <Partition2 />
-      <MacPro />
+    <Suspense fallback={<SceneLoading />}>
+      <group
+        onDoubleClick={() => {
+          console.log(camera.position, camera.rotation);
+        }}
+      >
+        <Partition1 />
+        <Partition2 />
+        <MacPro />
 
-      <Socials />
-      <About />
-      <Works />
-      <Lab />
+        <Socials />
+        <About />
+        <Works />
+        <Lab />
 
-      <MonitorScreen />
-      <PhoneScreen />
+        <MonitorScreen />
+        <PhoneScreen />
 
-      <WallLight />
-      <Lamp />
-    </group>
+        <WallLight />
+        <Lamp />
+      </group>
+    </Suspense>
   );
 };
 

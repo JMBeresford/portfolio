@@ -1,3 +1,15 @@
+#loading {
+  position: "fixed";
+  background: "#fff";
+  inset: 0;
+  width: "100vw";
+  height: "100vh";
+  overflow: "hidden";
+  display: "grid";
+  place-items: "center";
+  z-index: 15;
+}
+
 * {
   box-sizing: border-box;
 }
