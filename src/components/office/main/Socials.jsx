@@ -5,15 +5,12 @@ import { OfficeMaterial } from '../shaders/office';
 import useStore from '@/store';
 import { useCursor, useGLTF, useTexture } from '@react-three/drei';
 import { useMemo } from 'react';
+import useTextureMaps from '../hooks/useTextureMaps';
 
 const Socials = () => {
   const { nodes } = useGLTF(model);
 
-  const maps = useTexture(useStore.getState().maps, (textures) => {
-    for (let tex of Object.values(textures)) {
-      tex.flipY = false;
-    }
-  });
+  const maps = useTextureMaps();
 
   const { emailHovered, instaHovered, linkedinHovered, githubHovered } =
     useStore();

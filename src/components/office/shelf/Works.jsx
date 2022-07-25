@@ -1,9 +1,10 @@
 import model from '@/assets/models/office.glb';
 import useStore from '@/store';
-import { useGLTF, useTexture, useCursor } from '@react-three/drei';
+import { useGLTF, useCursor } from '@react-three/drei';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import { useSpring, animated } from '@react-spring/three';
+import useTextureMaps from '../hooks/useTextureMaps';
 
 const Works = () => {
   const { nodes } = useGLTF(model);
@@ -12,11 +13,7 @@ const Works = () => {
 
   useCursor(worksHovered);
 
-  const maps = useTexture(useStore.getState().maps, (textures) => {
-    for (let tex of Object.values(textures)) {
-      tex.flipY = false;
-    }
-  });
+  const maps = useTextureMaps();
 
   const { shelfLightIntensity, shelfLightColor } = useControls(
     'Works',

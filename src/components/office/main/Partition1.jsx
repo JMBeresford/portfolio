@@ -1,17 +1,14 @@
 import model from '@/assets/models/office.glb';
 import useStore from '@/store';
 import { useSpring } from '@react-spring/three';
-import { useGLTF, useTexture } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
+import useTextureMaps from '../hooks/useTextureMaps';
 import { OfficeMaterial } from '../shaders/office';
 
 const Partition1 = () => {
   const { nodes } = useGLTF(model);
 
-  const maps = useTexture(useStore.getState().maps, (textures) => {
-    for (let tex of Object.values(textures)) {
-      tex.flipY = false;
-    }
-  });
+  const maps = useTextureMaps();
 
   const {
     emailHovered,

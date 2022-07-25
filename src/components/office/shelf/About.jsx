@@ -2,21 +2,19 @@ import model from '@/assets/models/office.glb';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import useStore from '@/store';
-import { useCursor, useGLTF, useTexture } from '@react-three/drei';
+import { useCursor, useGLTF } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
+import useTextureMaps from '../hooks/useTextureMaps';
+import { useEffect } from 'react';
 
 const About = () => {
   const { nodes } = useGLTF(model);
 
-  const { aboutHovered } = useStore();
+  const { aboutHovered, actions } = useStore();
 
   useCursor(aboutHovered);
 
-  const maps = useTexture(useStore.getState().maps, (textures) => {
-    for (let tex of Object.values(textures)) {
-      tex.flipY = false;
-    }
-  });
+  const maps = useTextureMaps();
 
   const { shelfLightIntensity, shelfLightColor } = useControls(
     'About',
@@ -38,6 +36,7 @@ const About = () => {
   return (
     <group
       onPointerEnter={() => useStore.setState({ aboutHovered: true })}
+      onClick={() => actions.setView('about')}
       onPointerLeave={() => useStore.setState({ aboutHovered: false })}
     >
       <mesh
