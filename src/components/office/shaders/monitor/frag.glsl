@@ -32,7 +32,7 @@ void main() {
   }
 
   #if defined(TONE_MAPPING)
-    waves = toneMapping(waves);
+    // waves = toneMapping(waves);
   #endif
 
   waves = mix(vec3(1.0), waves, S(0.0, 1.0, uEntered));

@@ -5,9 +5,12 @@ import useStore from '@/store';
 import { useCursor, useGLTF } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import useTextureMaps from '../hooks/useTextureMaps';
-import { useEffect } from 'react';
+import IpadMaterial from '../shaders/ipads';
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 
 const About = () => {
+  const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
   const { aboutHovered, actions } = useStore();
@@ -25,13 +28,17 @@ const About = () => {
     { collapsed: true }
   );
 
-  const { lightIntensity, ambientLight, emissiveColor, screenColor } =
+  const { lightIntensity, ambientLight, emissiveColor, hoverFactor } =
     useSpring({
       lightIntensity: aboutHovered ? 1.2 : 0.65,
       ambientLight: aboutHovered ? 0.16 : 0.16 * 0.35,
       emissiveColor: aboutHovered ? '#ffffff' : '#837c6c',
-      screenColor: aboutHovered ? '#ffffff' : '#999999',
+      hoverFactor: aboutHovered ? 0 : 1,
     });
+
+  useFrame(({ clock }) => {
+    screenRef.current.material.uTime = clock.elapsedTime + 1000.0;
+  });
 
   return (
     <group
@@ -61,11 +68,17 @@ const About = () => {
             uLightmap5={maps.lm51}
           />
         </mesh>
+
         <mesh
+          ref={screenRef}
           position={nodes.About_Ipad_Emissive.position}
           geometry={nodes.About_Ipad_Emissive.geometry}
         >
-          <animated.meshBasicMaterial color={screenColor} />
+          <IpadMaterial
+            uColor={[1.0, 0.5098, 0.4745]}
+            uLightningMap={maps.lightning}
+            uHovered={hoverFactor}
+          />
         </mesh>
       </group>
     </group>

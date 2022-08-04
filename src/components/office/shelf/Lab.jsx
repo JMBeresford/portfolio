@@ -5,8 +5,12 @@ import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import { useSpring, animated } from '@react-spring/three';
 import useTextureMaps from '../hooks/useTextureMaps';
+import { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import IpadMaterial from '../shaders/ipads';
 
 const Lab = () => {
+  const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
   const { labHovered } = useStore();
@@ -24,13 +28,17 @@ const Lab = () => {
     { collapsed: true }
   );
 
-  const { lightIntensity, ambientLight, emissiveColor, screenColor } =
+  const { lightIntensity, ambientLight, emissiveColor, hoverFactor } =
     useSpring({
       lightIntensity: labHovered ? 1 : 0.35,
       ambientLight: labHovered ? 0.16 : 0.16 * 0.35,
       emissiveColor: labHovered ? '#ffffff' : '#837c6c',
-      screenColor: labHovered ? '#ffffff' : '#999999',
+      hoverFactor: labHovered ? 0 : 1,
     });
+
+  useFrame(({ clock }) => {
+    screenRef.current.material.uTime = clock.elapsedTime + 3000.0;
+  });
 
   return (
     <group
@@ -61,10 +69,15 @@ const Lab = () => {
         </mesh>
 
         <mesh
+          ref={screenRef}
           position={nodes.Lab_Ipad_Emissive.position}
           geometry={nodes.Lab_Ipad_Emissive.geometry}
         >
-          <animated.meshBasicMaterial color={screenColor} />
+          <IpadMaterial
+            uColor={[0.6706, 0.4196, 1.0]}
+            uHovered={hoverFactor}
+            uLightningMap={maps.lightning}
+          />
         </mesh>
       </group>
     </group>

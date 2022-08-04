@@ -10,6 +10,7 @@ import lightMapImage4_1 from '@/assets/img/bakes/lightmap4_1.jpg';
 import lightMapImage4_2 from '@/assets/img/bakes/lightmap4_2.jpg';
 import lightMapImage5_1 from '@/assets/img/bakes/lightmap5_1.jpg';
 import lightMapImage5_2 from '@/assets/img/bakes/lightmap5_2.jpg';
+import lightningImage from '@/assets/img/lightning.jpg';
 
 const assetsSlice = (set, get) => ({
   maps: {
@@ -25,6 +26,7 @@ const assetsSlice = (set, get) => ({
     lm42: lightMapImage4_2.src,
     lm51: lightMapImage5_1.src,
     lm52: lightMapImage5_2.src,
+    lightning: lightningImage.src,
   },
 });
 
