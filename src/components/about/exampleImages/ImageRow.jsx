@@ -9,7 +9,7 @@ const ASPECT = 1368 / 1069;
 const ImageRow = ({ align }) => {
   const ref = useRef();
 
-  var direction = useMemo(() => (align === 'middle' ? 1 : -1), [align]);
+  const direction = useMemo(() => (align === 'middle' ? 1 : -1), [align]);
 
   const verticalPos = useMemo(() => {
     if (align === 'top') {

@@ -16,7 +16,7 @@ const DOM = () => {
     } else if (aboutLoaded) {
       useStore.setState({ aboutLoaded: false });
     }
-  }, [progress]);
+  }, [progress, aboutLoaded]);
 
   return (
     <section id='about'>
@@ -41,11 +41,15 @@ const DOM = () => {
         <div className='content'>
           <p>
             My name is John Beresford, and I am a multi-disciplinary developer
-            and designer. I'm currently working at{' '}
-            <a href='https://www.nvidia.com/en-us/' target='_blank'>
+            and designer. I am currently working at{' '}
+            <a
+              href='https://www.nvidia.com/en-us/'
+              target='_blank'
+              rel='noreferrer'
+            >
               NVIDIA
             </a>{' '}
-            as a software engineer. When I'm not working, I spend my time
+            as a software engineer. When I am not working, I spend my time
             building and maintaining a collection of personal projects and
             experiments!
           </p>
@@ -61,7 +65,11 @@ const DOM = () => {
               <a>my work</a>
             </Link>{' '}
             and is even an exhibition of these technologies itself. Head over to{' '}
-            <a href='https://lab.john-beresford.com' target='_blank'>
+            <a
+              href='https://lab.john-beresford.com'
+              target='_blank'
+              rel='noreferrer'
+            >
               my lab
             </a>{' '}
             to see my more experimental projects.

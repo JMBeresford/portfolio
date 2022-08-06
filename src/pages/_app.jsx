@@ -35,19 +35,19 @@ function App({ Component, pageProps = { title: 'index' } }) {
     if (enteringAbout) {
       router.push('/about');
     }
-  }, [enteringAbout]);
+  }, [enteringAbout, router]);
 
   useEffect(() => {
     if (enteringWorks) {
       router.push('/works');
     }
-  }, [enteringWorks]);
+  }, [enteringWorks, router]);
 
   useEffect(() => {
     if (enteringLab) {
       router.push('/lab');
     }
-  }, [enteringLab]);
+  }, [enteringLab, router]);
 
   useEffect(() => {
     router.beforePopState(({ as }) => {
@@ -71,7 +71,7 @@ function App({ Component, pageProps = { title: 'index' } }) {
     return () => {
       router.beforePopState(() => true);
     };
-  }, [router]);
+  }, [router, actions]);
 
   return (
     <>

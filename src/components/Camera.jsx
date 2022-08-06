@@ -27,7 +27,7 @@ const Camera = () => {
       initialView.rotation.y,
       initialView.rotation.z
     );
-  }, [router.asPath, views]);
+  }, [router.asPath, views, actions]);
 
   const viewPosition = useMemo(() => {
     const view = views[currentView];
