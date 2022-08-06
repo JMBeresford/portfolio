@@ -83,6 +83,13 @@ const viewActions = (set, get) => ({
 
     return state.viewHistory[state.viewHistory.length - 1];
   },
+  popView: () => {
+    let state = get();
+
+    let lastView = state.actions.getLastView();
+    state.viewHistory.pop();
+    set({ currentView: lastView });
+  },
 });
 
 export { viewSlice, viewActions };
