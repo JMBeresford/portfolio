@@ -4,7 +4,7 @@ import { useGLTF, useCursor } from '@react-three/drei';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import { useSpring, animated } from '@react-spring/three';
-import useTextureMaps from '../hooks/useTextureMaps';
+import useTextureMaps from '../../../hooks/useTextureMaps';
 import IpadMaterial from '../shaders/ipads';
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
@@ -13,7 +13,7 @@ const Works = () => {
   const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
-  const { worksHovered } = useStore();
+  const { worksHovered, actions } = useStore();
 
   useCursor(worksHovered);
 
@@ -43,6 +43,7 @@ const Works = () => {
   return (
     <group
       onPointerEnter={() => useStore.setState({ worksHovered: true })}
+      onClick={() => actions.setView('works')}
       onPointerLeave={() => useStore.setState({ worksHovered: false })}
     >
       <mesh

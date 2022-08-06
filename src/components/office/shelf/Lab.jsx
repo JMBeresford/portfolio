@@ -4,7 +4,7 @@ import { useCursor, useGLTF } from '@react-three/drei';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import { useSpring, animated } from '@react-spring/three';
-import useTextureMaps from '../hooks/useTextureMaps';
+import useTextureMaps from '../../../hooks/useTextureMaps';
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import IpadMaterial from '../shaders/ipads';

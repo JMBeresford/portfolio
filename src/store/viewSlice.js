@@ -1,6 +1,10 @@
 const viewSlice = (set, get) => ({
-  viewHistory: [],
+  viewHistory: ['start'],
   currentView: 'start',
+
+  enteringAbout: false,
+  enteringWorks: false,
+  enteringLab: false,
 
   views: {
     start: {
@@ -8,6 +12,18 @@ const viewSlice = (set, get) => ({
         x: 0.3401925563812256,
         y: 1.129882574081421,
         z: -0.8591268086433411,
+      },
+      rotation: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+    },
+    origin: {
+      position: {
+        x: 0,
+        y: 0,
+        z: 0,
       },
       rotation: {
         x: 0,
@@ -29,14 +45,26 @@ const viewSlice = (set, get) => ({
     },
     about: {
       position: {
-        x: -1.1214985847473145,
-        y: 1.2421875,
-        z: -0.7616888284683228,
+        x: -1.3112402591886119,
+        y: 1.4044473356842653,
+        z: -0.7418818303538858,
       },
       rotation: {
-        x: -0.15321013516821672,
-        y: 0,
-        z: 0,
+        x: -0.40464373181922353,
+        y: 0.1546270463342957,
+        z: 0.04044414698765712,
+      },
+    },
+    works: {
+      position: {
+        x: -0.8970006942664647,
+        y: 1.0051937482801594,
+        z: -0.7307353204768537,
+      },
+      rotation: {
+        x: -0.4672322790818503,
+        y: -0.0658090431997701,
+        z: -0.033163809658742494,
       },
     },
   },

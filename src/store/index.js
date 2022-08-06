@@ -12,6 +12,8 @@ const useStore = create((set, get) => {
     sceneLoaded: false,
     experienceStarted: false,
 
+    aboutLoaded: false,
+
     ...hoverSlice(set, get),
     ...assetsSlice(set, get),
     ...viewSlice(set, get),

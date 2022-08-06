@@ -1,10 +1,10 @@
-import Head from 'next/head'
+import Head from 'next/head';
 
-const titleDefault = 'React Three Next Starter'
-const url = 'https://react-three-next.vercel.app/'
+const titleDefault = 'React Three Next Starter';
+const url = 'https://react-three-next.vercel.app/';
 const description =
-  'The easiest and fastest way to create a 3D website using React Three Fiber and NextJS'
-const author = 'Author'
+  'The easiest and fastest way to create a 3D website using React Three Fiber and NextJS';
+const author = 'Author';
 
 const Header = ({ title = titleDefault }) => {
   return (
@@ -79,7 +79,7 @@ const Header = ({ title = titleDefault }) => {
         <meta name='twitter:site' content='@onirenaud' />
       </Head>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

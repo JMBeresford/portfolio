@@ -2,7 +2,7 @@ import model from '@/assets/models/office.glb';
 import useStore from '@/store';
 import { useSpring } from '@react-spring/three';
 import { useGLTF } from '@react-three/drei';
-import useTextureMaps from '../hooks/useTextureMaps';
+import useTextureMaps from '../../../hooks/useTextureMaps';
 import { OfficeMaterial } from '../shaders/office';
 
 const Partition1 = () => {

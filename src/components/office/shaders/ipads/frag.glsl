@@ -1,5 +1,6 @@
 uniform float uTime;
 uniform float uHovered;
+uniform float uEntered;
 uniform vec3 uColor;
 uniform sampler2D uLightningMap;
 
@@ -82,6 +83,8 @@ void main() {
     vec3 tonemapped = toneMapping(color);
     color = mix(color, tonemapped, uHovered);
   #endif
+
+  color = mix(color, vec3(0.0), clamp(uEntered, 0.0, 1.0));
 
   gl_FragColor = vec4(color, 1.0);
 }

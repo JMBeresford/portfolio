@@ -26,6 +26,24 @@ const nextConfig = {
       ],
     });
 
+    // font support
+    config.module.rules.push({
+      test: /\.(ttf)$/i,
+      exclude: config.exclude,
+      use: [
+        {
+          loader: require.resolve('url-loader'),
+          options: {
+            fallback: require.resolve('file-loader'),
+            publicPath: `${config.assetPrefix}/_next/static/fonts/`,
+            outputPath: `${isServer ? '../' : ''}static/fonts/`,
+            name: '[name]-[hash].[ext]',
+            esModule: config.esModule || false,
+          },
+        },
+      ],
+    });
+
     // 3D model support
     config.module.rules.push({
       test: /\.(obj|mtl|glb|gltf)$/i,

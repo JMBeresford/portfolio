@@ -12,6 +12,7 @@ const LCanvas = dynamic(() => import('@/layout/canvas'), {
 
 function App({ Component, pageProps = { title: 'index' } }) {
   const router = useRouter();
+  const { enteringAbout, enteringWorks, enteringLab, actions } = useStore();
 
   useEffect(() => {
     useStore.setState({ debug: window.location.hash.includes('debug') });
@@ -21,6 +22,55 @@ function App({ Component, pageProps = { title: 'index' } }) {
     useStore.setState({
       router,
     });
+  }, [router]);
+
+  useEffect(() => {
+    if (!router) return;
+
+    router.prefetch('/about');
+    router.prefetch('/works');
+  }, [router]);
+
+  useEffect(() => {
+    if (enteringAbout) {
+      router.push('/about');
+    }
+  }, [enteringAbout]);
+
+  useEffect(() => {
+    if (enteringWorks) {
+      router.push('/works');
+    }
+  }, [enteringWorks]);
+
+  useEffect(() => {
+    if (enteringLab) {
+      router.push('/lab');
+    }
+  }, [enteringLab]);
+
+  useEffect(() => {
+    router.beforePopState(({ as }) => {
+      if (as !== router.asPath) {
+        let lastView = actions.getLastView();
+
+        actions.setView(lastView);
+      }
+
+      if (as === '/') {
+        useStore.setState({
+          enteringAbout: false,
+          enteringWorks: false,
+          enteringLab: false,
+        });
+      }
+
+      return true;
+    });
+
+    return () => {
+      router.beforePopState(() => true);
+    };
   }, [router]);
 
   return (

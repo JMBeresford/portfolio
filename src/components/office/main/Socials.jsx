@@ -5,7 +5,7 @@ import { OfficeMaterial } from '../shaders/office';
 import useStore from '@/store';
 import { useCursor, useGLTF, useTexture } from '@react-three/drei';
 import { useMemo } from 'react';
-import useTextureMaps from '../hooks/useTextureMaps';
+import useTextureMaps from '../../../hooks/useTextureMaps';
 
 const Socials = () => {
   const { nodes } = useGLTF(model);

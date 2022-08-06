@@ -4,7 +4,7 @@ import { useSpring } from '@react-spring/three';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
-import useTextureMaps from '../hooks/useTextureMaps';
+import useTextureMaps from '../../../hooks/useTextureMaps';
 import { OfficeMaterial } from '../shaders/office';
 
 const Partition2 = () => {

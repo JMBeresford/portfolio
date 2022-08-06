@@ -3,8 +3,8 @@ import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import useStore from '@/store';
 import { useCursor, useGLTF } from '@react-three/drei';
-import { useSpring, animated } from '@react-spring/three';
-import useTextureMaps from '../hooks/useTextureMaps';
+import { useSpring, animated, easings } from '@react-spring/three';
+import useTextureMaps from '../../../hooks/useTextureMaps';
 import IpadMaterial from '../shaders/ipads';
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
@@ -13,7 +13,7 @@ const About = () => {
   const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
-  const { aboutHovered, actions } = useStore();
+  const { aboutHovered, actions, currentView } = useStore();
 
   useCursor(aboutHovered);
 

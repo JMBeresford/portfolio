@@ -1,12 +1,11 @@
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Preload, Stats } from '@react-three/drei';
 import useStore from '@/store';
 import { Perf } from 'r3f-perf';
 import Camera from '@/components/Camera';
-import { Leva } from 'leva';
 
 const LCanvas = ({ children }) => {
-  const { debug } = useStore();
+  const { debug, router } = useStore();
 
   return (
     <Canvas
@@ -16,16 +15,16 @@ const LCanvas = ({ children }) => {
         inset: 0,
         zIndex: 5,
       }}
+      camera={{ near: 0.01 }}
       onCreated={({ gl }) => gl.setClearColor('#000005', 1)}
     >
-      {/* <Preload all /> */}
+      <Preload all />
       {children}
       <Camera />
 
-      {debug && <OrbitControls />}
+      {/* <OrbitControls /> */}
       {debug && <Perf position='bottom-left' />}
       {debug && <Stats />}
-      <Leva hidden={!debug} />
     </Canvas>
   );
 };

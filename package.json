@@ -34,6 +34,7 @@
     "r3f-perf": "^6.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
     "sass": "^1.53.0",
     "three": "^0.141.0",
     "three-stdlib": "^2.12.1",

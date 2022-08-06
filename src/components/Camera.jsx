@@ -1,16 +1,21 @@
 import useStore from '@/store';
-import { PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useLayoutEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRef } from 'react';
 import { damp } from 'three/src/math/MathUtils';
 
+const DELTA = 0.025;
+
 const Camera = () => {
   const ref = useRef();
-  const { views, currentView, viewHistory } = useStore();
+  const { views, currentView, actions, router, debug } = useStore();
+  const { enteringAbout, enteringWorks, enteringLab } = useStore();
 
-  useLayoutEffect(() => {
-    let initialView = views['start'];
+  // initial camera position on page load
+  useEffect(() => {
+    let initialView =
+      router.asPath === '/' ? views[actions.getLastView()] : views['origin'];
 
     ref.current.position.set(
       initialView.position.x,
@@ -22,7 +27,7 @@ const Camera = () => {
       initialView.rotation.y,
       initialView.rotation.z
     );
-  }, []);
+  }, [router.asPath, views]);
 
   const viewPosition = useMemo(() => {
     const view = views[currentView];
@@ -37,10 +42,11 @@ const Camera = () => {
   useFrame(({ mouse }, delta) => {
     let cam = ref.current;
 
-    if (!cam) return;
+    if (!cam || debug) return;
 
-    let lastView = viewHistory[viewHistory.length - 1];
-    let lambda = lastView === 'start' ? 0.8 : 1.5;
+    // longer animation for first view
+    let lastView = actions.getLastView();
+    let lambda = lastView === 'start' ? 0.8 : currentView === 'home' ? 1.5 : 4;
 
     let newPos =
       currentView === 'home'
@@ -51,6 +57,10 @@ const Camera = () => {
           }
         : viewPosition;
 
+    if (router.asPath !== '/') {
+      return;
+    }
+
     // smooth animate camera position per-frame independant of frame rate
     cam.position.x = damp(cam.position.x, newPos.x, lambda, delta);
     cam.position.y = damp(cam.position.y, newPos.y, lambda, delta);
@@ -60,16 +70,28 @@ const Camera = () => {
     cam.rotation.x = damp(cam.rotation.x, viewRotation.x, lambda, delta);
     cam.rotation.y = damp(cam.rotation.y, viewRotation.y, lambda, delta);
     cam.rotation.z = damp(cam.rotation.z, viewRotation.z, lambda, delta);
+
+    if (
+      currentView === 'about' &&
+      !enteringAbout &&
+      cam.position.distanceTo(views.about.position) < DELTA
+    ) {
+      useStore.setState({ enteringAbout: true });
+    }
+
+    if (
+      currentView === 'works' &&
+      !enteringWorks &&
+      cam.position.distanceTo(views.works.position) < DELTA
+    ) {
+      useStore.setState({ enteringWorks: true });
+    }
   });
 
   return (
-    <PerspectiveCamera
-      ref={ref}
-      makeDefault={true}
-      near={0.001}
-      far={5}
-      fov={65}
-    />
+    <>
+      <PerspectiveCamera ref={ref} makeDefault near={0.001} far={50} fov={65} />
+    </>
   );
 };
 

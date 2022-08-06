@@ -1,12 +1,12 @@
 import useStore from '@/store';
 import { useProgress } from '@react-three/drei';
 import React, { useMemo } from 'react';
-import { useCallback } from 'react';
+import { useEffect } from 'react';
 
 const Loading = () => {
   const { progress } = useProgress();
 
-  const { experienceStarted, sceneLoaded, actions } = useStore();
+  const { experienceStarted, sceneLoaded, actions, router } = useStore();
 
   const doneLoading = useMemo(
     () => progress >= 100 && sceneLoaded,

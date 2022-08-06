@@ -9,6 +9,7 @@ const BaseIpadMaterial = shaderMaterial(
   {
     uTime: 0,
     uHovered: 0,
+    uEntered: 0,
     uColor: new Color(),
     uLightningMap: null,
   },
