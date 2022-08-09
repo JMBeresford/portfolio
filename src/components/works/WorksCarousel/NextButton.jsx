@@ -78,4 +78,6 @@ const NextButton = forwardRef((props, avatarRef) => {
   );
 });
 
+NextButton.displayName = 'NextButton';
+
 export default NextButton;
