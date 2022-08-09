@@ -1,10 +1,37 @@
-import React from 'react';
+import useStore from '@/store';
+import { useFrame } from '@react-three/fiber';
+import React, { useMemo, useRef } from 'react';
+import { Color } from 'three';
+import { damp } from 'three/src/math/MathUtils';
 import IpadBackground from '../IpadBackground';
+import WorksCarousel from './WorksCarousel';
+
+const tempCol = new Color();
 
 const Works = () => {
+  const bgRef = useRef();
+  const { works, selectedWork } = useStore();
+
+  const color = useMemo(() => {
+    let c = tempCol.setStyle(works[selectedWork].color);
+
+    return c;
+  }, [selectedWork, works]);
+
+  useFrame((state, delta) => {
+    let { r, g, b } = bgRef.current.material.uniforms.uColor.value;
+
+    r = damp(r, color.r, 1, delta);
+    g = damp(g, color.g, 1, delta);
+    b = damp(b, color.b, 1, delta);
+
+    bgRef.current.material.uniforms.uColor.value.setRGB(r, g, b);
+  });
+
   return (
     <group>
-      <IpadBackground color={[0.4745, 0.7451, 1.0]} />
+      <WorksCarousel />
+      <IpadBackground ref={bgRef} />
     </group>
   );
 };

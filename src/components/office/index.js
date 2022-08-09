@@ -12,8 +12,16 @@ import MacPro from './main/MacPro';
 import { useThree } from '@react-three/fiber';
 import { Suspense, useEffect } from 'react';
 import useStore from '@/store';
+import { useTexture } from '@react-three/drei';
 
-// useTexture.preload(useStore.getState().maps);
+// preload all images for other routes
+const workImages = useStore.getState().workImages;
+
+for (let work in workImages) {
+  for (let image of workImages[work]) {
+    useTexture.preload(image);
+  }
+}
 
 const SceneLoading = () => {
   useEffect(() => {

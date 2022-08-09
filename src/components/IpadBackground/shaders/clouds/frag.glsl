@@ -15,7 +15,7 @@ float fbm(vec4 p) {
   float a = 0.5;
 
   for (int i = 0; i < uOctaves; i++) {
-    v += a * noise4(p);
+    v += a * abs(noise4(p));
     p = p * 2.0;
     a *= 0.5;
   }

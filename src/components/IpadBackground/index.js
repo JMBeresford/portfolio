@@ -2,13 +2,11 @@ import useTextureMaps from '@/hooks/useTextureMaps';
 import { Points, useDetectGPU } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import React from 'react';
-import { useMemo } from 'react';
-import { useRef } from 'react';
+import { useMemo, forwardRef, useRef } from 'react';
 import CloudsMaterial from './shaders/clouds';
 import ParticleMaterial from './shaders/particles';
 
-const IpadBackground = ({ color, pointCount = 1000 }) => {
-  const cloudsRef = useRef();
+const IpadBackground = forwardRef(({ color, pointCount = 1000 }, cloudsRef) => {
   const pointsRef = useRef();
   const { viewport } = useThree();
   const { tier } = useDetectGPU();
@@ -56,6 +54,6 @@ const IpadBackground = ({ color, pointCount = 1000 }) => {
       </Points>
     </group>
   );
-};
+});
 
 export default IpadBackground;

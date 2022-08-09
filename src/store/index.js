@@ -2,6 +2,7 @@ import create from 'zustand';
 import { assetsActions, assetsSlice } from './assetsSlice';
 import { hoverSlice, hoverActions } from './hoverSlice';
 import { viewActions, viewSlice } from './viewSlice';
+import { worksActions, worksSlice } from './worksSlice';
 
 const useStore = create((set, get) => {
   return {
@@ -17,6 +18,7 @@ const useStore = create((set, get) => {
     ...hoverSlice(set, get),
     ...assetsSlice(set, get),
     ...viewSlice(set, get),
+    ...worksSlice(set, get),
 
     actions: {
       startExperience: () => {
@@ -30,6 +32,7 @@ const useStore = create((set, get) => {
       ...hoverActions(set, get),
       ...assetsActions(set, get),
       ...viewActions(set, get),
+      ...worksActions(set, get),
     },
   };
 });

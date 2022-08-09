@@ -28,6 +28,7 @@
     "glsl-blend": "^1.0.3",
     "glsl-noise": "^0.0.0",
     "glsl-random": "^0.0.5",
+    "gsap": "^3.10.4",
     "leva": "^0.9.29",
     "next": "^12.1.6",
     "next-compose-plugins": "^2.2.1",

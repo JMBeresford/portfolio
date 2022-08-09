@@ -28,7 +28,7 @@ const nextConfig = {
 
     // font support
     config.module.rules.push({
-      test: /\.(ttf)$/i,
+      test: /\.(ttf|otf)$/i,
       exclude: config.exclude,
       use: [
         {

@@ -8,8 +8,6 @@ for (let work in Object.keys(useStore.getState().workImages)) {
 }
 
 export default function useWorkImages(work) {
-  if (!work) return null;
-
   const works = useStore.getState().workImages;
 
   return useTexture(works[work]);
