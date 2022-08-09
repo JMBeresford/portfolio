@@ -56,4 +56,6 @@ const IpadBackground = forwardRef(({ color, pointCount = 1000 }, cloudsRef) => {
   );
 });
 
+IpadBackground.displayName = 'IpadBackground';
+
 export default IpadBackground;

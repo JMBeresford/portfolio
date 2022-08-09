@@ -78,4 +78,6 @@ const PrevButton = forwardRef((props, avatarRef) => {
   );
 });
 
+PrevButton.displayName = 'PrevButton';
+
 export default PrevButton;
