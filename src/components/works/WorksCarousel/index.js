@@ -5,13 +5,18 @@ import { useSpring } from '@react-spring/three';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Suspense, useMemo, useRef } from 'react';
 import { damp } from 'three/src/math/MathUtils';
+import AvatarMaterial from './shaders';
+import WorksList from './WorksList';
 import NextButton from './NextButton';
 import PrevButton from './PrevButton';
-import AvatarMaterial from './shaders';
+
+const AVATAR_SIZE = 0.08;
 
 const WorksCarousel = () => {
   const avatarRef = useRef();
-  const { selectedWork, works, nextHovered, prevHovered } = useStore();
+  const wrapperRef = useRef();
+  const { selectedWork, works, nextHovered, prevHovered, transitioningWork } =
+    useStore();
   const { size } = useThree();
   const maps = useTextureMaps();
 
@@ -30,49 +35,74 @@ const WorksCarousel = () => {
   const prevAvatarTexture = useWorkAvatar(prevWork.name);
 
   const { leftFactor, rightFactor } = useSpring({
-    leftFactor: prevHovered ? 1 : 0,
-    rightFactor: nextHovered ? 1 : 0,
+    leftFactor: prevHovered && !transitioningWork ? 1 : 0,
+    rightFactor: nextHovered && !transitioningWork ? 1 : 0,
   });
 
   useFrame(({ clock, mouse }, delta) => {
     avatarRef.current.material.uTime = clock.elapsedTime + 1000.0;
 
-    let x = avatarRef.current.material.uniforms.uMouse.value[0];
-    avatarRef.current.material.uniforms.uMouse.value[0] = damp(
-      x,
-      mouse.x * 0.01,
-      1,
+    // let x = avatarRef.current.material.uniforms.uMouse.value[0];
+    // avatarRef.current.material.uniforms.uMouse.value[0] = damp(
+    //   x,
+    //   mouse.x * 0.01,
+    //   1,
+    //   delta
+    // );
+
+    // let y = avatarRef.current.material.uniforms.uMouse.value[1];
+    // avatarRef.current.material.uniforms.uMouse.value[1] = damp(
+    //   y,
+    //   mouse.y * 0.01,
+    //   1,
+    //   delta
+    // );
+
+    wrapperRef.current.rotation.y = damp(
+      wrapperRef.current.rotation.y,
+      mouse.x * 0.3,
+      4,
       delta
     );
 
-    let y = avatarRef.current.material.uniforms.uMouse.value[1];
-    avatarRef.current.material.uniforms.uMouse.value[1] = damp(
-      y,
-      mouse.y * 0.01,
-      1,
+    wrapperRef.current.rotation.x = damp(
+      wrapperRef.current.rotation.x,
+      -mouse.y * 0.3,
+      4,
       delta
     );
   });
 
   return (
     <group position={[0, 0, -0.1]}>
-      <points ref={avatarRef} position-y={0.005}>
-        <planeGeometry args={[0.08, 0.08, 256, 256]} />
-        <AvatarMaterial
-          uAvatarMap={avatarTexture}
-          uNextAvatarMap={nextAvatarTexture}
-          uPrevAvatarMap={prevAvatarTexture}
-          uParticleMask={maps.particle}
-          uAccentColor={curWork.accentColor}
-          uPointScale={size.height / 800}
-          uLeft={leftFactor}
-          uRight={rightFactor}
-        />
-      </points>
+      <group ref={wrapperRef} position-y={-0.01}>
+        <mesh
+          visible={false}
+          onPointerEnter={() => useStore.setState({ workAvatarHovered: true })}
+          onPointerLeave={() => useStore.setState({ workAvatarHovered: false })}
+        >
+          <planeGeometry args={[AVATAR_SIZE, AVATAR_SIZE]} />
+        </mesh>
+        <points ref={avatarRef}>
+          <planeGeometry args={[AVATAR_SIZE, AVATAR_SIZE, 256, 256]} />
+          <AvatarMaterial
+            uAvatarMap={avatarTexture}
+            uNextAvatarMap={nextAvatarTexture}
+            uPrevAvatarMap={prevAvatarTexture}
+            uParticleMask={maps.particle}
+            uAccentColor={curWork.accentColor}
+            uPointScale={size.height / 1000}
+            uLeft={leftFactor}
+            uRight={rightFactor}
+          />
+        </points>
+      </group>
 
       <Suspense fallback={null}>
-        <NextButton ref={avatarRef} />
-        <PrevButton ref={avatarRef} />
+        {/* <WorksList /> */}
+        {/* <Title /> */}
+        {/* <NextButton ref={avatarRef} />
+        <PrevButton ref={avatarRef} /> */}
       </Suspense>
     </group>
   );

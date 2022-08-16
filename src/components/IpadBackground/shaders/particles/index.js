@@ -8,12 +8,13 @@ import { AdditiveBlending } from 'three';
 const BaseParticleMaterial = shaderMaterial(
   {
     uTime: 0,
+    uPointSize: 5.0,
     uParticleMap: null,
   },
   vertexShader,
   fragmentShader,
   (mat) => {
-    mat.depthTest = false;
+    // mat.depthTest = false;
     mat.depthWrite = false;
     mat.blending = AdditiveBlending;
     mat.transparent = true;

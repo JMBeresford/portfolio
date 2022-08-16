@@ -1,4 +1,5 @@
 uniform float uTime;
+uniform float uPointSize;
 
 varying float vDist;
 
@@ -32,7 +33,7 @@ void main() {
   float d = distance(modelPosition.xyz, cameraPosition);
 
   gl_Position = projectionMatrix * viewMatrix * modelPosition;
-  gl_PointSize = 45.0 / d;
+  gl_PointSize = 45.0 / d * uPointSize;
 
   vDist = d;
 }

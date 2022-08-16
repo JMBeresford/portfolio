@@ -11,6 +11,7 @@
   justify-content: center;
   align-items: center;
   gap: 2rem;
+  font-family: "Proxima Nova";
   z-index: 15;
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
@@ -53,14 +54,81 @@ section#about {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  font-family: "Proxima Nova";
   color: white;
 }
-section#about header,
-section#about .content {
-  width: 60ch;
+section#about a {
+  color: #f0f0f0;
+  position: relative;
+  text-decoration: none;
+}
+section#about a::before {
+  position: absolute;
+  content: "";
+  inset: 0;
+  z-index: -1;
+  background-color: #f27070;
+  transform-origin: bottom center;
+  transform: scaleY(0.1);
+  transition: transform 0.15s ease-in-out;
+}
+section#about a:hover::before {
+  transform: scaleY(1);
+}
+section#about header {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  margin-bottom: 2rem;
+}
+section#about header .back {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+section#about header .back a {
+  display: flex;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  text-decoration: none;
 }
 section#about header h1 {
-  font-size: 2.5rem;
+  position: relative;
+  font-size: clamp(2rem, 2vw + 0.8rem, 5rem);
+  margin-bottom: 0.125rem;
+  margin-right: 3rem;
+  color: black;
+}
+section#about header h1::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -2%;
+  right: -10%;
+  bottom: 0;
+  z-index: -1;
+  background-color: white;
+}
+section#about header h1::before {
+  content: "";
+  position: absolute;
+  top: 8%;
+  left: 2%;
+  right: -12%;
+  bottom: -8%;
+  z-index: -2;
+  background-color: #f27070;
+}
+section#about .content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: clamp(1.2rem, 0.3vw + 1rem, 2rem);
+  width: min(60ch, 90vw);
 }
 
 * {

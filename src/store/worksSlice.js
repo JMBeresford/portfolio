@@ -1,7 +1,9 @@
 const worksSlice = (set, get) => ({
-  selectedWork: 0,
+  selectedWork: 1,
   nextHovered: false,
   prevHovered: false,
+  workTitleHovered: false,
+  workAvatarHovered: false,
 
   transitioningWork: false,
 

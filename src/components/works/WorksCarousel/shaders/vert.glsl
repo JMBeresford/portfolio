@@ -27,7 +27,7 @@ void main() {
   pos.xy += uMouse;
   float d = length(pos);
 
-  vDivergenceFactor = S(0.035, 0.04, d);
+  vDivergenceFactor = S(0.0325, 0.04, d);
 
   vec3 p = position * 50.0;
 

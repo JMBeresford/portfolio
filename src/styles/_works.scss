@@ -1,0 +1,93 @@
+#worksDom {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+
+  .content {
+    font-family: 'Proxima Nova', sans-serif;
+    width: min(1500px, 100%);
+
+    display: grid;
+    place-items: center;
+
+    grid-template-columns: 1fr 1fr 1fr;
+
+    .worksList {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      color: white;
+
+      .header {
+        position: relative;
+        margin-bottom: 1.5rem;
+        width: max-content;
+
+        .fg {
+          position: absolute;
+          top: 0;
+          left: -2%;
+          right: -10%;
+          bottom: 0;
+          z-index: -1;
+          background-color: white;
+        }
+
+        .bg {
+          position: absolute;
+          top: 8%;
+          left: 2%;
+          right: -12%;
+          bottom: -8%;
+          z-index: -2;
+
+          transition: background-color 0.25s ease;
+        }
+
+        h1 {
+          font-size: clamp(2rem, 2vw + 0.8rem, 5rem);
+          color: black;
+        }
+      }
+
+      .workItem {
+        display: grid;
+
+        grid-template-columns: 2ch 1fr;
+        gap: 0.25rem;
+        font-family: monospace;
+
+        padding: 0.25rem 0rem;
+        font-size: 1rem;
+        opacity: 0.35;
+        cursor: pointer;
+
+        transition: opacity 0.25s ease-in-out;
+
+        p.idx {
+          font-weight: 100;
+        }
+
+        p.name {
+          font-size: 1.5rem;
+          font-weight: 400;
+          font-family: 'Proxima Nova', sans-serif;
+          text-transform: uppercase;
+
+          color: #fff;
+        }
+
+        &.selected {
+          opacity: 1;
+        }
+
+        &:hover:not(.selected) {
+          opacity: 0.75;
+        }
+      }
+    }
+  }
+}

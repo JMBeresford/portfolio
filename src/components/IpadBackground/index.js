@@ -6,9 +6,9 @@ import { useMemo, forwardRef, useRef } from 'react';
 import CloudsMaterial from './shaders/clouds';
 import ParticleMaterial from './shaders/particles';
 
-const IpadBackground = forwardRef(({ color, pointCount = 1000 }, cloudsRef) => {
+const IpadBackground = forwardRef(({ color, pointCount = 2000 }, cloudsRef) => {
   const pointsRef = useRef();
-  const { viewport } = useThree();
+  const { viewport, size } = useThree();
   const { tier } = useDetectGPU();
 
   const maps = useTextureMaps();
@@ -50,7 +50,10 @@ const IpadBackground = forwardRef(({ color, pointCount = 1000 }, cloudsRef) => {
         limit={pointCount}
         range={pointCount}
       >
-        <ParticleMaterial uParticleMap={maps.particle} />
+        <ParticleMaterial
+          uPointSize={size.height / 400}
+          uParticleMap={maps.particle}
+        />
       </Points>
     </group>
   );

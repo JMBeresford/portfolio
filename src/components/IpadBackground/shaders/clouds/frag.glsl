@@ -24,14 +24,17 @@ float fbm(vec4 p) {
 }
 
 void main() {
-  vec3 p = vPos * 0.125;
+  vec3 p = vPos * 0.5;
+  p.xz *= 0.15;
   p.z -= uTime * 0.1;
 
-  float clouds = fbm(vec4(p, uTime * 0.01));
+  float clouds = noise4(vec4(p, uTime * 0.01));
 
-  clouds = S(0.0, 1.0, clouds) + S(0.3, 0.7, clouds);
+  clouds = S(0.0, 1.0, clouds) * 0.5;
 
-  vec3 color = mix(vec3(0.075), uColor, clouds);
+  vec3 baseColor = mix(uColor, vec3(0.0), 0.85);
+
+  vec3 color = mix(baseColor, uColor, clouds);
 
   gl_FragColor = vec4(color, 1.0);
 }

@@ -1,3 +1,4 @@
+import DOM from '@/components/works/DOM';
 import dynamic from 'next/dynamic';
 // Dynamic import is used to prevent a payload when the website start that will include threejs r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -11,7 +12,7 @@ const Works = dynamic(() => import('@/components/works'), {
 const Page = (props) => {
   return (
     <>
-      <></>
+      <DOM />
     </>
   );
 };
