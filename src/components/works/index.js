@@ -1,6 +1,6 @@
 import useStore from '@/store';
-import { useFrame } from '@react-three/fiber';
-import React, { useMemo, useRef } from 'react';
+import { events, useFrame, useThree } from '@react-three/fiber';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Color } from 'three';
 import { damp } from 'three/src/math/MathUtils';
 import IpadBackground from '../IpadBackground';
@@ -11,6 +11,10 @@ const tempCol = new Color();
 const Works = () => {
   const bgRef = useRef();
   const { works, selectedWork } = useStore();
+
+  useEffect(() => {
+    useStore.setState({ enteringWorks: false });
+  }, []);
 
   const color = useMemo(() => {
     let c = tempCol.setStyle(works[selectedWork].color);

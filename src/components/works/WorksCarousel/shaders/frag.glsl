@@ -1,44 +1,26 @@
 uniform sampler2D uAvatarMap;
-uniform sampler2D uNextAvatarMap;
-uniform sampler2D uPrevAvatarMap;
 uniform sampler2D uParticleMask;
-uniform float uLeft;
-uniform float uRight;
 uniform vec3 uAccentColor;
+uniform float uTransition;
 
 varying vec2 vUv;
 varying float vDivergenceFactor;
 varying float vSpeed;
-varying float vHeightCycle;
-varying float vHorizCycle;
-varying float vTransition;
 
 #define S smoothstep
 
 void main() {
   // textures
-  vec4 curTex = texture2D(uAvatarMap, vUv);
-  vec4 nextTex = texture2D(uNextAvatarMap, vUv);
-  vec4 prevTex = texture2D(uPrevAvatarMap, vUv);
+  vec4 avatarTex = texture2D(uAvatarMap, vUv);
   float particleMask = texture2D(uParticleMask, gl_PointCoord).r;
 
-  // determine which texture to use
-  vec4 displayTex = mix(curTex, prevTex, clamp(uLeft * vHorizCycle, 0.0, 1.0));
-  displayTex = mix(displayTex, nextTex, clamp(uRight * vHorizCycle, 0.0, 1.0));
-
-  vec3 color = mix(displayTex.rgb, uAccentColor, S(0.0, 0.75, vDivergenceFactor * vSpeed));
+  vec3 color = mix(avatarTex.rgb, uAccentColor, S(0.0, 0.75, vDivergenceFactor * vSpeed) + S(0.0, 0.25, uTransition * vSpeed));
 
   // alpha
-  float opacity = curTex.a; // always use curTex opacity
+  float opacity = avatarTex.a;
   opacity *= particleMask;
-
-  if (vDivergenceFactor > 0.0) {
-    opacity *= 1.0 - vDivergenceFactor;
-    opacity *= 1.0 - distance(vHeightCycle, 0.5) * 2.0;
-  }
-
-  opacity *= 1.0 - vHorizCycle;
-  opacity *= 1.0 - S(0.0, 0.85, vTransition);
+  opacity *= 1.0 - vDivergenceFactor;
+  opacity *= 1.0 - S(0.0, 0.4, uTransition);
 
   gl_FragColor = vec4(color, opacity);
 

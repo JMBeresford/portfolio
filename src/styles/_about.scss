@@ -53,8 +53,11 @@ section#about {
 
     h1 {
       position: relative;
+      font-family: mrs-eaves-roman-small-caps, serif;
+      font-weight: 900;
       font-size: clamp(2rem, 2vw + 0.8rem, 5rem);
       margin-bottom: 0.125rem;
+      padding-left: 0.25rem;
 
       margin-right: 3rem;
       color: black;

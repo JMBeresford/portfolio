@@ -3,20 +3,16 @@ import fragmentShader from './frag.glsl';
 import { shaderMaterial } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
 import { animated } from '@react-spring/three';
-import { Color } from 'three';
+import { Color, Vector3 } from 'three';
 
 const BaseAvatarMaterial = shaderMaterial(
   {
     uTime: 0,
     uAvatarMap: null,
-    uNextAvatarMap: null,
-    uPrevAvatarMap: null,
     uParticleMask: null,
-    uMouse: [0, 0],
-    uLeft: 0,
-    uRight: 0,
-    uTransitionPrev: 0,
-    uTransitionNext: 0,
+    uIntersecting: 0,
+    uIntersect: new Vector3(),
+    uTransition: 0,
     uPointScale: 1,
     uAccentColor: new Color(),
   },
@@ -24,8 +20,8 @@ const BaseAvatarMaterial = shaderMaterial(
   fragmentShader,
   (mat) => {
     mat.transparent = true;
-    // mat.depthWrite = false;
-    mat.depthTest = false;
+    mat.depthWrite = false;
+    // mat.depthTest = false;
   }
 );
 

@@ -1,90 +1,59 @@
 uniform float uTime;
-uniform float uLeft;
-uniform float uRight;
-uniform float uTransitionNext;
-uniform float uTransitionPrev;
 uniform float uPointScale;
-uniform vec2 uMouse;
+uniform float uIntersecting;
+uniform float uTransition;
+uniform vec3 uIntersect;
 
 varying vec2 vUv;
 varying float vDivergenceFactor;
 varying float vSpeed;
-varying float vHeightCycle;
-varying float vHorizCycle;
-varying float vTransition;
 
 #define S smoothstep
-#define MOD_BOUNDS 0.009
-#define HORIZ_MOD_BOUNDS 0.1
-#pragma glslify: snoise3 = require('glsl-noise/simplex/3d')
 
-float rand(vec2 p){
-    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+#pragma glslify: snoise4 = require('glsl-noise/simplex/4d')
+
+float rand(vec2 p) {
+  return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+vec3 snoise4_3(vec4 x) {
+  float a = snoise4(x);
+  float b = snoise4(vec4(x.y - 42.3, x.z + 69.0, x.w + 420.0, x.x - 50.0));
+  float c = snoise4(vec4(x.w + 128.0, x.x - 65536.0, x.y + 100.0, x.z - 256.0));
+
+  return vec3(a, b, c);
 }
 
 void main() {
-  vec3 pos = position;
-  pos.xy += uMouse;
-  float d = length(pos);
+  float d = length(position.xy); // dist from center in obj space
+  float speed = rand(position.xy) * 0.5 + 0.5; // random speed offset per particle
 
-  vDivergenceFactor = S(0.0325, 0.04, d);
+  vec4 modelPosition = modelMatrix * vec4(position, 1.0); // world space coords
+  vec3 pos = modelPosition.xyz;
 
-  vec3 p = position * 50.0;
+  float ripple = abs(sin(distance(pos, uIntersect) * 50.0 + uTime * 2.75)) * 0.375;
 
-  float speed = rand(position.xy) * 0.5 + 0.5;
+  float rippleStr = S(0.0, 1.0, ripple) * uIntersecting;
+
+  vDivergenceFactor = S(0.0325, 0.04, d) + rippleStr;
+
+  vec3 displacement = snoise4_3(vec4(pos, uTime * speed * 0.1));
 
   // idle diverged pos
-  vec3 divergedPosition = pos;
-  divergedPosition.z += cos(uTime * 0.5 * speed) * 0.01;
-  divergedPosition.x += sin(uTime * 0.5 * speed) * 0.01;
-  float heightOffset = mod(uTime * 0.005 * speed, MOD_BOUNDS);
-  divergedPosition.y += heightOffset;
+  vec3 divergedPosition = pos + displacement * 0.015;
 
-  float horizDivergence = mod(uTime * 0.25 * speed, HORIZ_MOD_BOUNDS);
-
-  // to left
-  vec3 leftPosition = pos;
-  leftPosition.x -= horizDivergence;
-  leftPosition.z += cos(uTime * 0.1 * speed) * 0.01;
-  leftPosition.y += sin(uTime * 2.0) * 0.075 * abs(leftPosition.x);
-
-  // to right
-  vec3 rightPosition = pos;
-  rightPosition.x += horizDivergence;
-  rightPosition.z += cos(uTime * 0.1 * speed) * 0.01;
-  rightPosition.y += sin(uTime * 2.0) * 0.075 * abs(rightPosition.x);
-
-  // interpolate horiz pos
-  float leftFactor = uLeft * S(0.9, 0.0, uv.x);
-  float rightFactor = uRight * S(0.1, 1.0, uv.x);
-
-  vec3 transitionNextPos = rightPosition;
-  transitionNextPos.x = 0.15 * speed;
-  transitionNextPos.y += sin(uTime * 0.1 * speed) * 0.025;
-  transitionNextPos.z += cos(uTime * 0.1 * speed) * 0.025;
-
-  vec3 transitionPrevPos = leftPosition;
-  transitionPrevPos.x = -0.15 * speed;
-  transitionPrevPos.y += sin(uTime * 0.1 * speed) * 0.025;
-  transitionPrevPos.z += cos(uTime * 0.1 * speed) * 0.025;
-
-  float transitionNextFactor = clamp(uTransitionNext - (1.0 - uv.x), 0.0, 1.0);
-  float transitionPrevFactor = clamp(uTransitionPrev - uv.x, 0.0, 1.0);
+  // transition diverged position
+  vec3 transitionPosition = pos - displacement * 1.0;
 
   pos = mix(pos, divergedPosition, vDivergenceFactor);
-  pos = mix(pos, leftPosition, leftFactor);
-  pos = mix(pos, rightPosition, rightFactor);
-  pos = mix(pos, transitionNextPos, transitionNextFactor);
-  pos = mix(pos, transitionPrevPos, transitionPrevFactor);
+  pos = mix(pos, transitionPosition, uTransition);
 
-  vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
+  modelPosition.xyz = pos;
+  vec4 modelViewPosition = viewMatrix * modelPosition;
 
-  gl_Position = projectionMatrix * viewMatrix * modelPosition;
-  gl_PointSize = 8.0 * uPointScale;
+  gl_Position = projectionMatrix * modelViewPosition;
+  gl_PointSize = 8.0 * uPointScale / -modelViewPosition.z;
 
   vUv = uv;
   vSpeed = speed;
-  vHeightCycle = heightOffset / MOD_BOUNDS;
-  vHorizCycle = (horizDivergence / HORIZ_MOD_BOUNDS) * (leftFactor + rightFactor);
-  vTransition = clamp(transitionNextFactor + transitionPrevFactor, 0.0, 1.0);
 }

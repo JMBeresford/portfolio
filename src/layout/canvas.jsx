@@ -5,7 +5,7 @@ import { Perf } from 'r3f-perf';
 import Camera from '@/components/Camera';
 
 const LCanvas = ({ children }) => {
-  const { debug, router } = useStore();
+  const { debug, dom } = useStore();
 
   return (
     <Canvas
@@ -16,7 +16,9 @@ const LCanvas = ({ children }) => {
         zIndex: 5,
       }}
       camera={{ near: 0.01 }}
-      onCreated={({ gl }) => gl.setClearColor('#000005', 1)}
+      onCreated={({ gl,events }) => {
+        events.connect(dom.current)
+        gl.setClearColor('#000005', 1)}}
     >
       <Preload all />
       {children}
