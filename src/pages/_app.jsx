@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import useStore from '@/store';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import Header from '@/config';
 import Dom from '@/layout/dom';
 import '@/styles/index.scss';
 import dynamic from 'next/dynamic';
 
 const LCanvas = dynamic(() => import('@/layout/canvas'), {
-  ssr: false,
+  ssr: true,
 });
 
 function App({ Component, pageProps = { title: 'index' } }) {
@@ -22,13 +22,6 @@ function App({ Component, pageProps = { title: 'index' } }) {
     useStore.setState({
       router,
     });
-  }, [router]);
-
-  useEffect(() => {
-    if (!router) return;
-
-    router.prefetch('/about');
-    router.prefetch('/works');
   }, [router]);
 
   useEffect(() => {
@@ -79,6 +72,7 @@ function App({ Component, pageProps = { title: 'index' } }) {
       <Dom>
         <Component {...pageProps} />
       </Dom>
+
       {Component?.r3f && <LCanvas>{Component.r3f(pageProps)}</LCanvas>}
     </>
   );

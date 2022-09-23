@@ -1,28 +1,29 @@
-import { Canvas, useThree } from '@react-three/fiber';
-import { OrbitControls, Preload, Stats } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import { Preload, Stats, OrbitControls } from '@react-three/drei';
 import useStore from '@/store';
 import { Perf } from 'r3f-perf';
-import Camera from '@/components/Camera';
+import { ACESFilmicToneMapping, CineonToneMapping } from 'three';
 
 const LCanvas = ({ children }) => {
-  const { debug, dom } = useStore();
+  const { debug } = useStore();
+  const dom = useStore((state) => state.dom);
 
   return (
     <Canvas
       mode='concurrent'
       style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 5,
+        position: 'fixed',
+        top: 0,
       }}
-      camera={{ near: 0.01 }}
-      onCreated={({ gl,events }) => {
-        events.connect(dom.current)
-        gl.setClearColor('#000005', 1)}}
+      // camera={{ fov: 50, near: 0.001, position: [0, 0, 1.125] }}
+      gl={{ toneMapping: ACESFilmicToneMapping, toneMappingExposure: 0.95 }}
+      onCreated={({ gl, events }) => {
+        events.connect(dom.current);
+        gl.setClearColor('#000005', 1);
+      }}
     >
-      <Preload all />
+      {/* <Preload all /> */}
       {children}
-      <Camera />
 
       {/* <OrbitControls /> */}
       {debug && <Perf position='bottom-left' />}

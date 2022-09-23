@@ -1,4 +1,5 @@
 import useStore from '@/store';
+import { PerspectiveCamera } from '@react-three/drei';
 import { events, useFrame, useThree } from '@react-three/fiber';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Color } from 'three';
@@ -34,6 +35,7 @@ const Works = () => {
 
   return (
     <group>
+      <PerspectiveCamera makeDefault={true} near={0.001} far={50} fov={65} />
       <WorksCarousel />
       <IpadBackground ref={bgRef} />
     </group>

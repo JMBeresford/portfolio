@@ -87,11 +87,11 @@ void main() {
   color = blendLighten(color, WHITE, ipadTopLight + ipadMidLight + ipadBottomLight);
 
   #if defined(TONE_MAPPING)
-    color = toneMapping(color);
+  color = toneMapping(color);
   #endif
 
   gl_FragColor = vec4(color, 1.0);
 
-  // equivalent to #include <encodings_pars_fragment>
+  // equivalent to #include <encodings_fragment>
   gl_FragColor = linearToOutputTexel(gl_FragColor);
 }

@@ -14,12 +14,14 @@ const Dom = ({ children }) => {
     <div
       style={{
         position: 'absolute',
-        inset: 0,
-        width: '100vw',
-        height: '100vh',
-        zIndex: 100,
-        overflow: 'hidden',
+        top: 0,
+        left: 0,
+        right: 0,
+        minHeight: '100vh',
+        zIndex: 10,
+        overflow: 'auto',
       }}
+      id={'dom'}
       ref={ref}
     >
       {children}

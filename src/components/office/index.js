@@ -12,37 +12,14 @@ import MacPro from './main/MacPro';
 import { useThree } from '@react-three/fiber';
 import { Suspense, useEffect } from 'react';
 import useStore from '@/store';
+import Camera from './Camera';
 import { useTexture } from '@react-three/drei';
 
-// preload all images for other routes
-const workImages = useStore.getState().workImages;
-
-for (let work in workImages) {
-  for (let image of workImages[work]) {
-    useTexture.preload(image);
-  }
-}
-
-const SceneLoading = () => {
-  useEffect(() => {
-    return () => {
-      useStore.setState({ sceneLoaded: true });
-    };
-  }, []);
-
-  return <></>;
-};
-
 const Office = () => {
-  const { camera } = useThree();
-
   return (
-    <Suspense fallback={<SceneLoading />}>
-      <group
-        onDoubleClick={() => {
-          console.log(camera.position, camera.rotation);
-        }}
-      >
+    <>
+      <Camera />
+      <group>
         <Partition1 />
         <Partition2 />
         <MacPro />
@@ -58,7 +35,7 @@ const Office = () => {
         <WallLight />
         <Lamp />
       </group>
-    </Suspense>
+    </>
   );
 };
 

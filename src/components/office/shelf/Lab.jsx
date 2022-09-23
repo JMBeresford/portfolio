@@ -1,23 +1,44 @@
 import model from '@/assets/models/office.glb';
 import useStore from '@/store';
-import { useCursor, useGLTF } from '@react-three/drei';
+import { useCursor, useGLTF, useTexture } from '@react-three/drei';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
 import { useSpring, animated } from '@react-spring/three';
-import useTextureMaps from '../../../hooks/useTextureMaps';
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import IpadMaterial from '../shaders/ipads';
+import albedo1 from '@/assets/img/bakes/albedo1.jpg';
+import lightMapImage1_1 from '@/assets/img/bakes/lightmap1_1.jpg';
+import lightMapImage2_1 from '@/assets/img/bakes/lightmap2_1.jpg';
+import lightMapImage3_1 from '@/assets/img/bakes/lightmap3_1.jpg';
+import lightMapImage4_1 from '@/assets/img/bakes/lightmap4_1.jpg';
+import lightMapImage5_1 from '@/assets/img/bakes/lightmap5_1.jpg';
+import lightningImage from '@/assets/img/lightning.jpg';
 
-const Lab = () => {
+const Lab = ({ maps }) => {
   const screenRef = useRef();
   const { nodes } = useGLTF(model);
+
+  const [albedo, lm1, lm2, lm3, lm4, lm5, lightning] = useTexture(
+    [
+      albedo1.src,
+      lightMapImage1_1.src,
+      lightMapImage2_1.src,
+      lightMapImage3_1.src,
+      lightMapImage4_1.src,
+      lightMapImage5_1.src,
+      lightningImage.src,
+    ],
+    (textures) => {
+      for (let tex of textures) {
+        tex.flipY = false;
+      }
+    }
+  );
 
   const { labHovered } = useStore();
 
   useCursor(labHovered);
-
-  const maps = useTextureMaps();
 
   const { shelfLightIntensity, shelfLightColor } = useControls(
     'Lab',
@@ -55,16 +76,16 @@ const Lab = () => {
       <group>
         <mesh position={nodes.Lab.position} geometry={nodes.Lab.geometry}>
           <OfficeMaterial
-            uAlbedo={maps.albedo1}
+            uAlbedo={albedo}
             uAmbientLight={ambientLight}
             uLightMap2Intensity={shelfLightIntensity}
             uShelfLightColor={shelfLightColor}
             uShelfBottomStr={lightIntensity}
-            uLightmap1={maps.lm11}
-            uLightmap2={maps.lm21}
-            uLightmap3={maps.lm31}
-            uLightmap4={maps.lm41}
-            uLightmap5={maps.lm51}
+            uLightmap1={lm1}
+            uLightmap2={lm2}
+            uLightmap3={lm3}
+            uLightmap4={lm4}
+            uLightmap5={lm5}
           />
         </mesh>
 
@@ -76,7 +97,7 @@ const Lab = () => {
           <IpadMaterial
             uColor={[0.6706, 0.4196, 1.0]}
             uHovered={hoverFactor}
-            uLightningMap={maps.lightning}
+            uLightningMap={lightning}
           />
         </mesh>
       </group>

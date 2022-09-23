@@ -14,8 +14,8 @@ varying vec2 vUv;
 
 #pragma glslify: snoise3 = require('glsl-noise/simplex/3d')
 
-float rand(vec2 co){
-    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+float rand(vec2 co) {
+  return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
 float noise(vec2 st) {
@@ -24,11 +24,7 @@ float noise(vec2 st) {
 
   fr = fr * fr * (3.0 - 2.0 * fr);
 
-  float base = mix(
-    mix(rand(id), rand(id + vec2(1.0, 0.0)), fr.x),
-    mix(rand(id + vec2(0.0, 1.0)), rand(id + vec2(1.0, 1.0)), fr.x),
-    fr.y
-  );
+  float base = mix(mix(rand(id), rand(id + vec2(1.0, 0.0)), fr.x), mix(rand(id + vec2(0.0, 1.0)), rand(id + vec2(1.0, 1.0)), fr.x), fr.y);
 
   return base * base;
 }
@@ -40,7 +36,7 @@ float fbm(vec2 st) {
   vec2 shift = vec2(100.0, 100.0);
   mat2 r = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
 
-  for (int i = 0; i < NUM_OCTAVES; i++) {
+  for(int i = 0; i < NUM_OCTAVES; i++) {
     v += a * noise(st);
     st = r * st * 2.0 + shift;
     a *= 0.5;
@@ -60,10 +56,7 @@ void main() {
   float x = cos(angle) * delta.x - sin(angle) * delta.y;
   float y = sin(angle) * delta.x + cos(angle) * delta.y;
 
-  vec2 offset = vec2(
-    (cos(uTime) + 1.0) / 2.0,
-    (sin(uTime) + 1.0) / 2.0
-  );
+  vec2 offset = vec2((cos(uTime) + 1.0) / 2.0, (sin(uTime) + 1.0) / 2.0);
 
   vec2 p = vec2(x + center.x + offset.x, y + center.y + offset.y);
 
@@ -80,8 +73,7 @@ void main() {
   color += lightning * flickering * uColor * (1.0 - uHovered);
 
   #if defined(TONE_MAPPING)
-    vec3 tonemapped = toneMapping(color);
-    color = mix(color, tonemapped, uHovered);
+  color = toneMapping(color);
   #endif
 
   color = mix(color, vec3(0.0), clamp(uEntered, 0.0, 1.0));

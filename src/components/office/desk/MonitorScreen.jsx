@@ -26,9 +26,6 @@ const MonitorScreen = () => {
       ref={ref}
       position={nodes.Monitor_Emissive.position}
       geometry={nodes.Monitor_Emissive.geometry}
-      onClick={() => {
-        console.log(ref.current.material);
-      }}
     >
       <MonitorMaterial uEntered={mixFactor} />
     </mesh>

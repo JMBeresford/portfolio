@@ -14,7 +14,7 @@ float fbm(vec4 p) {
   float v = 0.0;
   float a = 0.5;
 
-  for (int i = 0; i < uOctaves; i++) {
+  for(int i = 0; i < uOctaves; i++) {
     v += a * abs(noise4(p));
     p = p * 2.0;
     a *= 0.5;
@@ -37,4 +37,6 @@ void main() {
   vec3 color = mix(baseColor, uColor, clouds);
 
   gl_FragColor = vec4(color, 1.0);
+
+  gl_FragColor.rgb = toneMapping(gl_FragColor.rgb);
 }

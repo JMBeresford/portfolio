@@ -23,7 +23,13 @@ const Image = ({ position, aspectRatio }) => {
   return (
     <mesh ref={ref} position={position} scale={[0.9, 0.9 / aspectRatio, 0.9]}>
       <planeGeometry args={[1, 1]} />
-      <ImageMaterial map={texture} uAspect={viewportAspect} opacity={opacity} />
+      {/* <ImageMaterial map={texture} uAspect={viewportAspect} opacity={opacity} /> */}
+      <meshBasicMaterial
+        map={texture}
+        transparent={true}
+        opacity={0.1}
+        depthWrite={false}
+      />
     </mesh>
   );
 };

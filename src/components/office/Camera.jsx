@@ -14,8 +14,7 @@ const Camera = () => {
 
   // initial camera position on page load
   useEffect(() => {
-    let initialView =
-      router.asPath === '/' ? views[actions.getLastView()] : views['origin'];
+    let initialView = views[actions.getLastView()];
 
     ref.current.position.set(
       initialView.position.x,
@@ -27,7 +26,7 @@ const Camera = () => {
       initialView.rotation.y,
       initialView.rotation.z
     );
-  }, [router.asPath, views, actions]);
+  }, [views, actions]);
 
   const viewPosition = useMemo(() => {
     const view = views[currentView];
@@ -42,7 +41,7 @@ const Camera = () => {
   useFrame(({ mouse }, delta) => {
     let cam = ref.current;
 
-    if (!cam || debug) return;
+    if (!cam) return;
 
     // longer animation for first view
     let lastView = actions.getLastView();
@@ -90,7 +89,13 @@ const Camera = () => {
 
   return (
     <>
-      <PerspectiveCamera ref={ref} makeDefault near={0.001} far={50} fov={65} />
+      <PerspectiveCamera
+        ref={ref}
+        makeDefault={true}
+        near={0.001}
+        far={50}
+        fov={65}
+      />
     </>
   );
 };

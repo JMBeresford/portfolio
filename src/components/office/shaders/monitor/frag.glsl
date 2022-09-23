@@ -20,7 +20,7 @@ void main() {
 
   vec3 waves = vec3(0.0);
 
-  for (float i = 0.0; i < 1.0; i += 1.0 / COUNT) {
+  for(float i = 0.0; i < 1.0; i += 1.0 / COUNT) {
     uv = vUv;
 
     uv.y += i + abs(sin(uTime * 0.1)) * i;
@@ -32,7 +32,7 @@ void main() {
   }
 
   #if defined(TONE_MAPPING)
-    // waves = toneMapping(waves);
+  waves = toneMapping(waves);
   #endif
 
   waves = mix(vec3(1.0), waves, S(0.0, 1.0, uEntered));
