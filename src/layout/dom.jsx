@@ -1,6 +1,7 @@
-import useStore from '@/store';
+import { useStore } from '@/store';
 import { useEffect, useRef } from 'react';
 import { Leva } from 'leva';
+import Loading from '@/components/loading';
 
 const Dom = ({ children }) => {
   const ref = useRef(null);
@@ -24,6 +25,7 @@ const Dom = ({ children }) => {
       id={'dom'}
       ref={ref}
     >
+      <Loading />
       {children}
 
       <Leva hidden={!debug} />

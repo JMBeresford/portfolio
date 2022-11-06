@@ -1,8 +1,12 @@
-import useStore from '@/store';
+import useStore, { useWorksStore } from '@/store';
 import { useMemo } from 'react';
+import shallow from 'zustand/shallow';
 
 const WorkItem = ({ work, idx, ...props }) => {
-  const { selectedWork, actions } = useStore();
+  const [selectedWork, actions] = useWorksStore(
+    (s) => [s.selectedWork, s.actions],
+    shallow
+  );
 
   const selected = useMemo(() => selectedWork === idx, [selectedWork, idx]);
 

@@ -9,5 +9,5 @@ void main() {
 
   vUv = (uv * 2.0 - 1.0);
   vUv.x *= uAspect;
-  vPos = modelPosition.xyz;
+  vPos = position.xyz;
 }

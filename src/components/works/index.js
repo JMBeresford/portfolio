@@ -1,9 +1,11 @@
-import useStore from '@/store';
+import { useWorksStore } from '@/store';
 import { PerspectiveCamera } from '@react-three/drei';
-import { events, useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Color } from 'three';
 import { damp } from 'three/src/math/MathUtils';
+import shallow from 'zustand/shallow';
+import { Starfield } from '../about/Starfield';
 import IpadBackground from '../IpadBackground';
 import WorksCarousel from './WorksCarousel';
 
@@ -11,11 +13,10 @@ const tempCol = new Color();
 
 const Works = () => {
   const bgRef = useRef();
-  const { works, selectedWork } = useStore();
-
-  useEffect(() => {
-    useStore.setState({ enteringWorks: false });
-  }, []);
+  const [works, selectedWork] = useWorksStore(
+    (s) => [s.works, s.selectedWork],
+    shallow
+  );
 
   const color = useMemo(() => {
     let c = tempCol.setStyle(works[selectedWork].color);
@@ -37,6 +38,7 @@ const Works = () => {
     <group>
       <PerspectiveCamera makeDefault={true} near={0.001} far={50} fov={65} />
       <WorksCarousel />
+      <Starfield />
       <IpadBackground ref={bgRef} />
     </group>
   );

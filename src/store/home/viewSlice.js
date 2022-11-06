@@ -1,10 +1,9 @@
-const viewSlice = (set, get) => ({
-  viewHistory: ['start'],
-  currentView: 'start',
+import { useStore } from '..';
 
-  enteringAbout: false,
-  enteringWorks: false,
-  enteringLab: false,
+const viewSlice = {
+  currentView: 'start',
+  prevView: '',
+  viewManaged: false,
 
   views: {
     start: {
@@ -68,27 +67,34 @@ const viewSlice = (set, get) => ({
       },
     },
   },
-});
+};
 
 const viewActions = (set, get) => ({
-  setView: (newView) => {
+  initView: (from) => {
     let state = get();
 
-    state.viewHistory.push(state.currentView);
+    state.actions.setViewInstantly(from);
+    state.actions.transitionView('home');
+  },
+  transitionView: (newView) => {
+    let prev = get().currentView;
+    set({ currentView: newView, prevView: prev });
+    set({ viewManaged: true });
+  },
+  setViewInstantly: (newView) => {
+    let state = get();
+    let cam = state.camera;
+
+    if (!cam || !newView) return;
 
     set({ currentView: newView });
-  },
-  getLastView: () => {
-    let state = get();
 
-    return state.viewHistory[state.viewHistory.length - 1];
-  },
-  popView: () => {
-    let state = get();
+    let view = state.views[newView];
+    let pos = view['position'];
+    let rot = view['rotation'];
 
-    let lastView = state.actions.getLastView();
-    state.viewHistory.pop();
-    set({ currentView: lastView });
+    cam.position.set(pos.x, pos.y, pos.z);
+    cam.rotation.set(rot.x, rot.y, rot.z);
   },
 });
 

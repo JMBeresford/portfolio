@@ -1,18 +1,18 @@
-import useTextureMaps from '@/hooks/useTextureMaps';
-import { Points, useDetectGPU } from '@react-three/drei';
+import { Points, useDetectGPU, useTexture } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import React from 'react';
 import { useMemo, forwardRef, useRef } from 'react';
 import CloudsMaterial from './shaders/clouds';
 import ParticleMaterial from './shaders/particles';
+import particleMask from '@/assets/img/particle.jpg';
 
 const IpadBackground = forwardRef(
-  ({ color, pointCount = 2000, noParticles }, cloudsRef) => {
+  ({ color, pointCount = 2000, noParticles, ...props }, cloudsRef) => {
     const pointsRef = useRef();
     const { viewport, size } = useThree();
     const { tier } = useDetectGPU();
 
-    const maps = useTextureMaps();
+    const mask = useTexture(particleMask.src);
 
     const positions = useMemo(() => {
       const positions = [];
@@ -30,7 +30,7 @@ const IpadBackground = forwardRef(
     }, [pointCount]);
 
     useFrame(({ clock }) => {
-      cloudsRef.current.material.uTime = clock.elapsedTime;
+      // cloudsRef.current.material.uTime = clock.elapsedTime;
 
       if (pointsRef.current) {
         pointsRef.current.material.uTime = clock.elapsedTime + 1000;
@@ -39,7 +39,7 @@ const IpadBackground = forwardRef(
 
     return (
       <group position={[0, 0, 0]}>
-        <mesh ref={cloudsRef}>
+        <mesh ref={cloudsRef} {...props}>
           <sphereGeometry args={[3, 16, 16]} />
           <CloudsMaterial
             uAspect={viewport.aspect}
@@ -57,7 +57,7 @@ const IpadBackground = forwardRef(
           >
             <ParticleMaterial
               uPointSize={size.height / 400}
-              uParticleMap={maps.particle}
+              uParticleMap={mask}
             />
           </Points>
         )}

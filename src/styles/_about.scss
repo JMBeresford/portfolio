@@ -160,6 +160,61 @@ main#about {
     }
   }
 
+  section.subsection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 2.5rem 0;
+
+    $whiteish: #bbb;
+
+    h1 {
+      font-family: mrs-eaves-roman-small-caps, serif;
+      // font-family: montserrat, sans-serif;
+      font-size: clamp(3.5rem, 3.5rem + 5.5vw, 9rem);
+      font-weight: bold;
+      letter-spacing: 0.075ch;
+      color: white;
+      width: min-content;
+      margin-bottom: 1.5rem;
+      line-height: 1;
+    }
+
+    h2 {
+      font-size: clamp(1.2rem, 1.2rem + 2vw, 9rem);
+      color: $whiteish;
+      font-family: mrs-eaves-roman-small-caps, serif;
+      // font-family: montserrat, sans-serif;
+    }
+
+    .smallText {
+      display: flex;
+      align-items: center;
+
+      h3 {
+        font-family: montserrat, sans-serif;
+        font-weight: 300;
+        font-size: 1.125rem;
+        max-width: 50ch;
+        line-height: 2rem;
+
+        span {
+          background-color: $whiteish;
+          color: black;
+          padding: 0.125rem 0;
+          box-shadow: 0.25rem 0px 0px $whiteish, -0.25rem 0px 0px $whiteish;
+          box-decoration-break: clone;
+
+          a {
+            color: black;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
   &.animate {
     animation: stage-one $stage-one-duration ease-out 0s forwards;
 

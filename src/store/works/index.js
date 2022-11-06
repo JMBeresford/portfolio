@@ -1,4 +1,8 @@
-const worksSlice = (set, get) => ({
+import create from 'zustand';
+import { imagesSlice, imagesActions } from './imagesSlice';
+
+// non-application state
+const useWorksStore = create((set, get) => ({
   selectedWork: 0,
   prevSelectedWork: null,
   hoveredWork: null,
@@ -9,7 +13,7 @@ const worksSlice = (set, get) => ({
 
   works: [
     {
-      displayName: 'Deforestation\nDetector',
+      displayName: 'Deforestation Detector',
       name: 'deforestationdetector',
       description: [
         `Deforestation Detector is a web application that is intended to promote awareness of deforestation in the Amazon and inform users how they can
@@ -23,6 +27,7 @@ const worksSlice = (set, get) => ({
       source: 'https://github.com/Deforestation-Detector/web',
       color: '#c9461e',
       accentColor: '#007D5C',
+      images: imagesSlice.deforestationdetector,
     },
     {
       displayName: 'Art of Jay Joson',
@@ -36,6 +41,7 @@ const worksSlice = (set, get) => ({
       source: 'https://github.com/JMBeresford/art-of-jay-joson',
       color: '#8657b1',
       accentColor: '#aa5577',
+      images: imagesSlice.artofjayjoson,
     },
     {
       displayName: 'UCSC Chess Club',
@@ -50,17 +56,19 @@ const worksSlice = (set, get) => ({
       source: 'https://github.com/JMBeresford/UCSC-chessclub',
       color: '#B39554',
       accentColor: '#FFD478',
+      images: imagesSlice.ucscchessclub,
     },
   ],
-});
 
-const worksActions = (set, get) => ({
-  transitionToWork: (idx) => {
-    if (get().transitioningWork) return;
+  actions: {
+    init: () => {},
+    transitionToWork: (idx) => {
+      if (get().transitioningWork) return;
 
-    set({ prevSelectedWork: get().selectedWork, transitioningWork: true });
-    set({ selectedWork: idx });
+      set({ prevSelectedWork: get().selectedWork, transitioningWork: true });
+      set({ selectedWork: idx });
+    },
   },
-});
+}));
 
-export { worksSlice, worksActions };
+export default useWorksStore;

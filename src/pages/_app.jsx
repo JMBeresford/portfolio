@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import useStore from '@/store';
-import { Suspense, useEffect } from 'react';
+import { useStore, useHomeStore } from '@/store';
+import { useEffect } from 'react';
 import Header from '@/config';
 import Dom from '@/layout/dom';
 import '@/styles/index.scss';
@@ -12,7 +12,7 @@ const LCanvas = dynamic(() => import('@/layout/canvas'), {
 
 function App({ Component, pageProps = { title: 'index' } }) {
   const router = useRouter();
-  const { enteringAbout, enteringWorks, enteringLab, actions } = useStore();
+  const actions = useStore((s) => s.actions);
 
   useEffect(() => {
     useStore.setState({ debug: window.location.hash.includes('debug') });
@@ -22,49 +22,17 @@ function App({ Component, pageProps = { title: 'index' } }) {
     useStore.setState({
       router,
     });
-  }, [router]);
 
-  useEffect(() => {
-    if (enteringAbout) {
-      router.push('/about');
-    }
-  }, [enteringAbout, router]);
-
-  useEffect(() => {
-    if (enteringWorks) {
-      router.push('/works');
-    }
-  }, [enteringWorks, router]);
-
-  useEffect(() => {
-    if (enteringLab) {
-      router.push('/lab');
-    }
-  }, [enteringLab, router]);
-
-  useEffect(() => {
-    router.beforePopState(({ as }) => {
-      if (as !== router.asPath) {
-        let lastView = actions.getLastView();
-
-        actions.setView(lastView);
-      }
-
-      if (as === '/') {
-        useStore.setState({
-          enteringAbout: false,
-          enteringWorks: false,
-          enteringLab: false,
-        });
-      }
-
-      return true;
-    });
-
-    return () => {
-      router.beforePopState(() => true);
-    };
+    actions.init();
   }, [router, actions]);
+
+  useEffect(() => {
+    let prevRoute = router?.pathname;
+
+    if (prevRoute !== '/') {
+      useStore.setState({ prevRoute: prevRoute });
+    }
+  }, [router.pathname]);
 
   return (
     <>

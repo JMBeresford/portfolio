@@ -21,7 +21,7 @@ const BaseAvatarMaterial = shaderMaterial(
   (mat) => {
     mat.transparent = true;
     mat.depthWrite = false;
-    // mat.depthTest = false;
+    mat.depthTest = false;
   }
 );
 

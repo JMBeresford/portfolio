@@ -9,13 +9,35 @@ import Lamp from './lights/Lamp';
 import Partition1 from './main/Partition1';
 import Partition2 from './main/Partition2';
 import MacPro from './main/MacPro';
-import { useThree } from '@react-three/fiber';
-import { Suspense, useEffect } from 'react';
-import useStore from '@/store';
+import { useHomeStore, useStore } from '@/store';
 import Camera from './Camera';
-import { useTexture } from '@react-three/drei';
+import { useEffect } from 'react';
 
 const Office = () => {
+  const actions = useHomeStore((s) => s.actions);
+  const router = useStore((s) => s.router);
+  const prevRoute = useStore((s) => s.prevRoute);
+
+  useEffect(() => {
+    if (router) {
+      let from;
+
+      switch (prevRoute) {
+        case '/about':
+          from = 'about';
+          break;
+        case '/works':
+          from = 'works';
+          break;
+        default:
+          from = 'start';
+          break;
+      }
+
+      actions.init(from);
+    }
+  }, [router, actions, prevRoute]);
+
   return (
     <>
       <Camera />

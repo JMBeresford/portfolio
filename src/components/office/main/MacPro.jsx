@@ -7,9 +7,14 @@ import lightMapImage2_1 from '@/assets/img/bakes/lightmap2_1.jpg';
 import lightMapImage3_1 from '@/assets/img/bakes/lightmap3_1.jpg';
 import lightMapImage4_1 from '@/assets/img/bakes/lightmap4_1.jpg';
 import lightMapImage5_1 from '@/assets/img/bakes/lightmap5_1.jpg';
+import { useControls } from 'leva';
 
 const MacPro = ({ maps }) => {
   const { nodes } = useGLTF(model);
+
+  const { baseLightColor } = useControls('lights', {
+    baseLightColor: '#d59c6e',
+  });
 
   const [albedo, lm1, lm2, lm3, lm4, lm5] = useTexture(
     [
@@ -36,6 +41,7 @@ const MacPro = ({ maps }) => {
           uLightmap2={lm2}
           uLightmap3={lm3}
           uLightmap4={lm4}
+          uBaseLightColor={baseLightColor}
         />
       </mesh>
 

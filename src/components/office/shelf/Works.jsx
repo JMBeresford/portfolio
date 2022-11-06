@@ -1,5 +1,5 @@
 import model from '@/assets/models/office.glb';
-import useStore from '@/store';
+import { useStore, useHomeStore } from '@/store';
 import { useGLTF, useCursor, useTexture } from '@react-three/drei';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
@@ -14,8 +14,9 @@ import lightMapImage3_1 from '@/assets/img/bakes/lightmap3_1.jpg';
 import lightMapImage4_1 from '@/assets/img/bakes/lightmap4_1.jpg';
 import lightMapImage5_1 from '@/assets/img/bakes/lightmap5_1.jpg';
 import lightningImage from '@/assets/img/lightning.jpg';
+import shallow from 'zustand/shallow';
 
-const Works = ({ maps }) => {
+const Works = () => {
   const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
@@ -36,7 +37,10 @@ const Works = ({ maps }) => {
     }
   );
 
-  const { worksHovered, actions } = useStore();
+  const [worksHovered, actions] = useHomeStore(
+    (s) => [s.worksHovered, s.actions],
+    shallow
+  );
 
   useCursor(worksHovered);
 
@@ -48,6 +52,10 @@ const Works = ({ maps }) => {
     },
     { collapsed: true }
   );
+
+  const { baseLightColor } = useControls('lights', {
+    baseLightColor: '#d59c6e',
+  });
 
   const { lightIntensity, ambientLight, emissiveColor, hoverFactor } =
     useSpring({
@@ -63,9 +71,12 @@ const Works = ({ maps }) => {
 
   return (
     <group
-      onPointerEnter={() => useStore.setState({ worksHovered: true })}
-      onClick={() => actions.setView('works')}
-      onPointerLeave={() => useStore.setState({ worksHovered: false })}
+      onPointerEnter={() => useHomeStore.setState({ worksHovered: true })}
+      onClick={() => {
+        actions.transitionView('works');
+        useStore.setState({ transitioning: true });
+      }}
+      onPointerLeave={() => useHomeStore.setState({ worksHovered: false })}
     >
       <mesh
         position={nodes.Shelf_Emissive_Middle.position}
@@ -82,6 +93,7 @@ const Works = ({ maps }) => {
             uLightMap2Intensity={shelfLightIntensity}
             uShelfLightColor={shelfLightColor}
             uShelfMidStr={lightIntensity}
+            uBaseLightColor={baseLightColor}
             uLightmap1={lm1}
             uLightmap2={lm2}
             uLightmap3={lm3}

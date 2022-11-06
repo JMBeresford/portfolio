@@ -1,14 +1,15 @@
-import useTextureMaps from "@/hooks/useTextureMaps";
-import useWorkAvatar from "@/hooks/useWorkAvatar";
-import useStore from "@/store";
-import { useSpring } from "@react-spring/three";
-import { meshBounds, useCursor } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import gsap, { Power2 } from "gsap";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Vector2, Vector3 } from "three";
-import { damp } from "three/src/math/MathUtils";
-import AvatarMaterial from "./shaders";
+import useWorkAvatar from '@/hooks/useWorkAvatar';
+import { useWorksStore } from '@/store';
+import { useSpring } from '@react-spring/three';
+import { meshBounds, useCursor, useTexture } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import gsap, { Power2 } from 'gsap';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Vector2, Vector3 } from 'three';
+import { damp } from 'three/src/math/MathUtils';
+import shallow from 'zustand/shallow';
+import AvatarMaterial from './shaders';
+import particleMask from '@/assets/img/particle.jpg';
 
 const AVATAR_SIZE = 0.08;
 
@@ -19,20 +20,19 @@ const WorksCarousel = () => {
   const pointer = useRef(new Vector2(0, 0));
   const tl = useRef(gsap.timeline());
 
-  const {
-    selectedWork,
-    works,
-    prevSelectedWork,
-    transitioningWork,
-    workAvatarHovered,
-  } = useStore();
-  const { size } = useThree();
-  const maps = useTextureMaps();
+  const [selectedWork, works, prevSelectedWork, workAvatarHovered] =
+    useWorksStore(
+      (s) => [s.selectedWork, s.works, s.prevSelectedWork, s.workAvatarHovered],
+      shallow
+    );
+
+  const size = useThree((s) => s.size);
   const [workId, setWorkId] = useState(selectedWork || 0);
 
   const curWork = useMemo(() => works[workId], [workId, works]);
 
   const avatarTexture = useWorkAvatar(curWork.name);
+  const mask = useTexture(particleMask.src);
 
   const { intersecting } = useSpring({
     intersecting: workAvatarHovered ? 1 : 0,
@@ -54,7 +54,7 @@ const WorksCarousel = () => {
         duration: 1,
         ease: Power2.easeIn,
         onStart: () => {
-          useStore.setState({ transitioningWork: true });
+          useWorksStore.setState({ transitioningWork: true });
         },
         onComplete: () => {
           setWorkId(selectedWork);
@@ -66,7 +66,7 @@ const WorksCarousel = () => {
         duration: 1,
         ease: Power2.easeOut,
         onComplete: () => {
-          useStore.setState({ transitioningWork: false });
+          useWorksStore.setState({ transitioningWork: false });
         },
       });
   }, [selectedWork, prevSelectedWork, setWorkId]);
@@ -88,10 +88,10 @@ const WorksCarousel = () => {
       );
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
@@ -106,18 +106,18 @@ const WorksCarousel = () => {
       damp(z, pointRef.current.z, 4, delta)
     );
 
-    camera.rotation.x = damp(
-      camera.rotation.x,
-      pointer.current.y * 0.1,
-      4,
-      delta
-    );
-    camera.rotation.y = damp(
-      camera.rotation.y,
-      -pointer.current.x * 0.1,
-      4,
-      delta
-    );
+    // camera.rotation.x = damp(
+    //   camera.rotation.x,
+    //   pointer.current.y * 0.1,
+    //   4,
+    //   delta
+    // );
+    // camera.rotation.y = damp(
+    //   camera.rotation.y,
+    //   -pointer.current.x * 0.1,
+    //   4,
+    //   delta
+    // );
 
     // wrapperRef.current.rotation.y = damp(
     //   wrapperRef.current.rotation.y,
@@ -139,8 +139,12 @@ const WorksCarousel = () => {
       <group ref={wrapperRef}>
         <mesh
           visible={false}
-          onPointerEnter={() => useStore.setState({ workAvatarHovered: true })}
-          onPointerLeave={() => useStore.setState({ workAvatarHovered: false })}
+          onPointerEnter={() =>
+            useWorksStore.setState({ workAvatarHovered: true })
+          }
+          onPointerLeave={() =>
+            useWorksStore.setState({ workAvatarHovered: false })
+          }
           onPointerMove={(e) => handlePointerMove(e)}
         >
           <planeGeometry args={[AVATAR_SIZE, AVATAR_SIZE]} />
@@ -149,7 +153,7 @@ const WorksCarousel = () => {
           <planeGeometry args={[AVATAR_SIZE, AVATAR_SIZE, 256, 256]} />
           <AvatarMaterial
             uAvatarMap={avatarTexture}
-            uParticleMask={maps.particle}
+            uParticleMask={mask}
             uAccentColor={curWork.accentColor}
             uPointScale={size.height / 8000}
             uIntersecting={intersecting}

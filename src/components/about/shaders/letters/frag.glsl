@@ -6,6 +6,7 @@ uniform vec3 uColor3;
 varying float vRand;
 varying float vSize;
 varying float vFade;
+varying vec3 vPos;
 
 #define S smoothstep
 
@@ -25,8 +26,9 @@ void main() {
     float d = length(st);
 
     float fade = S(5.0, 8.0, vSize) * vFade;
+    float distanceFade = S(2.5, 0.5, distance(cameraPosition, vPos));
 
-    float opacity = S(0.1, 0.75, 0.1 / d) * fade;
+    float opacity = S(0.1, 0.75, 0.1 / d) * fade * distanceFade;
 
     vec3 color = getColor() * opacity;
 

@@ -1,5 +1,5 @@
 import model from '@/assets/models/office.glb';
-import useStore from '@/store';
+import { useHomeStore } from '@/store';
 import { useCursor, useGLTF, useTexture } from '@react-three/drei';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
@@ -14,8 +14,9 @@ import lightMapImage3_1 from '@/assets/img/bakes/lightmap3_1.jpg';
 import lightMapImage4_1 from '@/assets/img/bakes/lightmap4_1.jpg';
 import lightMapImage5_1 from '@/assets/img/bakes/lightmap5_1.jpg';
 import lightningImage from '@/assets/img/lightning.jpg';
+import shallow from 'zustand/shallow';
 
-const Lab = ({ maps }) => {
+const Lab = () => {
   const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
@@ -36,7 +37,7 @@ const Lab = ({ maps }) => {
     }
   );
 
-  const { labHovered } = useStore();
+  const [labHovered] = useHomeStore((s) => [s.labHovered], shallow);
 
   useCursor(labHovered);
 
@@ -48,6 +49,10 @@ const Lab = ({ maps }) => {
     },
     { collapsed: true }
   );
+
+  const { baseLightColor } = useControls('lights', {
+    baseLightColor: '#d59c6e',
+  });
 
   const { lightIntensity, ambientLight, emissiveColor, hoverFactor } =
     useSpring({
@@ -63,8 +68,8 @@ const Lab = ({ maps }) => {
 
   return (
     <group
-      onPointerEnter={() => useStore.setState({ labHovered: true })}
-      onPointerLeave={() => useStore.setState({ labHovered: false })}
+      onPointerEnter={() => useHomeStore.setState({ labHovered: true })}
+      onPointerLeave={() => useHomeStore.setState({ labHovered: false })}
     >
       <mesh
         position={nodes.Shelf_Emissive_Bottom.position}
@@ -81,6 +86,7 @@ const Lab = ({ maps }) => {
             uLightMap2Intensity={shelfLightIntensity}
             uShelfLightColor={shelfLightColor}
             uShelfBottomStr={lightIntensity}
+            uBaseLightColor={baseLightColor}
             uLightmap1={lm1}
             uLightmap2={lm2}
             uLightmap3={lm3}

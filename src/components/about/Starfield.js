@@ -12,7 +12,8 @@ import { useControls } from 'leva';
 export function Starfield(props) {
   const ref = useRef();
   const { nodes } = useGLTF(model);
-  const { viewport, size } = useThree();
+  const viewport = useThree((s) => s.viewport);
+  const size = useThree((s) => s.size);
 
   const { starSize, color1, color2, color3 } = useControls('stars', {
     color1: '#fffbd7',
@@ -31,7 +32,7 @@ export function Starfield(props) {
         ref={ref}
         geometry={nodes.starfield.geometry}
         position={[0, 0, 0]}
-        scale={[0.5, 0.5, 0.5]}
+        scale={[1, 1, 1]}
       >
         <StarfieldMaterial
           uPointSize={Math.max(

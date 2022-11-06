@@ -6,9 +6,9 @@ import { Suspense } from 'react';
 // WARNING ! errors might get obfuscated by using dynamic import.
 // If something goes wrong go back to a static import to show the error.
 // https://github.com/pmndrs/react-three-next/issues/49
-const Loading = dynamic(() => import('@/components/loading'), {
-  ssr: false,
-});
+// const Loading = dynamic(() => import('@/components/loading'), {
+//   ssr: false,
+// });
 
 const Office = dynamic(() => import('@/components/office'), {
   ssr: false,
@@ -17,11 +17,7 @@ const Office = dynamic(() => import('@/components/office'), {
 
 // dom components goes here
 const Page = (props) => {
-  return (
-    <>
-      <Loading />
-    </>
-  );
+  return <></>;
 };
 
 // canvas components goes here
@@ -39,7 +35,7 @@ export default Page;
 export async function getStaticProps() {
   return {
     props: {
-      title: 'Index',
+      title: 'John Beresford - Creative Developer',
     },
   };
 }

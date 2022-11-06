@@ -1,7 +1,7 @@
 import model from '@/assets/models/office.glb';
 import { useControls } from 'leva';
 import { OfficeMaterial } from '../shaders/office';
-import useStore from '@/store';
+import { useHomeStore, useStore } from '@/store';
 import { useCursor, useGLTF, useTexture } from '@react-three/drei';
 import { useSpring, animated } from '@react-spring/three';
 import IpadMaterial from '../shaders/ipads';
@@ -14,8 +14,9 @@ import lightMapImage3_1 from '@/assets/img/bakes/lightmap3_1.jpg';
 import lightMapImage4_1 from '@/assets/img/bakes/lightmap4_1.jpg';
 import lightMapImage5_1 from '@/assets/img/bakes/lightmap5_1.jpg';
 import lightningImage from '@/assets/img/lightning.jpg';
+import shallow from 'zustand/shallow';
 
-const About = ({ maps }) => {
+const About = () => {
   const screenRef = useRef();
   const { nodes } = useGLTF(model);
 
@@ -36,7 +37,10 @@ const About = ({ maps }) => {
     }
   );
 
-  const { aboutHovered, actions, currentView } = useStore();
+  const [aboutHovered, actions] = useHomeStore(
+    (s) => [s.aboutHovered, s.actions],
+    shallow
+  );
 
   useCursor(aboutHovered);
 
@@ -44,15 +48,19 @@ const About = ({ maps }) => {
     'About',
     {
       shelfLightIntensity: { value: 1, min: 0, max: 2, step: 0.05 },
-      shelfLightColor: '#ffffff',
+      shelfLightColor: '#fff4da',
     },
     { collapsed: true }
   );
 
+  const { baseLightColor } = useControls('lights', {
+    baseLightColor: '#d59c6e',
+  });
+
   const { lightIntensity, ambientLight, emissiveColor, hoverFactor } =
     useSpring({
       lightIntensity: aboutHovered ? 1.2 : 0.65,
-      ambientLight: aboutHovered ? 0.16 : 0.16 * 0.35,
+      ambientLight: aboutHovered ? 0.125 : 0.16 * 0.3,
       emissiveColor: aboutHovered ? '#ffffff' : '#837c6c',
       hoverFactor: aboutHovered ? 0 : 1,
     });
@@ -63,9 +71,12 @@ const About = ({ maps }) => {
 
   return (
     <group
-      onPointerEnter={() => useStore.setState({ aboutHovered: true })}
-      onClick={() => actions.setView('about')}
-      onPointerLeave={() => useStore.setState({ aboutHovered: false })}
+      onPointerEnter={() => useHomeStore.setState({ aboutHovered: true })}
+      onClick={() => {
+        actions.transitionView('about');
+        useStore.setState({ transitioning: true });
+      }}
+      onPointerLeave={() => useHomeStore.setState({ aboutHovered: false })}
     >
       <mesh
         position={nodes.Shelf_Emissive_Top.position}
@@ -77,6 +88,7 @@ const About = ({ maps }) => {
       <group>
         <mesh position={nodes.About.position} geometry={nodes.About.geometry}>
           <OfficeMaterial
+            uBaseLightColor={baseLightColor}
             uAlbedo={albedo}
             uAmbientLight={ambientLight}
             uLightMap2Intensity={shelfLightIntensity}

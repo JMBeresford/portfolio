@@ -10,12 +10,12 @@ varying vec3 vPos;
 #pragma glslify: noise3 = require(glsl-noise/simplex/3d)
 #pragma glslify: noise4 = require(glsl-noise/simplex/4d)
 
-float fbm(vec4 p) {
+float fbm(vec3 p) {
   float v = 0.0;
   float a = 0.5;
 
   for(int i = 0; i < uOctaves; i++) {
-    v += a * abs(noise4(p));
+    v += a * abs(noise3(p));
     p = p * 2.0;
     a *= 0.5;
   }
@@ -24,11 +24,11 @@ float fbm(vec4 p) {
 }
 
 void main() {
-  vec3 p = vPos * 0.5;
+  vec3 p = vPos * 0.25;
   p.xz *= 0.15;
   p.z -= uTime * 0.1;
 
-  float clouds = noise4(vec4(p, uTime * 0.01));
+  float clouds = noise3(p);
 
   clouds = S(0.0, 1.0, clouds) * 0.5;
 

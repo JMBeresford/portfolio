@@ -1,84 +1,102 @@
-import useStore from '@/store';
-import { PerspectiveCamera, OrbitControls } from '@react-three/drei';
+import { useAboutStore } from '@/store';
+import { PerspectiveCamera } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing';
-import gsap, { Power4 } from 'gsap';
+import gsap, { Power2, Power4 } from 'gsap';
 import { useControls } from 'leva';
-import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { KernelSize } from 'postprocessing';
+import { useMemo } from 'react';
+import { useEffect, useRef, useLayoutEffect, useCallback } from 'react';
 import { damp } from 'three/src/math/MathUtils';
+import shallow from 'zustand/shallow';
 import IpadBackground from '../IpadBackground';
-import { Letters } from './Letters';
+import WorksCarousel from '../works/WorksCarousel';
+import { Letters } from './constellations/Letters';
 import { Starfield } from './Starfield';
+import Sections from './Sections';
 
 const STARTPOS = [1.2, 0, 0.55];
+const INIT_RADIUS = 1.5;
 
 const About = () => {
   const bgRef = useRef();
+  const timeline = useRef(gsap.timeline());
+  const scrollRef = useRef(0);
   const camRef = useRef();
   const worldRef = useRef();
-
-  const introDone = useStore((s) => s.introDone);
+  const [introDone, section, lastSection, viewManaged] = useAboutStore(
+    (s) => [s.introDone, s.section, s.lastSection, s.viewManaged],
+    shallow
+  );
 
   const { spaceColor } = useControls('space', {
-    spaceColor: { value: '#1c0d5c' },
+    spaceColor: { value: '#4d006c' },
   });
 
-  useEffect(() => {
-    useStore.setState({ enteringAbout: false, introDone: false });
+  const { smoothing, threshold, intensity } = useControls('bloom', {
+    smoothing: { value: 0.9, min: 0, max: 2 },
+    threshold: { value: 0.5, min: 0, max: 1 },
+    intensity: { value: 1, min: 0, max: 2 },
+  });
 
+  const radius = useMemo(() => (introDone ? 2 : INIT_RADIUS), [introDone]);
+
+  useLayoutEffect(() => {
+    useAboutStore.setState({
+      introDone: false,
+      converged: true,
+      section: 0,
+      viewManaged: true,
+      camera: camRef.current,
+      world: worldRef.current,
+    });
     camRef.current.position.set(...STARTPOS);
     camRef.current.lookAt(0, 0, 0.5);
   }, []);
 
-  const introAnimation = useCallback(
+  const handleScroll = useCallback(
     (e) => {
-      e.stopPropagation();
+      if (!introDone || viewManaged) return;
 
-      if (introDone || gsap.isTweening(camRef.current.position)) return;
-
-      let [x2, y2, z2] = [0, 0, 1.5];
-
-      gsap.to(camRef.current.position, {
-        x: x2,
-        y: y2,
-        z: z2,
-
-        duration: 3.5,
-        ease: Power4.easeInOut,
-        onUpdate: () => {
-          if (camRef.current) {
-            camRef.current.lookAt(0, 0, 0.5);
-          }
-        },
-        onComplete: () => {
-          useStore.setState({ introDone: true });
-
-          setTimeout(() => {
-            let el = document.documentElement;
-            let target = document.querySelector('#about section.career');
-
-            if (el.scrollTop === 0 && target) {
-              target.scrollIntoView({ behavior: 'smooth' });
-            }
-          }, 5000);
-        },
-      });
+      scrollRef.current += e.deltaY * 0.00035;
+      scrollRef.current = Math.max(0, scrollRef.current);
     },
-    [introDone]
+    [introDone, viewManaged]
   );
 
-  // useFrame(({}, delta) => {
-  //   let [x, y, z] = camRef.current.position.toArray();
-  //   let [x2, y2, z2] = transitionRef.current;
+  useEffect(() => {
+    let [x2, y2, z2] = [0, 0, INIT_RADIUS];
 
-  //   camRef.current.position.x = damp(x, x2, 0.7, delta);
+    timeline.current.to(camRef.current.position, {
+      x: x2,
+      y: y2,
+      z: z2,
 
-  //   camRef.current.position.y = damp(y, y2, 0.7, delta);
+      duration: 3.5,
+      ease: Power4.easeInOut,
+      onUpdate: () => {
+        camRef.current?.lookAt(0, 0, 0.5);
+      },
+      onComplete: () => {
+        useAboutStore.setState({
+          introDone: true,
+          converged: false,
+          viewManaged: false,
+        });
+      },
+    });
+  }, []);
 
-  //   camRef.current.position.z = damp(z, z2, 0.7, delta);
+  useFrame(({ clock }, delta) => {
+    if (!introDone) return;
 
-  //   camRef.current.lookAt(0, 0, 0);
-  // });
+    let pz = camRef.current.position.z;
+    let rx = worldRef.current.rotation.x;
+
+    camRef.current.position.z = damp(pz, radius, 4, delta);
+    worldRef.current.rotation.x = damp(rx, -scrollRef.current, 12, delta);
+    bgRef.current.material.uTime = clock.elapsedTime;
+  });
 
   return (
     <>
@@ -89,24 +107,27 @@ const About = () => {
         far={50}
         fov={65}
       />
-      {/* <OrbitControls position0={[0, 0, 3]} enablePan={false} /> */}
-      <group
-        ref={worldRef}
-        onClick={(e) => {
-          introAnimation(e);
-        }}
-      >
+      <group ref={worldRef}>
         <Starfield />
         <Letters />
-        <IpadBackground ref={bgRef} noParticles color={spaceColor} />
+        <Sections />
+
+        <IpadBackground
+          ref={bgRef}
+          noParticles
+          uOctaves={2}
+          color={spaceColor}
+          onWheel={handleScroll}
+        />
       </group>
 
       <EffectComposer multisampling={2}>
         <Bloom
-          luminanceThreshold={0.5}
-          intensity={1}
-          luminanceSmoothing={0.9}
-          height={300}
+          luminanceThreshold={threshold}
+          intensity={intensity}
+          luminanceSmoothing={smoothing}
+          height={200}
+          kernelSize={KernelSize.SMALL}
         />
         <Vignette eskil={false} darkness={0.65} />
       </EffectComposer>

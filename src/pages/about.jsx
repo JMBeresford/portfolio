@@ -1,5 +1,7 @@
 import DOM from '@/components/about/DOM';
+import { useStore } from '@/store';
 import dynamic from 'next/dynamic';
+import { Suspense, useEffect } from 'react';
 // import About from '@/components/about';
 // Dynamic import is used to prevent a payload when the website start that will include threejs r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -12,14 +14,24 @@ const About = dynamic(() => import('@/components/about'), {
 
 // dom components goes here
 const Page = (props) => {
-  return <DOM />;
+  useEffect(() => {
+    useStore.setState({ transitioning: false });
+  }, []);
+
+  return (
+    <>
+      <DOM />
+    </>
+  );
 };
 
 // canvas components goes here
 // It will receive same props as Page component (from getStaticProps, etc.)
 Page.r3f = (props) => (
   <>
-    <About />
+    <Suspense fallback={null}>
+      <About />
+    </Suspense>
   </>
 );
 
@@ -28,7 +40,7 @@ export default Page;
 export async function getStaticProps() {
   return {
     props: {
-      title: 'About',
+      title: 'About - John Beresford',
     },
   };
 }

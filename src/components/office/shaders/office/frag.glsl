@@ -1,4 +1,4 @@
-#define WHITE vec3(1.0)
+#define WHITE vec3(1.0, 1.0, 1.0)
 
 uniform float uTime;
 
@@ -32,6 +32,7 @@ uniform vec3 uInstaColor;
 uniform vec3 uLinkedinColor;
 uniform vec3 uGithubColor;
 uniform vec3 uShelfLightColor;
+uniform vec3 uBaseLightColor;
 
 varying vec2 vUv;
 
@@ -62,7 +63,7 @@ void main() {
   float aboutLight = lights2.r * uShelfTopStr;
   float worksLight = lights2.g * uShelfMidStr;
   float labLight = lights2.b * uShelfBottomStr;
-  color = blendLighten(color, uShelfLightColor, aboutLight + worksLight + labLight);
+  color = blendLighten(color, uBaseLightColor, aboutLight + worksLight + labLight);
 
   // third lightmap
   float githubLight = lights3.r * uGithubStr;
@@ -70,7 +71,7 @@ void main() {
   float tableLight = lights3.b;
   vec3 tableLightColor = mix(uEmailColor, uGithubColor, sin(uTime));
   color = blendLighten(color, uGithubColor, githubLight);
-  color = blendLighten(color, WHITE, monitorLight);
+  color = blendLighten(color, uBaseLightColor, monitorLight);
   color = blendLighten(color, tableLightColor, tableLight);
 
   // fourth lightmap
@@ -78,13 +79,13 @@ void main() {
   float lampLight = lights4.g * uLampStr;
   float wallLight = lights4.b * uWallLightStr;
   color = blendLighten(color, WHITE, macLight);
-  color = blendLighten(color, uShelfLightColor, lampLight + wallLight);
+  color = blendLighten(color, uBaseLightColor, lampLight + wallLight);
 
   // fifth lightmap
   float ipadTopLight = lights5.r * uShelfTopStr;
   float ipadMidLight = lights5.g * uShelfMidStr;
   float ipadBottomLight = lights5.b * uShelfBottomStr;
-  color = blendLighten(color, WHITE, ipadTopLight + ipadMidLight + ipadBottomLight);
+  color = blendLighten(color, uBaseLightColor, ipadTopLight + ipadMidLight + ipadBottomLight);
 
   #if defined(TONE_MAPPING)
   color = toneMapping(color);

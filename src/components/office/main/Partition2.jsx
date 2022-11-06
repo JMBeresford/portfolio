@@ -1,5 +1,5 @@
 import model from '@/assets/models/office.glb';
-import useStore from '@/store';
+import { useHomeStore } from '@/store';
 import { useSpring } from '@react-spring/three';
 import { useGLTF, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
@@ -11,10 +11,16 @@ import lightMapImage2_2 from '@/assets/img/bakes/lightmap2_2.jpg';
 import lightMapImage3_2 from '@/assets/img/bakes/lightmap3_2.jpg';
 import lightMapImage4_2 from '@/assets/img/bakes/lightmap4_2.jpg';
 import lightMapImage5_2 from '@/assets/img/bakes/lightmap5_2.jpg';
+import shallow from 'zustand/shallow';
+import { useControls } from 'leva';
 
 const Partition2 = ({ maps }) => {
   const ref = useRef();
   const { nodes } = useGLTF(model);
+
+  const { baseLightColor } = useControls('lights', {
+    baseLightColor: '#d59c6e',
+  });
 
   const [albedo, lm1, lm2, lm3, lm4, lm5] = useTexture(
     [
@@ -32,7 +38,7 @@ const Partition2 = ({ maps }) => {
     }
   );
 
-  const {
+  const [
     emailHovered,
     instaHovered,
     linkedinHovered,
@@ -40,7 +46,18 @@ const Partition2 = ({ maps }) => {
     aboutHovered,
     worksHovered,
     labHovered,
-  } = useStore();
+  ] = useHomeStore(
+    (s) => [
+      s.emailHovered,
+      s.instaHovered,
+      s.linkedinHovered,
+      s.githubHovered,
+      s.aboutHovered,
+      s.worksHovered,
+      s.labHovered,
+    ],
+    shallow
+  );
 
   const {
     emailStr,
@@ -80,6 +97,7 @@ const Partition2 = ({ maps }) => {
         uShelfTopStr={aboutStr}
         uShelfMidStr={worksStr}
         uShelfBottomStr={labStr}
+        uBaseLightColor={baseLightColor}
         uLampStr={0.5}
         uLightMap5Intensity={0.25}
         uLightmap1={lm1}

@@ -18,7 +18,8 @@
   z-index: 15;
   opacity: 1;
 
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.3s ease-out;
+  transition-delay: 0.5s;
 
   &.out {
     opacity: 0;

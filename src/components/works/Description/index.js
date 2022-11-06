@@ -1,9 +1,13 @@
-import useStore from '@/store';
+import { useWorksStore } from '@/store';
 import { useEffect, useMemo, useState } from 'react';
 import { animated as a, useSpring } from '@react-spring/web';
+import shallow from 'zustand/shallow';
 
 const Description = () => {
-  const { works, selectedWork, transitioningWork } = useStore();
+  const [works, selectedWork, transitioningWork] = useWorksStore(
+    (s) => [s.works, s.selectedWork, s.transitioningWork],
+    shallow
+  );
   const [workId, setWorkId] = useState(selectedWork || 0);
 
   const curWork = useMemo(() => works[workId], [works, workId]);

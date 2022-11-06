@@ -1,64 +1,77 @@
-import useStore from '@/store';
+import { useHomeStore, useStore } from '@/store';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useEffect, useMemo } from 'react';
-import { useRef } from 'react';
+import gsap, { Power2 } from 'gsap';
+import { useEffect, useRef, useLayoutEffect } from 'react';
 import { damp } from 'three/src/math/MathUtils';
+import shallow from 'zustand/shallow';
 
-const DELTA = 0.025;
+let lambda = 1.5;
+let homePosition = useHomeStore.getState().views['home']['position'];
+let homeRotation = useHomeStore.getState().views['home']['rotation'];
 
 const Camera = () => {
   const ref = useRef();
-  const { views, currentView, actions, router, debug } = useStore();
-  const { enteringAbout, enteringWorks, enteringLab } = useStore();
+  const introTimeline = useRef(gsap.timeline());
+  const router = useStore((s) => s.router);
+  const [viewManaged, currentView, prevView, experienceStarted] = useHomeStore(
+    (s) => [s.viewManaged, s.currentView, s.prevView, s.experienceStarted],
+    shallow
+  );
 
-  // initial camera position on page load
+  useLayoutEffect(() => {
+    useHomeStore.setState({ camera: ref.current });
+  }, [ref]);
+
   useEffect(() => {
-    let initialView = views[actions.getLastView()];
+    if (!experienceStarted || !viewManaged) return;
 
-    ref.current.position.set(
-      initialView.position.x,
-      initialView.position.y,
-      initialView.position.z
-    );
-    ref.current.rotation.set(
-      initialView.rotation.x,
-      initialView.rotation.y,
-      initialView.rotation.z
-    );
-  }, [views, actions]);
+    let startPos = useHomeStore.getState().views[currentView].position;
+    let startRot = useHomeStore.getState().views[currentView].rotation;
 
-  const viewPosition = useMemo(() => {
-    const view = views[currentView];
-    return view.position;
-  }, [currentView, views]);
+    let dur = prevView === 'start' ? 4 : 1;
+    let delay = prevView === 'start' ? 1 : 0;
 
-  const viewRotation = useMemo(() => {
-    const view = views[currentView];
-    return view.rotation;
-  }, [currentView, views]);
+    console.log(`dur=${dur} delay=${delay}`);
+
+    introTimeline.current
+      .to(ref.current.position, {
+        x: startPos.x,
+        y: startPos.y,
+        z: startPos.z,
+
+        duration: dur,
+        ease: Power2.easeOut,
+        delay: delay,
+      })
+      .to(ref.current.rotation, {
+        x: startRot.x,
+        y: startRot.y,
+        z: startRot.z,
+
+        duration: dur,
+        ease: Power2.easeOut,
+        delay: -dur,
+        onComplete: () => {
+          useHomeStore.setState({ viewManaged: false });
+
+          if (['about', 'works'].includes(currentView)) {
+            router.push(`/${currentView}`);
+          }
+        },
+      });
+  }, [currentView, experienceStarted, viewManaged, prevView, router]);
 
   useFrame(({ mouse }, delta) => {
     let cam = ref.current;
 
-    if (!cam) return;
+    if (viewManaged || currentView !== 'home') return;
 
-    // longer animation for first view
-    let lastView = actions.getLastView();
-    let lambda = lastView === 'start' ? 0.8 : currentView === 'home' ? 1.5 : 4;
-
-    let newPos =
-      currentView === 'home'
-        ? {
-            x: viewPosition.x + mouse.x * 0.25,
-            y: viewPosition.y + mouse.y * 0.25,
-            z: viewPosition.z,
-          }
-        : viewPosition;
-
-    if (router.asPath !== '/') {
-      return;
-    }
+    let newPos = {
+      x: homePosition.x + mouse.x * 0.25,
+      y: homePosition.y + mouse.y * 0.25,
+      z: homePosition.z,
+    };
 
     // smooth animate camera position per-frame independant of frame rate
     cam.position.x = damp(cam.position.x, newPos.x, lambda, delta);
@@ -66,25 +79,9 @@ const Camera = () => {
     cam.position.z = damp(cam.position.z, newPos.z, lambda, delta);
 
     // smooth animate camera rotation per-frame independant of frame rate
-    cam.rotation.x = damp(cam.rotation.x, viewRotation.x, lambda, delta);
-    cam.rotation.y = damp(cam.rotation.y, viewRotation.y, lambda, delta);
-    cam.rotation.z = damp(cam.rotation.z, viewRotation.z, lambda, delta);
-
-    if (
-      currentView === 'about' &&
-      !enteringAbout &&
-      cam.position.distanceTo(views.about.position) < DELTA
-    ) {
-      useStore.setState({ enteringAbout: true });
-    }
-
-    if (
-      currentView === 'works' &&
-      !enteringWorks &&
-      cam.position.distanceTo(views.works.position) < DELTA
-    ) {
-      useStore.setState({ enteringWorks: true });
-    }
+    cam.rotation.x = damp(cam.rotation.x, homeRotation.x, lambda, delta);
+    cam.rotation.y = damp(cam.rotation.y, homeRotation.y, lambda, delta);
+    cam.rotation.z = damp(cam.rotation.z, homeRotation.z, lambda, delta);
   });
 
   return (

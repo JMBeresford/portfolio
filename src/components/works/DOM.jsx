@@ -3,12 +3,16 @@ import Description from './Description';
 import WorksList from './WorksList';
 import { IoArrowBack } from 'react-icons/io5';
 import Link from 'next/link';
-import useStore from '@/store';
+import { useWorksStore } from '@/store';
+import shallow from 'zustand/shallow';
 
 const DOM = () => {
   const ref = useRef();
 
-  const { works, selectedWork, actions } = useStore();
+  const [works, selectedWork] = useWorksStore(
+    (s) => [s.works, s.selectedWork],
+    shallow
+  );
 
   return (
     <div ref={ref} id='worksDom'>
@@ -16,11 +20,7 @@ const DOM = () => {
         <div className='left'>
           <div className='back'>
             <Link href='/'>
-              <a
-                onClick={() => {
-                  actions.setView('home');
-                }}
-              >
+              <a>
                 <IoArrowBack />
                 return home
                 <div
