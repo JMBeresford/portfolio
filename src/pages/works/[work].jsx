@@ -1,13 +1,12 @@
 import Navigation from '@/components/DOM/Navigation';
-import { useStore } from '@/store';
+import { useWorksStore } from '@/store';
 import dynamic from 'next/dynamic';
 import { Suspense, useEffect } from 'react';
 // Dynamic import is used to prevent a payload when the website start that will include threejs r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
 // If something goes wrong go back to a static import to show the error.
 // https://github.com/pmndrs/react-three-next/issues/49
-
-const HomeScene = dynamic(() => import('@/components/Canvas/HomeScene'), {
+const WorkScene = dynamic(() => import('@/components/Canvas/WorkScene'), {
   ssr: false,
   suspense: true,
 });
@@ -26,17 +25,36 @@ const Page = (props) => {
 Page.r3f = (props) => (
   <>
     <Suspense fallback={null}>
-      <HomeScene />
+      <WorkScene {...props} />
     </Suspense>
   </>
 );
 
 export default Page;
 
-export async function getStaticProps() {
+export async function getStaticPaths() {
+  const works = useWorksStore.getState().works;
+
+  let paths = works.map((work) => ({
+    params: {
+      work: work.name,
+    },
+  }));
+
+  return {
+    paths: paths,
+    fallback: false, // can also be true or 'blocking'
+  };
+}
+
+export async function getStaticProps(context) {
+  const work = useWorksStore
+    .getState()
+    .works.find((w) => w.name === context.params.work);
   return {
     props: {
-      title: 'John Beresford - Creative Developer',
+      work: work,
+      title: 'John Beresford - Works',
     },
   };
 }

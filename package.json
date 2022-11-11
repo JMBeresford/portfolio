@@ -25,6 +25,7 @@
     "@react-spring/web": "^9.5.2",
     "@react-three/drei": "^9.31.1",
     "@react-three/fiber": "^8.0.27",
+    "@react-three/flex": "^1.0.0",
     "@react-three/postprocessing": "^2.6.2",
     "babel-plugin-glsl": "^1.0.0",
     "glsl-blend": "^1.0.3",

@@ -1305,6 +1305,13 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@react-pdf/yoga@^2.0.4":
+  "integrity" "sha512-bsU48GQ8E4LEQ38AtyQPQZ9oEATMpolGPFewgI4sBXOZBNH2miLtoBTbyB/xEOMuBcyqtvJQwSNg2czSZjrlyQ=="
+  "resolved" "https://registry.npmjs.org/@react-pdf/yoga/-/yoga-2.0.4.tgz"
+  "version" "2.0.4"
+  dependencies:
+    "@types/yoga-layout" "^1.9.3"
+
 "@react-spring/animated@~9.5.1", "@react-spring/animated@~9.5.2":
   "integrity" "sha512-oRlX+MmYLbK8IuUZR7SQUnRjXxJ4PMIZeBkBd1SUWVgVJAHMTfJzPltzm+I6p59qX+qLlklYHfnWaonQKDqLuQ=="
   "resolved" "https://registry.npmjs.org/@react-spring/animated/-/animated-9.5.2.tgz"
@@ -1397,6 +1404,14 @@
     "scheduler" "^0.21.0"
     "suspend-react" "^0.0.8"
     "zustand" "^3.7.1"
+
+"@react-three/flex@^1.0.0":
+  "integrity" "sha512-6Ti01VYdzMiBJv2pDowiOFt9N/AiuGFiLlnzbBHnuuM7FV+yjicy1OTkHHPxiL1Dda6mp84i7eLYhWCAMs5sTw=="
+  "resolved" "https://registry.npmjs.org/@react-three/flex/-/flex-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "@react-pdf/yoga" "^2.0.4"
+    "react-merge-refs" "^1.1.0"
 
 "@react-three/postprocessing@^2.6.2":
   "integrity" "sha512-YvU3oH5Vb2UT+ekhhzHwMTvEYo50VoW8EYMQxmh9TzWaTohSB0GGDanJw5peUMDUgYS1gNjj9cpsk0w/z/7Qpg=="
@@ -1516,6 +1531,11 @@
   "integrity" "sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew=="
   "resolved" "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
   "version" "0.16.2"
+
+"@types/yoga-layout@^1.9.3":
+  "integrity" "sha512-RRHc1+8Hc5mf/2lZKnom6kCnqcNS07s8keahniWTOva0KELF6RgDJmaEcvGEKUUJgN4UgessmEsWuidaOycIOw=="
+  "resolved" "https://registry.npmjs.org/@types/yoga-layout/-/yoga-layout-1.9.4.tgz"
+  "version" "1.9.4"
 
 "@typescript-eslint/parser@^5.21.0":
   "integrity" "sha512-r3hwrOWYbNKP1nTcIw/aZoH+8bBnh/Lh1iDHoFpyG4DnCpvEdctrSl6LOo19fZbzypjQMHdajolxs6VpYoChgA=="

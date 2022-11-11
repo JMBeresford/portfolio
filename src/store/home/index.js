@@ -1,28 +1,11 @@
 import create from 'zustand';
-import { viewActions, viewSlice } from './viewSlice';
-import { cursorSlice, cursorActions } from './cursorSlice';
 
 const useHomeStore = create((set, get) => ({
-  sceneLoaded: false,
-  camera: null,
-  experienceStarted: false,
+  introDone: false,
+  converged: true,
+  viewManaged: true,
 
-  ...viewSlice,
-  ...cursorSlice,
-
-  actions: {
-    init: (from) => {
-      let actions = get().actions;
-
-      actions.initView(from);
-      actions.initCursor();
-
-      set({ experienceStarted: true });
-    },
-
-    ...viewActions(set, get),
-    ...cursorActions(set, get),
-  },
+  actions: {},
 }));
 
 export default useHomeStore;

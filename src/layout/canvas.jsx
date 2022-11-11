@@ -15,10 +15,9 @@ const LCanvas = ({ children }) => {
         position: 'fixed',
         top: 0,
       }}
-      // camera={{ fov: 50, near: 0.001, position: [0, 0, 1.125] }}
       gl={{ toneMapping: ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
       onCreated={({ gl, events }) => {
-        events.connect(dom.current);
+        // events.connect(dom.current);
         gl.setClearColor('#000005', 1);
       }}
     >

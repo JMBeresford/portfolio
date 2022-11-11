@@ -1,7 +1,8 @@
 import { useStore } from '@/store';
 import { useEffect, useRef } from 'react';
 import { Leva } from 'leva';
-import Loading from '@/components/loading';
+import Loading from '@/components/DOM/loading';
+import Navigation from '@/components/DOM/Navigation';
 
 const Dom = ({ children }) => {
   const ref = useRef(null);
@@ -15,10 +16,6 @@ const Dom = ({ children }) => {
     <div
       style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        minHeight: '100vh',
         zIndex: 10,
         overflow: 'auto',
       }}

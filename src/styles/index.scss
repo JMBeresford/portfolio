@@ -1,6 +1,4 @@
 @use './loading';
-@use './about';
-@use './works';
 
 * {
   box-sizing: border-box;
@@ -13,4 +11,232 @@ body,
 #__next {
   width: 100%;
   height: 100%;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+nav {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  touch-action: none;
+
+  opacity: 1;
+  transition: opacity 0.15s ease-in-out;
+
+  &.hide {
+    opacity: 0;
+  }
+
+  .buttons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    margin: 5vh 0;
+    gap: 2em;
+  }
+
+  .hamburger,
+  .back {
+    z-index: 5;
+    position: relative;
+    pointer-events: all;
+    touch-action: all;
+    cursor: pointer;
+
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0);
+    border: rgba(255, 255, 255, 1) solid 2px;
+    opacity: 0.5;
+
+    transition: background-color 0.15s ease-in-out, opacity 0.15s ease-in-out;
+
+    .line {
+      position: absolute;
+      width: 50%;
+      height: 0.125em;
+      background-color: rgba(255, 255, 255, 1);
+      left: 50%;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      opacity: 1;
+    }
+  }
+
+  .backWrapper.hide {
+    display: none;
+  }
+
+  .back .line {
+    &:nth-child(1) {
+      top: 50%;
+      transform-origin: left;
+      transform: translateX(-50%) rotate(-45deg) scaleX(50%);
+    }
+    &:nth-child(2) {
+      top: 50%;
+      transform: translateX(-50%);
+    }
+    &:nth-child(3) {
+      top: 50%;
+      transform-origin: left;
+      transform: translateX(-50%) rotate(45deg) scaleX(50%);
+    }
+  }
+
+  .hamburger .line {
+    transform: translateX(-50%) translateY(-50%);
+    &:nth-child(1) {
+      top: 32.5%;
+    }
+    &:nth-child(2) {
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) scaleX(80%);
+    }
+    &:nth-child(3) {
+      top: 67.5%;
+    }
+  }
+
+  .navlist {
+    z-index: 10;
+    position: absolute;
+    background-color: rgba(20, 20, 20, 1);
+    opacity: 1;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5em;
+
+    transition: opacity 0.25s ease-in-out;
+
+    a {
+      font-size: 1.75em;
+      position: relative;
+      color: white;
+      font-family: mrs-eaves-roman-small-caps, serif;
+      text-decoration: none;
+
+      &.disabled {
+        color: grey;
+        pointer-events: none;
+        touch-action: none;
+      }
+
+      &::after {
+        position: absolute;
+        content: '';
+        bottom: 0;
+        left: 0;
+        height: 0.0625em;
+        width: 100%;
+        background-color: white;
+
+        transform: scaleX(0);
+
+        transition: transform 0.15s ease-in-out;
+      }
+
+      &:hover::after {
+        transform: scaleX(1);
+      }
+    }
+
+    &,
+    * {
+      pointer-events: all;
+      touch-action: all;
+    }
+
+    .close {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0);
+      border: rgba(255, 255, 255, 0.5) solid 2px;
+      top: 5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+
+      transition: background-color 0.15s ease-in-out, border 0.15s ease-in-out;
+
+      .lines {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+      }
+
+      .line {
+        position: absolute;
+        width: 50%;
+        height: 0.125em;
+        background-color: rgba(255, 255, 255, 0.5);
+
+        transition: background-color 0.15s ease-in-out;
+
+        &:nth-child(1) {
+          transform: rotate(45deg);
+        }
+
+        &:nth-child(2) {
+          transform: rotate(-45deg);
+        }
+      }
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border: rgba(255, 255, 255, 1) solid 2px;
+
+        .line {
+          background-color: rgba(255, 255, 255, 1);
+        }
+      }
+    }
+
+    &:not(.open) {
+      opacity: 0;
+
+      &,
+      * {
+        pointer-events: none;
+        touch-action: none;
+      }
+    }
+
+    .socials {
+      hr {
+        opacity: 0.25;
+        margin-bottom: 1.5em;
+      }
+      #nav-socials {
+        display: flex;
+        gap: 1em;
+        align-items: center;
+
+        img {
+          opacity: 0.5;
+
+          transition: opacity 0.15s ease-in-out;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
 }

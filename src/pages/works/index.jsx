@@ -6,8 +6,7 @@ import { Suspense, useEffect } from 'react';
 // WARNING ! errors might get obfuscated by using dynamic import.
 // If something goes wrong go back to a static import to show the error.
 // https://github.com/pmndrs/react-three-next/issues/49
-
-const HomeScene = dynamic(() => import('@/components/Canvas/HomeScene'), {
+const WorksScene = dynamic(() => import('@/components/Canvas/WorksScene'), {
   ssr: false,
   suspense: true,
 });
@@ -26,7 +25,7 @@ const Page = (props) => {
 Page.r3f = (props) => (
   <>
     <Suspense fallback={null}>
-      <HomeScene />
+      <WorksScene />
     </Suspense>
   </>
 );
@@ -36,7 +35,7 @@ export default Page;
 export async function getStaticProps() {
   return {
     props: {
-      title: 'John Beresford - Creative Developer',
+      title: 'John Beresford - Works',
     },
   };
 }
