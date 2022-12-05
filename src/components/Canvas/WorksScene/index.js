@@ -4,8 +4,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useMemo } from 'react';
 import { useRef, useEffect, useLayoutEffect } from 'react';
 import { damp } from 'three/src/math/MathUtils';
-import Environment, { Clouds, Starfield } from '../Environment';
-import { Constellation } from '../Environment/Constellation';
+import Environment from '../Environment';
 import PostProcessing from '../PostProcessing';
 import WorksList from './WorksList';
 

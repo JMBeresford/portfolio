@@ -13,7 +13,7 @@ const Layer = ({ layer = 1, children }) => {
   }, layer);
 
   return (
-    <scene visible={false} ref={ref}>
+    <scene visible={true} ref={ref}>
       {children}
     </scene>
   );

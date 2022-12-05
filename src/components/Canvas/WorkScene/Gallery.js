@@ -16,8 +16,7 @@ const Gallery = ({ images }) => {
   const [containerHeight, setContainerHeight] = useState(0);
 
   const containerWidth = useMemo(() => viewport.width * 0.15, [viewport]);
-  const width = useMemo(() => Math.min(viewport.width * 0.16, 0.3), [viewport]);
-  const height = useMemo(() => width / ASPECT, [width]);
+  const width = useMemo(() => Math.min(viewport.width * 0.1, 0.2), [viewport]);
   const isMobile = useMemo(() => size.width < 768, [size]);
 
   useEffect(() => {
@@ -81,13 +80,13 @@ const Gallery = ({ images }) => {
         {textures.map((t, idx) => (
           <Box
             width={width}
-            height={height}
-            margin={0.003}
+            height={width}
+            margin={0.005}
             key={idx}
             centerAnchor
           >
             <mesh>
-              <planeGeometry args={[width, height]} />
+              <planeGeometry args={[width, width]} />
               <meshBasicMaterial transparent map={t} toneMapped={false} />
             </mesh>
           </Box>

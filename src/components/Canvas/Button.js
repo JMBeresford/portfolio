@@ -3,6 +3,7 @@ import { Text as TextImpl, useCursor } from '@react-three/drei';
 import { animated, useSpring } from '@react-spring/three';
 import font from '@/assets/fonts/MrsEavesRomanSmallCaps.ttf';
 import { useThree } from '@react-three/fiber';
+import Layer from './Layer';
 
 const Text = animated(TextImpl);
 
@@ -11,22 +12,23 @@ const Button = ({
   position = [0, 0, 0],
   fontSize = 0.02,
   text,
+  baseOpacity = 0.5,
+  hoverOpacity = 1,
   onClick,
 }) => {
   const [hovered, setHovered] = useState(false);
   const windowSize = useThree((s) => s.size);
 
-  const isMobile = useMemo(() => windowSize.width < 768, [windowSize]);
-
   useCursor(hovered);
 
-  const { opacity } = useSpring({
-    opacity: hovered ? 1 : 0.5,
+  const { opacity, scale } = useSpring({
+    opacity: hovered ? hoverOpacity : baseOpacity,
+    scale: hovered ? 1.1 : 1,
   });
 
   return (
     <Suspense fallback={null}>
-      <group position={position}>
+      <animated.group position={position} scale={scale}>
         <mesh
           renderOrder={1}
           onPointerEnter={() => setHovered(true)}
@@ -37,19 +39,21 @@ const Button = ({
           <animated.meshBasicMaterial transparent opacity={opacity} />
         </mesh>
 
-        <Text
-          renderOrder={2}
-          text={text}
-          position={[0, -0.005, 0.0001]}
-          color='black'
-          fontSize={fontSize}
-          font={font}
-          textAlign='center'
-          anchorY='bottom'
-          anchorX='center'
-          lineHeight={isMobile ? 0.016 : 0.02}
-        />
-      </group>
+        <Layer layer={200}>
+          <Text
+            renderOrder={2}
+            text={text}
+            position={[0, -0.0025, 0.0001]}
+            color='black'
+            fontSize={fontSize}
+            font={font}
+            textAlign='center'
+            anchorY='center'
+            anchorX='center'
+            lineHeight={fontSize}
+          />
+        </Layer>
+      </animated.group>
     </Suspense>
   );
 };

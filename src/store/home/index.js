@@ -4,6 +4,8 @@ const useHomeStore = create((set, get) => ({
   introDone: false,
   converged: true,
   viewManaged: true,
+  world: null,
+  selectedWork: null,
 
   actions: {},
 }));

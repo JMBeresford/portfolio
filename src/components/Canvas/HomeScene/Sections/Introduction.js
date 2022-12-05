@@ -10,6 +10,10 @@ import { gsap, Power1 } from 'gsap';
 import { useCallback } from 'react';
 import { useEffect, useMemo } from 'react';
 import { useThree } from '@react-three/fiber';
+import useVW from '@/hooks/useVW';
+import { clamp } from 'three/src/math/MathUtils';
+import Layer from '../../Layer';
+import useFullWidth from '@/hooks/useFullWidth';
 
 const Text = animated(TextImpl);
 
@@ -32,16 +36,16 @@ const DESCRIPTIONS = [
 const Introduction = () => {
   const descRef = useRef();
   const size = useThree((s) => s.size);
-  const viewport = useThree((s) => s.viewport);
   const timeline = useRef(gsap.timeline());
   const [desc, setDesc] = useState(0);
+  const vw = useVW();
+  const fullWidth = useFullWidth();
 
   const { color } = useControls('text', {
     color: '#fff',
   });
 
   const introDone = useHomeStore((s) => s.introDone);
-  const isMobile = useMemo(() => size.width < 768, [size]);
 
   const { opacity } = useSpring({
     opacity: introDone ? 1 : 0,
@@ -51,6 +55,13 @@ const Introduction = () => {
     width: introDone ? 1 : 0,
     config: config.molasses,
   });
+
+  const headerSize = useMemo(() => clamp(2 * vw + 0.02, 0.05, 0.09), [vw]);
+  const descSize = useMemo(() => clamp(0.4 * vw + 0.01, 0.018, 0.022), [vw]);
+  const barSize = useMemo(
+    () => clamp(1.65 * vw + 0.02, 0.04, 0.09) * 5.75,
+    [vw]
+  );
 
   const nextDesc = useCallback(() => {
     if (!timeline.current) return;
@@ -86,44 +97,50 @@ const Introduction = () => {
 
   return (
     <Suspense fallback={null}>
-      <group position={[0, 0, 1.625]}>
-        <Text
-          text='John Beresford'
-          font={font}
-          outlineColor='black'
-          outlineWidth={0}
-          outlineBlur={0.05}
-          maxWidth={isMobile ? viewport.width * 0.2 : 1}
-          textAlign='center'
-          fontSize={isMobile ? 0.08 : 0.1}
-          anchorY='bottom'
-          fillOpacity={opacity}
-          outlineOpacity={opacity}
-        >
-          <meshBasicMaterial color={color} side={FrontSide} />
-        </Text>
+      <Layer layer={100}>
+        <group position={[0, 0, 1.625]}>
+          <Text
+            text='John Beresford'
+            font={font}
+            outlineColor='black'
+            outlineWidth={0}
+            outlineBlur={'20%'}
+            maxWidth={fullWidth * 0.9}
+            textAlign='center'
+            fontSize={headerSize}
+            anchorY='bottom'
+            outlineOpacity={0.5}
+          >
+            <animated.meshBasicMaterial
+              color={color}
+              side={FrontSide}
+              transparent
+              opacity={opacity}
+            />
+          </Text>
 
-        <animated.mesh position={[0, 0.005, 0.01]} scale-x={width}>
-          <planeGeometry args={[isMobile ? 0.25 : 0.5, 0.00125]} />
-          <meshBasicMaterial color={'white'} transparent={true} />
-        </animated.mesh>
+          <animated.mesh position={[0, 0.005, 0.01]} scale-x={width}>
+            <planeGeometry args={[barSize, 0.00125]} />
+            <meshBasicMaterial color={'white'} transparent={true} />
+          </animated.mesh>
 
-        <Text
-          ref={descRef}
-          text={DESCRIPTIONS[desc]}
-          font={font2}
-          fontSize={isMobile ? 0.03 : 0.035}
-          anchorY='top'
-          outlineColor='black'
-          outlineWidth={'5%'}
-          outlineBlur={0.025}
-          color={color}
-          fillOpacity={opacity}
-          outlineOpacity={opacity}
-        >
-          <meshBasicMaterial color={color} side={FrontSide} />
-        </Text>
-      </group>
+          <Text
+            ref={descRef}
+            text={DESCRIPTIONS[desc]}
+            font={font2}
+            fontSize={descSize}
+            anchorY='top'
+            outlineColor='black'
+            outlineWidth={0}
+            outlineBlur={'20%'}
+            color={color}
+            fillOpacity={opacity}
+            outlineOpacity={opacity}
+          >
+            <meshBasicMaterial color={color} side={FrontSide} />
+          </Text>
+        </group>
+      </Layer>
     </Suspense>
   );
 };

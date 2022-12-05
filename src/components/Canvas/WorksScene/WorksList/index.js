@@ -1,4 +1,4 @@
-import WorkItem from '@/components/Canvas/WorkItem';
+import WorkItem from '@/components/Canvas/HomeScene/WorkItem';
 import { useWorksStore } from '@/store';
 import { animated, useSpring } from '@react-spring/three';
 import { Text as TextImpl } from '@react-three/drei';

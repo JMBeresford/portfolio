@@ -16,10 +16,10 @@ const Clouds = ({ color, pointCount = 2000, ...props }) => {
   });
 
   const { color1, color2, color3, color4 } = useControls('clouds', {
-    color1: '#1f5b6f',
-    color2: '#0e2c79',
-    color3: '#4d006c',
-    color4: '#6b0044',
+    color1: '#153d52',
+    color2: '#100e78',
+    color3: '#2e006b',
+    color4: '#62006b',
   });
 
   const colors = useMemo(() => {
@@ -35,7 +35,7 @@ const Clouds = ({ color, pointCount = 2000, ...props }) => {
         <CloudsMaterial
           uAspect={viewport.aspect}
           uColors={colors}
-          uOctaves={isMobile ? 1 : tier >= 2 ? 4 : 3}
+          uOctaves={isMobile ? 1 : tier + 2}
         />
       </mesh>
     </group>

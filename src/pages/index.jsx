@@ -1,7 +1,6 @@
 import Navigation from '@/components/DOM/Navigation';
-import { useStore } from '@/store';
 import dynamic from 'next/dynamic';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 // Dynamic import is used to prevent a payload when the website start that will include threejs r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
 // If something goes wrong go back to a static import to show the error.

@@ -6,7 +6,7 @@ import Socials from './Socials';
 
 const Sections = () => {
   const { section1, section2 } = useControls('sectionAngles', {
-    section1: { value: 0.035, step: 0.001 },
+    section1: { value: 0.0425, step: 0.001 },
     section2: { value: 0.081, step: 0.001 },
   });
 
@@ -14,7 +14,7 @@ const Sections = () => {
     <group>
       <Introduction />
       <Work angle={section1} />
-      <Socials angle={section2} />
+      {/* <Socials angle={section2} /> */}
     </group>
   );
 };

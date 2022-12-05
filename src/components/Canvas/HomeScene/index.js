@@ -11,6 +11,7 @@ import { Constellation } from '../Environment/Constellation';
 import Environment, { Starfield, Clouds } from '../Environment';
 import Sections from './Sections';
 import PostProcessing from '../PostProcessing';
+import Layer from '../Layer';
 
 const STARTPOS = [1.2, 0, 0.55];
 const INIT_RADIUS = 1.5;
@@ -18,6 +19,8 @@ const INIT_RADIUS = 1.5;
 const HomeScene = () => {
   const timeline = useRef(gsap.timeline());
   const scrollRef = useRef(0);
+  const velocityRef = useRef(0);
+  const velocitySmoothRef = useRef(0);
   const touchRef = useRef(0);
   const camRef = useRef();
   const worldRef = useRef();
@@ -27,11 +30,14 @@ const HomeScene = () => {
     shallow
   );
 
+  const aspect = useMemo(() => size.width / size.height, [size]);
   const isMobile = useMemo(() => size.width < 768, [size]);
-  const radius = useMemo(
-    () => (introDone ? (isMobile ? 2.25 : 2) : INIT_RADIUS),
-    [introDone, isMobile]
-  );
+  const radius = useMemo(() => {
+    if (!introDone) return INIT_RADIUS;
+    else {
+      return 2;
+    }
+  }, [introDone]);
 
   useLayoutEffect(() => {
     if (introDone) return;
@@ -51,42 +57,53 @@ const HomeScene = () => {
 
   const handleScroll = useCallback(
     (e) => {
-      e.stopPropagation();
       if (!introDone || viewManaged) return;
 
       scrollRef.current += e.deltaY * 0.00035;
-      scrollRef.current = Math.max(0, scrollRef.current);
-      scrollRef.current = Math.min(0.6, scrollRef.current);
+
+      if (scrollRef.current < 0) {
+        scrollRef.current = 0;
+        return;
+      }
+
+      // scrollRef.current = Math.min(0.6, scrollRef.current);
+
+      velocityRef.current += Math.abs(e.deltaY * 0.00005);
+      velocityRef.current = Math.max(1);
     },
     [introDone, viewManaged]
   );
 
-  useEffect(() => {
-    const handleTouchStart = (e) => {
+  const handleTouchStart = useCallback(
+    (e) => {
       e.stopPropagation();
-      let touch = e.touches[0];
-      touchRef.current = touch.clientY;
-    };
+      if (!introDone || viewManaged || e.pointerType !== 'touch') return;
 
-    const handleTouchMove = (e) => {
+      let y = e.touches ? e.touches[0].clientY : e.clientY;
+      touchRef.current = y;
+    },
+    [introDone, viewManaged]
+  );
+
+  const handleTouchMove = useCallback(
+    (e) => {
       e.stopPropagation();
-      e.preventDefault();
-      let touch = e.touches[0];
-      let dy = touchRef.current - touch.clientY;
+      if (!introDone || viewManaged || e.pointerType !== 'touch') return;
+
+      let y = e.touches ? e.touches[0].clientY : e.clientY;
+
+      let dy = touchRef.current - y;
+
+      velocityRef.current += Math.abs(dy * 0.00005);
+      velocityRef.current = Math.max(1);
+
       scrollRef.current += dy * 0.00095;
       scrollRef.current = Math.max(0, scrollRef.current);
-      scrollRef.current = Math.min(0.6, scrollRef.current);
-      touchRef.current = touch.clientY;
-    };
-
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove);
-
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, []);
+      // scrollRef.current = Math.min(0.6, scrollRef.current);
+      touchRef.current = y;
+    },
+    [introDone, viewManaged]
+  );
 
   useEffect(() => {
     if (introDone) return;
@@ -119,8 +136,21 @@ const HomeScene = () => {
     let pz = camRef.current.position.z;
     let rx = worldRef.current.rotation.x;
 
-    camRef.current.position.z = damp(pz, radius, 4, delta);
-    worldRef.current.rotation.x = damp(rx, -scrollRef.current, 16, delta);
+    velocitySmoothRef.current = damp(
+      velocitySmoothRef.current,
+      velocityRef.current,
+      16,
+      delta
+    );
+    velocityRef.current = damp(velocityRef.current, 0, 24, delta);
+
+    camRef.current.position.z = damp(
+      pz,
+      radius + velocitySmoothRef.current / 35,
+      4,
+      delta
+    );
+    worldRef.current.rotation.x = damp(rx, -scrollRef.current, 12, delta);
 
     if (isMobile) return;
 
@@ -150,7 +180,11 @@ const HomeScene = () => {
       />
       <group ref={worldRef}>
         <Sections />
-        <Environment onWheel={handleScroll} />
+        <Environment
+          onWheel={handleScroll}
+          onPointerMove={handleTouchMove}
+          onPointerDown={handleTouchStart}
+        />
       </group>
 
       <PostProcessing />

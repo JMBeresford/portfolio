@@ -79,7 +79,7 @@ const Navigation = () => {
             onClick={(e) => handleNavigate(e, '/works')}
             className={`${curPath === '/works' ? 'disabled' : ''}`}
           >
-            My Works
+            My Work
           </a>
         </Link>
 
