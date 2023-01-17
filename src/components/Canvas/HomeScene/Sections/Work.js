@@ -35,13 +35,13 @@ const Work = ({ angle = 1, rotOffset, width, height, isMobile }) => {
           <Layer layer={100}>
             <Text
               text='Featured Work'
-              position={[-width / 2 - 0.02, 0.05, 0]}
+              position={[isMobile ? 0 : -width / 2 - 0.02, 0.05, 0]}
               lineHeight={0.9}
               maxWidth={width}
               textAlign={isMobile ? 'center' : 'left'}
               font={font2}
               fontSize={clamp(width * 0.235, 0.0, 0.1)}
-              anchorX='left'
+              anchorX={isMobile ? 'center' : 'left'}
               anchorY='bottom'
               outlineColor='black'
               outlineWidth={0}

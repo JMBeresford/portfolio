@@ -9,11 +9,6 @@ import { useWorksStore } from '@/store';
 import useFullHeight from '@/hooks/useFullHeight';
 
 const Sections = () => {
-  const { section1, section2 } = useControls('sectionAngles', {
-    section1: { value: 0.0425, step: 0.001 },
-    section2: { value: 0.081, step: 0.001 },
-  });
-
   const size = useThree((s) => s.size);
   const works = useWorksStore((s) => s.works);
   const fullWidth = useFullWidth();
@@ -23,6 +18,11 @@ const Sections = () => {
     () => size.width < 768 || aspect < 1,
     [size, aspect]
   );
+
+  const { section1, section2 } = useControls('sectionAngles', {
+    section1: { value: isMobile ? 0.0335 : 0.032, step: 0.001 },
+    section2: { value: 0.081, step: 0.001 },
+  });
 
   // const { nPlanes } = useControls('workList', {
   //   nPlanes: { value: 25, min: 0, max: 100, step: 1 },

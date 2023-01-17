@@ -31,12 +31,12 @@ const Contact = ({ angle = 1, width, height, isMobile }) => {
           <Text
             text='Contact Me'
             font={font2}
-            position={[-width / 2 - 0.0125, 0, 0]}
+            position={[isMobile ? 0 : -width / 2 - 0.0125, 0, 0]}
             lineHeight={0.9}
             maxWidth={width}
             textAlign={isMobile ? 'center' : 'left'}
             fontSize={headerSize}
-            anchorX='left'
+            anchorX={isMobile ? 'center' : 'left'}
             anchorY='bottom'
             outlineColor='black'
             outlineWidth={0}
@@ -102,6 +102,7 @@ const Contact = ({ angle = 1, width, height, isMobile }) => {
                 label='Message'
                 name='message'
                 position-x={isMobile ? 0 : inputWidth / 2 + gap}
+                position-y={isMobile ? -fontSize * 10 : 0}
                 width={inputWidth}
                 padding={[0.01, 0.01]}
                 rows={5}
@@ -122,7 +123,11 @@ const Contact = ({ angle = 1, width, height, isMobile }) => {
               <Input
                 type='submit'
                 value='submit'
-                position={[-width / 2 + 0.15 / 2, -fontSize * 10, 0]}
+                position={[
+                  isMobile ? 0 : -width / 2 + 0.15 / 2,
+                  isMobile ? -fontSize * 20 : -fontSize * 10,
+                  0,
+                ]}
               >
                 <Button
                   text='Send'

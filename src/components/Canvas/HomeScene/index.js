@@ -66,7 +66,7 @@ const HomeScene = () => {
         return;
       }
 
-      // scrollRef.current = Math.min(0.6, scrollRef.current);
+      scrollRef.current = Math.min(1.25, scrollRef.current);
 
       velocityRef.current += Math.abs(e.deltaY * 0.00005);
       velocityRef.current = Math.max(1);
@@ -99,7 +99,7 @@ const HomeScene = () => {
 
       scrollRef.current += dy * 0.00095;
       scrollRef.current = Math.max(0, scrollRef.current);
-      // scrollRef.current = Math.min(0.6, scrollRef.current);
+      scrollRef.current = Math.min(1.3, scrollRef.current);
       touchRef.current = y;
     },
     [introDone, viewManaged]
