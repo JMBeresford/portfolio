@@ -54,7 +54,7 @@ const Contact = ({ angle = 1, width, height, isMobile }) => {
           </group>
 
           <group position-y={-0.125}>
-            <Form style={{ opacity: 0, pointerEvents: 'none' }} netlify='true'>
+            <Form action='https://formspree.io/f/myyazelp' method='POST'>
               <Input
                 label='Name'
                 name='name'
