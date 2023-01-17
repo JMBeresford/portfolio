@@ -46,7 +46,7 @@ void main() {
   // p.xz *= 0.15;
   p.z -= uTime * 0.05;
 
-  float clouds = noise3(p);
+  float clouds = abs(noise3(p));
 
   clouds = S(0.0, 1.0, clouds) * 0.5;
 

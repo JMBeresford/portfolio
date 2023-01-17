@@ -58,7 +58,7 @@ const Info = ({ work, contentWidth, ...props }) => {
           <Text
             ref={descRef}
             text={work.description}
-            fontSize={clamp(contentWidth * 0.0153, 0.0085, 0.013)}
+            fontSize={clamp(contentWidth * 0.0153, 0.011, 0.013)}
             lineHeight={1.2}
             font={font2}
             maxWidth={width}

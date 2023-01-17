@@ -93,22 +93,6 @@ const WorkItem = ({
             <animated.meshBasicMaterial transparent opacity={0.05} />
           </animated.mesh>
         </animated.group>
-        {/* {isMobile ? null : (
-          <Text
-            text={work.year}
-            position={[even ? 0 : width, -0.01, 0]}
-            fontSize={0.0245 * width}
-            font={font}
-            anchorX={even ? 'left' : 'right'}
-            anchorY='top'
-            outlineColor='black'
-            outlineWidth={0}
-            outlineBlur={'20%'}
-            outlineOpacity={0.5}
-          >
-            <animated.meshBasicMaterial side={FrontSide} transparent={true} />
-          </Text>
-        )} */}
       </group>
     </group>
   );

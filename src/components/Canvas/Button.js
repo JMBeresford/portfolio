@@ -15,15 +15,18 @@ const Button = ({
   baseOpacity = 0.5,
   hoverOpacity = 1,
   onClick,
+  baseColor = '#ffffff',
+  hoverColor = '#ffffff',
 }) => {
   const [hovered, setHovered] = useState(false);
   const windowSize = useThree((s) => s.size);
 
   useCursor(hovered);
 
-  const { opacity, scale } = useSpring({
+  const { opacity, scale, color } = useSpring({
     opacity: hovered ? hoverOpacity : baseOpacity,
     scale: hovered ? 1.1 : 1,
+    color: hovered ? hoverColor : baseColor,
   });
 
   return (
@@ -36,7 +39,11 @@ const Button = ({
           onClick={onClick}
         >
           <planeGeometry args={size} />
-          <animated.meshBasicMaterial transparent opacity={opacity} />
+          <animated.meshBasicMaterial
+            transparent
+            opacity={opacity}
+            color={color}
+          />
         </mesh>
 
         <Layer layer={200}>
